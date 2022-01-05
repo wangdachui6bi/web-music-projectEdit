@@ -4,7 +4,7 @@ import './plugins/vant.js'
 import router from './router'
 import store from './store'
 // rem适配
-import 'lib-flexible'
+// import 'lib-flexible'
 Vue.config.productionTip = false
 
 new Vue({
