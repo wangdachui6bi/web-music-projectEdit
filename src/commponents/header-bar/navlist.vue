@@ -21,9 +21,13 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.navlist{
-  .van-tab{
-    height: 30px;
+.navlist {
+  .van-tabs {
+    .van-tab--active {
+      span {
+        font-weight: bolder;
+      }
+    }
   }
 }
 </style>
