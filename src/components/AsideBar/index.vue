@@ -1,11 +1,10 @@
 <template>
-  <div>this is home page</div>
+  <div class="AsideBar">this is this AsideBar</div>
 </template>
 
 <script>
-// 发现音乐
 export default {
-  name: "DiscoverMusic"
+  name: "AsideBar"
 }
 </script>
 
