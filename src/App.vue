@@ -5,7 +5,6 @@
 </template>
 <script>
 import Layout from "@/layout"
-import { userAccount } from "@/api/login.js"
 export default {
   data () {
     return {
@@ -14,18 +13,6 @@ export default {
   },
   components: {
     Layout
-  },
-  methods: {
-    async getAccount () {
-      const res = await userAccount()
-      console.log(res)
-      // 将数据传给Vuex
-      this.$store.commit('login/setProfile', res.data.profile)
-      this.$store.commit('login/setAccount', res.data.account)
-    }
-  },
-  mounted () {
-    this.getAccount()
   }
 }
 </script>
@@ -37,5 +24,26 @@ export default {
   border-radius: 16px;
   border: 0;
   color: snow;
+}
+.img-border {
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+}
+.font-14 {
+  font-size: 14px;
+}
+.font-12 {
+  font-size: 12px;
+}
+.w-150 {
+  width: 150px;
+}
+.w-100 {
+  width: 100px;
+}
+.text-hidden {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>
