@@ -3,9 +3,9 @@
 </template>
 
 <script>
-// 最近播放
+// 我的歌单
 export default {
-  name: "HistoryPlay"
+  name: "MyPlayList"
 }
 </script>
 

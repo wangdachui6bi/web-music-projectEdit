@@ -3,9 +3,9 @@
 </template>
 
 <script>
-// 最近播放
+// 排行榜
 export default {
-  name: "HistoryPlay"
+  name: "TopList"
 }
 </script>
 
