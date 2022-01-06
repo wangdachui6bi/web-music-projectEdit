@@ -25,19 +25,16 @@
       </div>
       <!-- 用户名 -->
       <div class="login-info">
-        {{ profile.nickname }}
+        <span @click="open">{{ profile.nickname }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// 引入eleui
-import Vue from 'vue'
 import { mapState } from "vuex"
-import { Input, Avatar } from 'element-ui'
-Vue.use(Input)
-Vue.use(Avatar)
+import { logout } from '@/api/login'
+
 export default {
   name: "TopBar",
   data () {
@@ -47,6 +44,29 @@ export default {
   },
   computed: {
     ...mapState('login', ['profile'])
+  },
+  methods: {
+    open () {
+      this.$confirm('将要退出登录 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 执行退出 移除登录状态
+        logout()
+        sessionStorage.removeItem("isLogin")
+        this.$message({
+          type: 'success',
+          message: '退出成功!'
+        })
+        location.reload(true)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    }
   }
 }
 </script>
@@ -135,6 +155,7 @@ export default {
     // 用户名
     .login-info {
       margin-left: 10px;
+      color: #fff;
       font-size: 12px;
     }
   }
