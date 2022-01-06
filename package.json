@@ -11,7 +11,6 @@
   "dependencies": {
     "@vue/cli-shared-utils": "^4.5.15",
     "axios": "^0.24.0",
-    "babel-plugin-component": "^1.1.1",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
     "lib-flexible": "^0.3.2",
@@ -30,6 +29,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-standard": "^5.1.2",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-component": "^1.1.1",
     "babel-plugin-import": "^1.13.3",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
