@@ -34,8 +34,7 @@
   </div>
 </template>
 <script>
-import { getBanner } from '@/api/api_cyc/Banner'
-import { getPersonalized } from '@/api/api_cyc/Playlist'
+import { getBanner, getPersonalized } from '@/api/DiscoverMusic/PersonalRecom'
 export default {
   name: "PersonalRecom",
   data () {

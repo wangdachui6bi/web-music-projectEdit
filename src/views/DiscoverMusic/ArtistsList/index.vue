@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { artistList } from '@/api/api_cg/artList'
+import { artistList } from '@/api/DiscoverMusic/ArtistList'
 export default {
   name: "ArtistsList",
   data () {
