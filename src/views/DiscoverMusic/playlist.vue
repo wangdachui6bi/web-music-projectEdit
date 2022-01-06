@@ -28,7 +28,8 @@ export default {
     return {
       msg: '华语',
       active: 0,
-      hotcat: []
+      hotcat: [],
+      listitem: []
     }
   },
   async created() {
