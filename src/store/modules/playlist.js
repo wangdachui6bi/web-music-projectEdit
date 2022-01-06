@@ -1,4 +1,4 @@
-import { getAllCat } from '@/api/apiwk/playList.js'
+import { getAllCat } from '@/api/playList.js'
 const state = {
   categories: [],
   sub: []

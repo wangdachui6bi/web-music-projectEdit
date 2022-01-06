@@ -6,30 +6,55 @@
           {{ msg }}
           <i class="iconfont icon icon-youjiantou1"></i>
         </button>
-        <van-tabs v-model="active" swipeable>
+        <van-tabs v-model="active" swipeable @click-tab="onClickTab">
           <van-tab
             v-for="(item, index) in hotcat"
             :title="item.name"
             :key="index"
           >
-            内容 {{ index }}
+            <div class="listdetail">
+              <ul class="listul" v-for="(list, index) in playlist" :key="index">
+                <li>
+                  <img :src="list.coverImgUrl" alt="" />
+                </li>
+                <li>
+                  <span>{{ list.name }}</span>
+                </li>
+              </ul>
+            </div>
           </van-tab>
         </van-tabs>
       </div>
+    </div>
+    <div class="totallist">
+      <dl class="listdl" v-for="(item, index) in categories" :key="index">
+        <dt class="listtitle">{{ item }}</dt>
+        <div style="display: flex">
+          <dd v-for="(item2, index2) in catesub[index]" :key="index2">
+            <span
+              :class="{ borderCir: item2.activity }"
+              @click="clickChange(item2)"
+              >{{ item2.name }}</span
+            >
+          </dd>
+        </div>
+      </dl>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { getHotCat } from '../../api/apiwk/playList'
+import { getHotCat, getplaylist } from '../../api/playList'
 export default {
+  name: "playlist",
   data() {
     return {
       msg: '华语',
       active: 0,
       hotcat: [],
-      listitem: []
+      listitem: [],
+      playlist: []
     }
   },
   async created() {
@@ -40,7 +65,9 @@ export default {
         this.$set(item, "acti", false)
       })
       this.hotcat = arr
-      console.log(this.hotcat)
+    })
+    getplaylist({ cat: this.msg }).then((res) => {
+      this.playlist = res.data.playlists
     })
   },
   computed: {
@@ -57,8 +84,12 @@ export default {
   },
   methods: {
     clickChange(item) {
+      // 改变颜色
       item.activity = !item.activity
       console.log(item.activity)
+    },
+    onClickTab() {
+      console.log(123)
     }
   }
 }

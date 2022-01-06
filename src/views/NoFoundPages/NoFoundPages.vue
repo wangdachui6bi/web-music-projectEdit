@@ -12,6 +12,7 @@
 
 <script>
 export default {
+  name:"NoFoundPages",
   data() {
     return {
       data: ['A', 'B']
@@ -31,7 +32,7 @@ export default {
   }
   .el-empty__description,
   .el-empty__bottom {
-    margin: 20px 0 0 38%;
+    margin: 20px 0 0 0;
   }
 }
 </style>
