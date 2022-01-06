@@ -2,7 +2,9 @@
   <div class="layout">
     <TopBar v-if="$route.path !== '/login'"></TopBar>
     <div class="main">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
     <FooBar v-if="$route.path !== '/login'"></FooBar>
   </div>
@@ -20,5 +22,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.layout {
+  padding-top: 60px;
+}
 </style>

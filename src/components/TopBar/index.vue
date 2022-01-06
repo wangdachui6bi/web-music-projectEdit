@@ -84,7 +84,7 @@ export default {
 
 <style lang="scss" scoped>
 .TopBar {
-  position: absolute;
+  position: fixed;
   background-color: #ec4141;
   height: 60px;
   width: 100%;

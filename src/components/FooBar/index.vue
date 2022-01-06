@@ -36,7 +36,7 @@ export default {
 <style lang="scss" scoped>
 .FooBar {
   height: 51px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
