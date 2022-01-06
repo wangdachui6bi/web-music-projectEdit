@@ -11,11 +11,27 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      data: ['A', 'B']
+    }
+  }
+}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .not-found {
   height: 100vh;
+  .el-empty__image {
+    width: 100% !important;
+    img {
+      width: 100%;
+    }
+  }
+  .el-empty__description,
+  .el-empty__bottom {
+    margin: 20px 0 0 38%;
+  }
 }
 </style>
