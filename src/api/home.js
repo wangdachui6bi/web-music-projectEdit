@@ -5,3 +5,4 @@ export const search = () => {
     url: '/search?keywords=海阔天空'
   })
 }
+
