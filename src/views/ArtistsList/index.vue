@@ -3,9 +3,9 @@
 </template>
 
 <script>
-// 最近播放
+// 歌手
 export default {
-  name: "HistoryPlay"
+  name: "ArtistsList"
 }
 </script>
 

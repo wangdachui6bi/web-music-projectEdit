@@ -3,9 +3,9 @@
 </template>
 
 <script>
-// 最近播放
+// 用户信息
 export default {
-  name: "HistoryPlay"
+  name: "UserInfo"
 }
 </script>
 
