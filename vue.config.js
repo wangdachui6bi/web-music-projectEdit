@@ -1,17 +1,17 @@
 module.exports = {
     // 进行rem移动端 适配 
-    css: {
-        loaderOptions: {
-            css: {},
-            postcss: {
-                plugins: [
-                    require('postcss-px2rem')({
-                        remUnit: 37.5
-                    })
-                ]
-            }
-        }
-    },
+    // css: {
+    //     loaderOptions: {
+    //         css: {},
+    //         postcss: {
+    //             plugins: [
+    //                 require('postcss-px2rem')({
+    //                     remUnit: 37.5
+    //                 })
+    //             ]
+    //         }
+    //     }
+    // },
     // 开发者模式和生产模式不同接口
     chainWebpack: config => {
         // 发布模式

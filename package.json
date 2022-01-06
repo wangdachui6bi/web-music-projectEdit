@@ -9,8 +9,10 @@
     "stage": "vue-cli-service serve --mode staging"
   },
   "dependencies": {
+    "@vue/cli-shared-utils": "^4.5.15",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "element-ui": "^2.15.6",
     "lib-flexible": "^0.3.2",
     "moment": "^2.29.1",
     "nprogress": "^0.2.0",
