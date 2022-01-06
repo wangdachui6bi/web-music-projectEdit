@@ -1,11 +1,10 @@
 <template>
-  <div></div>
+  <div class="AsideBar">this is this AsideBar</div>
 </template>
 
 <script>
-// 歌手
 export default {
-  name: "ArtistsList"
+  name: "AsideBar"
 }
 </script>
 
