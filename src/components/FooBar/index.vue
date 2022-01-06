@@ -16,9 +16,20 @@
           </div>
           <!-- 按钮组 -->
           <div class="player-wrapper">
-            <div class="player-bar-btn"></div>
-            <div class="player-bar-btn"></div>
-            <div class="player-bar-btn"></div>
+            <div class="player-bar">
+              <div class="player-bar-btn">
+                <i class="iconfont icon-shangyishou"></i>
+              </div>
+              <div class="player-bar-btn">
+                <i class="iconfont icon-bofang1"></i>
+              </div>
+              <div class="player-bar-btn">
+                <i class="iconfont icon-xiayishou"></i>
+              </div>
+              <div class="player-bar-btn">
+                <i class="iconfont icon-aixin"></i>
+              </div>
+            </div>
           </div>
           <div class="btn-other"></div>
         </div>
@@ -40,6 +51,7 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
+  z-index: 999;
   .footer-bar {
     height: 100%;
     .player {
@@ -79,6 +91,15 @@ export default {
             border: none;
             background-color: #fff;
             cursor: pointer;
+          }
+          .player-bar-btn:nth-child(2) {
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         }
       }

@@ -2,9 +2,8 @@
   <div class="layout">
     <TopBar v-if="$route.path !== '/login'"></TopBar>
     <div class="main">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+      <TabBar />
+      <router-view></router-view>
     </div>
     <FooBar v-if="$route.path !== '/login'"></FooBar>
   </div>
@@ -13,11 +12,13 @@
 <script>
 import FooBar from "@/components/FooBar"
 import TopBar from "@/components/TopBar"
+import TabBar from "@/components/TabBar"
 export default {
   name: "layout",
   components: {
     FooBar,
-    TopBar
+    TopBar,
+    TabBar
   }
 }
 </script>

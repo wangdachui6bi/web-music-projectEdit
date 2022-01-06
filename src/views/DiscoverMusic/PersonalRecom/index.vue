@@ -37,6 +37,7 @@
 import { getBanner } from '@/api/api_cyc/Banner'
 import { getPersonalized } from '@/api/api_cyc/Playlist'
 export default {
+  name: "PersonalRecom",
   data () {
     return {
       imgList: [],

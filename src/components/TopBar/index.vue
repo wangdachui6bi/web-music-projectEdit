@@ -89,6 +89,7 @@ export default {
   height: 60px;
   width: 100%;
   top: 0;
+  z-index: 999;
   .header-bar {
     height: 100%;
     display: flex;

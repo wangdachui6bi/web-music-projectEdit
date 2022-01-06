@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { artistList } from '../../api/apicg/artList'
+import { artistList } from '@/api/api_cg/artList'
 export default {
   name: "ArtistsList",
   data () {

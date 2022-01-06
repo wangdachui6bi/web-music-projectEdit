@@ -13,7 +13,7 @@ const routes = [
   ...DiscoverMusic,
   {
     path: "/",
-    redirect: "/discovermusic"
+    redirect: "/personalrecom"
   }
 ]
 
