@@ -4,15 +4,18 @@
       <div class="highlist">
         <img :src="highlist.coverImgUrl" alt="" />
         <div class="hgtext">
-          <div>精品歌单</div>
+          <div>
+            <i class="iconfont icon icon-huiyuan"></i>
+            <span>精品歌单</span>
+          </div>
           <div>{{ highlist.name }}</div>
         </div>
       </div>
     </div>
     <div class="playlist-top">
       <div class="sheetdetail">
-        <button @click="changisShow">
-          <span>{{ msg }}</span>
+        <button @click="changisShow" ref="clickbutton">
+          {{ msg }}
           <i class="iconfont icon icon-youjiantou1"></i>
         </button>
         <van-tabs v-model="active" @click="onClickTab">
@@ -25,7 +28,10 @@
         <div class="totallist" v-show="isShow">
           <p>全部歌单</p>
           <dl class="listdl" v-for="(item, index) in categories" :key="index">
-            <dt class="listtitle">{{ item }}</dt>
+            <dt class="listtitle">
+              <i :class="['icon', 'iconfont', `${iconarr[index]}`]"></i>
+              {{ item }}
+            </dt>
             <div style="display: flex">
               <dd v-for="(item2, index2) in catesub[index]" :key="index2">
                 <span
@@ -55,7 +61,7 @@
     <el-pagination
       background
       layout="prev, pager, next"
-      :total="totollist"
+      :total="totallist"
       :page-size="50"
       @current-change="currentChange"
     >
@@ -69,7 +75,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { getHotCat, getplaylist, getHighquality, getplaylistAll } from '../../../api/DiscoverMusic/playList'
+import { getHotCat, getplaylist, getHighquality } from '../../../api/DiscoverMusic/playList'
 export default {
   name: "playlist",
   data() {
@@ -84,7 +90,8 @@ export default {
       isShow: false,
       currentPage: 1,
       offset: 0,
-      totollist:0
+      totallist: 0,
+      iconarr: ["icon-yuzhong", "icon-fengge", "icon-kafei1", "icon-iconweixiao", "icon-zhuti"]
     }
   },
   async created() {
@@ -100,7 +107,9 @@ export default {
     getplaylist({ cat: this.msg }).then((res) => {
       this.playlist = res.data.playlists
     })
-    this.getplaylistall()
+  },
+  mounted() {
+    this.clickhidden()
   },
   computed: {
     ...mapState({
@@ -118,9 +127,11 @@ export default {
     msg: {
       // 初始化进行一次监听
       immediate: true,
-      handler(newVal, oldVal) {
+      async handler(newVal, oldVal) {
         getplaylist({ cat: newVal, page: this.currentPage - 1 }).then((res) => {
           this.playlist = res.data.playlists
+          // 更改每次的总条数
+          this.totallist = res.data.total
         })
         getHighquality({ cat: newVal }).then((res) => {
           this.arrtag = res.data.playlists
@@ -129,9 +140,12 @@ export default {
     }
   },
   methods: {
-    async getplaylistall() {
-      const res = await getplaylistAll({ cat: this.msg })
-      this.totollist = res.data.total
+    clickhidden() {
+      document.body.onclick = (event) => {
+        if (event.target !== this.$refs.clickbutton) {
+          this.isShow = false
+        }
+      }
     },
     clickChange(item) {
       // 改变颜色
@@ -165,11 +179,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .playlist {
   box-sizing: border-box;
   .highquality {
-    padding: 10px 20px 10px 10px;
+    padding: 0px 20px 10px 10px;
     .highlist {
       display: flex;
       margin: 15px 0 20px 20px;
@@ -325,6 +339,10 @@ export default {
     color: #fff;
   }
   .el-pagination {
+    button.btn-prev {
+      margin-left: 2px;
+      margin-right: 2px;
+    }
     ul.el-pager {
       position: absolute;
       li:not(.disabled).active {
