@@ -27,7 +27,7 @@ import TopBar from "@/components/TopBar"
 import TabBar from "@/components/TabBar"
 export default {
   name: "layout",
-  data () {
+  data() {
     return {
       TabList: [
         "/personalrecom",

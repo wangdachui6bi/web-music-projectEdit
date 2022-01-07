@@ -10,7 +10,9 @@ import {
   Carousel,
   CarouselItem,
   InfiniteScroll,
-  Icon
+  Icon,
+  Empty,
+  Pagination
 } from 'element-ui'
 
 Vue.use(Button)
@@ -22,6 +24,8 @@ Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(InfiniteScroll)
 Vue.use(Icon)
+Vue.use(Empty)
+Vue.use(Pagination)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm // 消息确认
