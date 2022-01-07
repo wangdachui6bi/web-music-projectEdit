@@ -1,5 +1,5 @@
 <template>
-  <div class="TopList">
+  <div class="TopList view-main">
     <div class="guanfang-list">
       <h2 class="font-bold font-20">官方榜</h2>
       <div
@@ -107,6 +107,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.view-main {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
 .TopList {
   .guanfang-list {
     h2 {

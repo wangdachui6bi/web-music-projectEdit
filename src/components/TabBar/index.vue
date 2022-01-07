@@ -17,6 +17,20 @@ export default {
     return {
       active: 0
     }
+  },
+  watch: {
+    $route: {
+      immediate: true,
+      handler (to, from) {
+        this.active = [
+          "/personalrecom",
+          "/playlist",
+          "/toplist",
+          "/artistlist",
+          "/newsongs"
+        ].indexOf(to.path)
+      }
+    }
   }
 }
 </script>
