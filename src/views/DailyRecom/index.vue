@@ -31,6 +31,11 @@
           <i class="iconfont icon-aixin"></i>
         </el-table-column>
         <el-table-column prop="name" label="音乐标题" width="211">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.name }}</span>
+            <div class="vip-tag" v-if="scope.row.fee === 1">VIP</div>
+            <div class="vip-tag" v-if="scope.row.mv !== 0">MV</div>
+          </template>
         </el-table-column>
         <el-table-column prop="ar[0].name" label="歌手" width="80">
         </el-table-column>
@@ -112,10 +117,12 @@ export default {
     border: none;
     font-size: 12px;
   }
-  .el-table__cell div {
-    box-sizing: border-box;
-    white-space: nowrap;
-    min-width: 50px;
+  .el-table__cell {
+    > div {
+      box-sizing: border-box;
+      white-space: nowrap;
+      min-width: 50px;
+    }
   }
 }
 </style>

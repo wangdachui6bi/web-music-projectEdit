@@ -128,4 +128,16 @@ export default {
   margin-top: -25%;
   width: 100% !important;
 }
+// vip 和 mv的弹窗
+.vip-tag {
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px solid #fe672e;
+  border-radius: 2px;
+  color: #fe672e;
+  margin-left: 10px;
+  height: 14px;
+  padding: 0 2px;
+  line-height: 1;
+}
 </style>
