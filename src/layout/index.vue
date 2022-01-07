@@ -1,21 +1,25 @@
 <template>
   <div class="layout">
     <!-- 头部 -->
-    <div v-if="$route.path !== '/login'">
+    <template v-if="$route.path !== '/login'">
       <TopBar></TopBar>
       <div class="TopBar-space"></div>
-    </div>
+    </template>
     <!-- 主体 -->
     <div class="main">
-      <TabBar v-if="TabList.includes($route.path)" />
-      <div class="TabBar-space" v-if="TabList.includes($route.path)"></div>
-      <router-view></router-view>
+      <template v-if="TabList.includes($route.path)">
+        <TabBar />
+        <div class="TabBar-space"></div>
+      </template>
+      <div class="view-main">
+        <router-view></router-view>
+      </div>
     </div>
     <!-- 底部 -->
-    <div v-if="$route.path !== '/login'">
+    <template v-if="$route.path !== '/login'">
       <FooBar></FooBar>
       <div class="FooBar-space"></div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -40,6 +44,8 @@ export default {
     FooBar,
     TopBar,
     TabBar
+  },
+  mounted () {
   }
 }
 </script>
@@ -54,6 +60,11 @@ export default {
   }
   .FooBar-space {
     margin-bottom: 51px;
+  }
+  .view-main {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1200px;
   }
 }
 </style>

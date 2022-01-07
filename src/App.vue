@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div id="app">
     <Layout></Layout>
   </div>
 </template>
@@ -17,6 +17,14 @@ export default {
 }
 </script>
 <style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #2c3e50;
+}
+:root {
+  font-size: 14px;
+}
 .search-input .el-input__inner {
   height: 36px;
   line-height: 36px;
@@ -28,6 +36,24 @@ export default {
 .img-border {
   box-sizing: border-box;
   border: 1px solid #ddd;
+}
+.img-radius-8 {
+  border-radius: 8px;
+}
+.img-radius-4 {
+  border-radius: 4px;
+}
+.img-h {
+  height: 100%;
+}
+.img {
+  width: 100%;
+}
+.font-bold {
+  font-weight: 700;
+}
+.font-20 {
+  font-size: 20px;
 }
 .font-14 {
   font-size: 14px;
@@ -41,10 +67,32 @@ export default {
 .w-100 {
   width: 100px;
 }
+.mleft-12 {
+  margin-left: 12px;
+}
+.mleft-30 {
+  margin-left: 30px;
+}
+.mright-10 {
+  margin-right: 10px;
+}
+.mtop-10 {
+  margin-top: 10px;
+}
+.mleft-200 {
+  margin-left: 200px;
+}
 .text-hidden {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.no-btn {
+  outline: 0;
+  border: 0;
+  color: #676767;
+  cursor: pointer;
+  background-color: #fff;
 }
 // 弹窗
 .el-message-box {
