@@ -37,5 +37,8 @@ export default {
 <style lang="scss" scoped>
 .layout {
   padding-top: 60px;
+  .main {
+    margin-bottom: 51px;
+  }
 }
 </style>
