@@ -73,7 +73,6 @@ export default {
 
 <style lang="scss" scoped>
 .login {
-  margin-top: -60px;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
