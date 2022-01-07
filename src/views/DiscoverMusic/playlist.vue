@@ -1,32 +1,46 @@
 <template>
   <div class="playlist">
+    <div class="totallist">
+      <van-cell is-link @click="showPopup">展示弹出层</van-cell>
+      <van-popup v-model="show">内容</van-popup>
+    </div>
+    <div class="highquality" v-for="(highlist, index) in arrtag" :key="index">
+      <div class="highlist">
+        <img :src="highlist.coverImgUrl" alt="" />
+        <div class="hgtext">
+          <div>精品歌单</div>
+          <div>{{ highlist.name }}</div>
+        </div>
+      </div>
+    </div>
     <div class="playlist-top">
       <div class="sheetdetail">
         <button>
           {{ msg }}
           <i class="iconfont icon icon-youjiantou1"></i>
         </button>
-        <van-tabs v-model="active" swipeable @click-tab="onClickTab">
+        <van-tabs v-model="active" @click="onClickTab">
           <van-tab
             v-for="(item, index) in hotcat"
             :title="item.name"
             :key="index"
-          >
-            <div class="listdetail">
-              <ul class="listul" v-for="(list, index) in playlist" :key="index">
-                <li>
-                  <img :src="list.coverImgUrl" alt="" />
-                </li>
-                <li>
-                  <span>{{ list.name }}</span>
-                </li>
-              </ul>
-            </div>
-          </van-tab>
+          ></van-tab>
         </van-tabs>
       </div>
+      <div class="listdetail">
+        <ul class="listul" v-for="(list, index) in playlist" :key="index">
+          <li>
+            <img :src="list.coverImgUrl" alt="" />
+          </li>
+          <li class="listtextli">
+            <span>{{ list.name }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="totallist">
+  </div>
+  <!-- <div class="totallist">
+      <p>全部歌单</p>
       <dl class="listdl" v-for="(item, index) in categories" :key="index">
         <dt class="listtitle">{{ item }}</dt>
         <div style="display: flex">
@@ -39,13 +53,16 @@
           </dd>
         </div>
       </dl>
-    </div>
-  </div>
+    </div> -->
 </template>
+
+
+
+
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { getHotCat, getplaylist } from '../../api/playList'
+import { getHotCat, getplaylist, getHighquality } from '../../api/playList'
 export default {
   name: "playlist",
   data() {
@@ -54,7 +71,9 @@ export default {
       active: 0,
       hotcat: [],
       listitem: [],
-      playlist: []
+      playlist: [],
+      arrtag: [],
+      show: false
     }
   },
   async created() {
@@ -82,14 +101,32 @@ export default {
       catesub: 'playlist/catesub'
     })
   },
+  watch: {
+    msg: {
+      // 初始化进行一次监听
+      immediate: true,
+      handler(newVal, oldVal) {
+        getplaylist({ cat: newVal }).then((res) => {
+          this.playlist = res.data.playlists
+        })
+        getHighquality({ cat: newVal }).then((res) => {
+          this.arrtag = res.data.playlists
+          console.log(this.arrtag)
+        })
+      }
+    }
+  },
   methods: {
     clickChange(item) {
       // 改变颜色
       item.activity = !item.activity
       console.log(item.activity)
     },
-    onClickTab() {
-      console.log(123)
+    onClickTab(name, title) {
+      this.msg = title
+    },
+    showPopup() {
+      this.show = true
     }
   }
 }
@@ -97,21 +134,96 @@ export default {
 
 <style lang="scss" scoped>
 .playlist {
-  .playlist-top {
-    .sheetdetail {
+  box-sizing: border-box;
+  .highquality {
+    padding: 10px 20px 10px 10px;
+    .highlist {
       display: flex;
+      margin: 15px 0 20px 20px;
+      font-size: 12px;
+      box-sizing: border-box;
+      background-color: rgba(0, 0, 0, 0.1);
+      background-image: linear-gradient(#ffecd2, #fcb69f);
+      border-radius: 10px;
+      padding: 10px;
+      img {
+        width: 140px;
+        height: 140px;
+      }
+      .hgtext {
+        margin: 50px 0 0 30px;
+        div:first-child {
+          color: orange;
+          border: 1px solid orange;
+          width: 80px;
+          text-align: center;
+          line-break: 12px;
+          text-align: center;
+          border-radius: 15px;
+          margin-bottom: 15px;
+        }
+        div:nth-child(2) {
+          width: 120px;
+        }
+      }
+    }
+  }
+  .playlist-top {
+    box-sizing: border-box;
+    padding: 0 14px;
+    .sheetdetail {
+      // display: flex;
+      overflow: hidden;
+      margin-bottom: 10px;
       button {
-        width: 80px;
+        float: left;
+        width: 106px;
         text-align: center;
         border-radius: 30px;
+        margin-top: 8px;
       }
-      ul {
+    }
+    .listdetail {
+      display: flex;
+      flex-wrap: wrap;
+      .listul {
+        box-sizing: border-box;
+        width: 33%;
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        li {
+          margin: 0;
+          img {
+            width: 100%;
+            height: 90%;
+            border-radius: 20px;
+          }
+        }
+        .listtextli {
+          width: 100%;
+          font-size: 12px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
     }
   }
   .totallist {
-    display: none;
+    .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .block {
+      width: 120px;
+      height: 120px;
+      background-color: #fff;
+    }
+    // display: none;
     .listdl {
       box-sizing: border-box;
       padding: 0 15px;
