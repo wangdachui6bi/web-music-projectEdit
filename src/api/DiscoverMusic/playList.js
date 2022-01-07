@@ -1,13 +1,6 @@
 import request from '../../utils/request'
 // 获取歌单分类
 /* 根据分类获取歌单 */
-// export const getPlayListByCat = ({ limit, order, cat, offset }) => get('/top/playlist', { limit, order, cat, offset })
-export const getPlayListByCat = () => {
-  return request({
-    method: 'get',
-    url: '/search?keywords=海阔天空'
-  })
-}
 export const getAllCat = () => {
   return request({
     method: 'get',
