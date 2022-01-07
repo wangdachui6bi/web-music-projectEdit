@@ -107,11 +107,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.view-main {
-  width: 90%;
-  margin: 0 auto;
-  max-width: 1200px;
-}
 .TopList {
   .guanfang-list {
     h2 {

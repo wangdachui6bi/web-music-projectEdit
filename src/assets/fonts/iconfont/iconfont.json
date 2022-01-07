@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11372639",
+      "name": "爱心",
+      "font_class": "aixin",
+      "unicode": "e8ab",
+      "unicode_decimal": 59563
+    },
+    {
+      "icon_id": "11372756",
+      "name": "爱心",
+      "font_class": "aixin1",
+      "unicode": "e8c3",
+      "unicode_decimal": 59587
+    },
+    {
       "icon_id": "867782",
       "name": "icon-微笑",
       "font_class": "iconweixiao",
@@ -130,13 +144,6 @@
       "font_class": "shoucangjia",
       "unicode": "e614",
       "unicode_decimal": 58900
-    },
-    {
-      "icon_id": "6775644",
-      "name": "爱心",
-      "font_class": "aixin",
-      "unicode": "eca1",
-      "unicode_decimal": 60577
     },
     {
       "icon_id": "7139415",

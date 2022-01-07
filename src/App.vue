@@ -6,11 +6,6 @@
 <script>
 import Layout from "@/layout"
 export default {
-  data() {
-    return {
-
-    }
-  },
   components: {
     Layout
   }
@@ -25,6 +20,12 @@ export default {
 :root {
   font-size: 14px;
 }
+// 版心
+.view-main {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
 .search-input .el-input__inner {
   height: 36px;
   line-height: 36px;
@@ -32,6 +33,23 @@ export default {
   border-radius: 16px;
   border: 0;
   color: snow;
+}
+.btn {
+  border: none;
+  outline: none;
+  height: 30px;
+  padding: 4px 14px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.btn-red {
+  background-color: #ec4141;
+  color: #fff;
+}
+.btn-white {
+  border: 1px solid #d8d8d8;
+  background-color: #fff;
+  color: #373737;
 }
 .img-border {
   box-sizing: border-box;
@@ -51,6 +69,9 @@ export default {
 }
 .font-bold {
   font-weight: 700;
+}
+.font-24 {
+  font-size: 24px;
 }
 .font-20 {
   font-size: 20px;
@@ -79,9 +100,13 @@ export default {
 .mtop-10 {
   margin-top: 10px;
 }
+.mtop-20 {
+  margin-top: 20px;
+}
 .mleft-200 {
   margin-left: 200px;
 }
+
 .text-hidden {
   overflow: hidden;
   white-space: nowrap;

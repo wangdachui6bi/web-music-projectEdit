@@ -37,6 +37,15 @@ export default [
     meta: {
       needHead: true
     }
+  },
+  {
+
+    name: "NewSongs",
+    path: '/newsongs',
+    component: () => import("@/views/DiscoverMusic/NewSongs"),
+    meta: {
+      needHead: true
+    }
   }
 ]
 
