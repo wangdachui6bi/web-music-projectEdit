@@ -64,6 +64,7 @@
       :total="totallist"
       :page-size="50"
       @current-change="currentChange"
+      :current-page="currentPage"
     >
     </el-pagination>
   </div>
@@ -136,6 +137,7 @@ export default {
         getHighquality({ cat: newVal }).then((res) => {
           this.arrtag = res.data.playlists
         })
+        this.currentPage = 1
       }
     }
   },
@@ -210,7 +212,7 @@ export default {
           margin-bottom: 15px;
         }
         div:nth-child(2) {
-          width: 120px;
+          width: 96px;
         }
       }
     }
@@ -348,7 +350,7 @@ export default {
         background-color: red;
       }
       li {
-        min-width: 24px;
+        min-width: 20px;
       }
     }
   }
