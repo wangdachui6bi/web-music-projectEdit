@@ -344,9 +344,11 @@ export default {
       margin-right: 2px;
     }
     ul.el-pager {
-      position: absolute;
       li:not(.disabled).active {
         background-color: red;
+      }
+      li {
+        min-width: 24px;
       }
     }
   }
