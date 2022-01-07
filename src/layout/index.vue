@@ -11,9 +11,7 @@
         <TabBar />
         <div class="TabBar-space"></div>
       </template>
-      <div class="view-main">
-        <router-view></router-view>
-      </div>
+      <router-view></router-view>
     </div>
     <!-- 底部 -->
     <template v-if="$route.path !== '/login'">
@@ -60,11 +58,6 @@ export default {
   }
   .FooBar-space {
     margin-bottom: 51px;
-  }
-  .view-main {
-    width: 90%;
-    margin: 0 auto;
-    max-width: 1200px;
   }
 }
 </style>
