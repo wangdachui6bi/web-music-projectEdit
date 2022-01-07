@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <!-- 头部 -->
-    <div v-if="$route.path !== '/login'">
+    <div v-if="$route.meta.needHead">
       <TopBar></TopBar>
       <div class="TopBar-space"></div>
     </div>
@@ -12,7 +12,7 @@
       <router-view></router-view>
     </div>
     <!-- 底部 -->
-    <div v-if="$route.path !== '/login'">
+    <div v-if="$route.meta.needHead">
       <FooBar></FooBar>
       <div class="FooBar-space"></div>
     </div>
@@ -25,7 +25,7 @@ import TopBar from "@/components/TopBar"
 import TabBar from "@/components/TabBar"
 export default {
   name: "layout",
-  data () {
+  data() {
     return {
       TabList: [
         "/personalrecom",
