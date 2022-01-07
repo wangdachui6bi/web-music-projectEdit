@@ -12,11 +12,14 @@
 
 <script>
 export default {
-  name:"NoFoundPages",
+  name: "NoFoundPages",
   data() {
     return {
       data: ['A', 'B']
     }
+  },
+  mounted() {
+    console.log(this.$route)
   }
 }
 </script>

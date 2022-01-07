@@ -1,4 +1,4 @@
-import { getAllCat } from '@/api/playList.js'
+import { getAllCat } from '@/api/DiscoverMusic/playList.js'
 const state = {
   categories: [],
   sub: []
@@ -22,6 +22,7 @@ const actions = {
 }
 
 const getters = {
+  // 将小分类与对应大分类相同的 合成数组
   catesub(state) {
     const arr = []
     for (var key in state.categories) {
@@ -33,7 +34,6 @@ const getters = {
       })
       arr.push(smarr)
     }
-    console.log(arr)
     return arr
   }
 }

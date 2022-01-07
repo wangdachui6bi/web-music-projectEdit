@@ -1,4 +1,8 @@
 export default {
+  name: "notFound",
   path: '*',
-  component: () => import('@/views/NoFoundPages/NoFoundPages')
+  component: () => import('@/views/NoFoundPages/NoFoundPages'),
+  meta: {
+    needHead: false
+  }
 }
