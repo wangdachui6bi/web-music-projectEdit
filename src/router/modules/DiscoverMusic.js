@@ -8,6 +8,11 @@ export default [
     name: "ArtistsList",
     path: '/artistlist',
     component: () => import('@/views/DiscoverMusic/ArtistsList')
+  },
+  {
+    name: "ArtistsListInfo",
+    path: '/ArtistsListInfo',
+    component: () => import('@/views/DiscoverMusic/ArtistsListInfo')
   }
 ]
 

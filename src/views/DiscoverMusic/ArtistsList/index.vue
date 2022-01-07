@@ -53,14 +53,18 @@
         <p>{{ msg.name }}</p>
       </div>
     </div>
+
+    <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
   </div>
+
+ 
 </template>
 
 <script>
 import { artistList } from '@/api/DiscoverMusic/ArtistList'
 export default {
   name: "ArtistsList",
-  data () {
+  data() {
     return {
       message: [],
       allid: -1,
@@ -107,40 +111,40 @@ export default {
       alphabet: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'G', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#']
     }
   },
-  mounted () {
+  mounted() {
     this.getArtisList()
   },
   methods: {
-    async getArtisList (type, area, initial) {
+    async getArtisList(type, area, initial) {
       const res = await artistList({ type: this.saveSortId, area: this.saveCountryId, initial: this.saveZmId })
       this.message = res.data.artists
     },
-    sortId (id) {
+    sortId(id) {
       this.saveSortId = id
       this.getArtisList()
     },
-    countryId (id) {
+    countryId(id) {
       this.saveCountryId = id
       this.getArtisList()
     },
-    zmId (id) {
+    zmId(id) {
       this.saveZmId = id
       this.getArtisList()
     },
-    allLang () {
+    allLang() {
       this.saveCountryId = -1
       this.getArtisList()
     },
-    allsort () {
+    allsort() {
       this.saveSortId = -1
       this.getArtisList()
     },
-    filterAll () {
+    filterAll() {
       this.saveZmId = -1
       this.getArtisList()
     },
-    toArtisInfo (id) {
-      console.log(id)
+    toArtisInfo(id) {
+      router.push
     }
   }
 }
