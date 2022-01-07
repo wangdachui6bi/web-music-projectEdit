@@ -6,7 +6,7 @@
 <script>
 import Layout from "@/layout"
 export default {
-  data () {
+  data() {
     return {
 
     }
@@ -101,5 +101,6 @@ export default {
   left: 50%;
   margin-left: -50%;
   margin-top: -25%;
+  width: 100% !important;
 }
 </style>

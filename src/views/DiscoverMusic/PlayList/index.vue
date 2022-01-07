@@ -350,7 +350,7 @@ export default {
         background-color: red;
       }
       li {
-        min-width: 20px;
+        min-width: 30px;
       }
     }
   }
