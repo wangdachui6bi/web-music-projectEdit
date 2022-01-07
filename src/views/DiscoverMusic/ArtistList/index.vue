@@ -1,5 +1,5 @@
 <template>
-  <div class="ArtistsList">
+  <div class="ArtistList">
     <p><button @click="isShow = !isShow">打开列表</button></p>
     <div class="tag-wrapper" v-show="isShow">
       <div class="languages">
@@ -59,7 +59,7 @@
 <script>
 import { artistList } from '@/api/DiscoverMusic/ArtistList'
 export default {
-  name: "ArtistsList",
+  name: "ArtistList",
   data () {
     return {
       message: [],
@@ -147,7 +147,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ArtistsList {
+.ArtistList {
   width: 90%;
   margin: 0 auto;
   font-size: 14px;
@@ -197,6 +197,7 @@ export default {
       margin-right: 5px;
       img {
         width: 100%;
+        height: 107px;
         border-radius: 5px;
         padding: 0;
         margin: 0;

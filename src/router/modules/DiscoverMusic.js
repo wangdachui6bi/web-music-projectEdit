@@ -5,9 +5,9 @@ export default [
     component: () => import('@/views/DiscoverMusic/PersonalRecom')
   },
   {
-    name: "ArtistsList",
+    name: "ArtistList",
     path: '/artistlist',
-    component: () => import('@/views/DiscoverMusic/ArtistsList')
+    component: () => import('@/views/DiscoverMusic/ArtistList')
   },
   {
     name: "TopList",
