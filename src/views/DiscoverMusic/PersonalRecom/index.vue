@@ -8,7 +8,7 @@
       </el-carousel>
     </div>
     <!-- 未登录状态下的热门推荐 -->
-    <div class="play-list">
+    <div class="play-list" v-if="!isLogin">
       <h2 @click="$router.push('playlist')">
         热门推荐 <i class="iconfont icon-youjiantou1"></i>
       </h2>
@@ -20,6 +20,7 @@
                 :src="item.picUrl"
                 alt=""
                 class="img img-radius-8 img-border"
+                @click="getTo('playlistdetail', item.id)"
               />
               <div class="play-btn">
                 <i class="el-icon-caret-right"></i>
@@ -31,21 +32,60 @@
       </div>
     </div>
     <!-- 登录状态下的推荐歌单 -->
+    <div class="play-list" v-else>
+      <h2 @click="$router.push('playlist')">
+        推荐歌单 <i class="iconfont icon-youjiantou1"></i>
+      </h2>
+      <div class="imglist">
+        <ul class="img-list-ul">
+          <li v-for="item in recommendList" :key="item.id" class="img-item-li">
+            <div class="img-wrap">
+              <img
+                :src="item.picUrl"
+                alt=""
+                class="img img-radius-8 img-border"
+                @click="getTo('playlistdetail', item.id)"
+              />
+              <div class="play-btn">
+                <i class="el-icon-caret-right"></i>
+              </div>
+            </div>
+            <div class="text-hidden">{{ item.name }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { getBanner, getPersonalized } from '@/api/DiscoverMusic/PersonalRecom'
+import { getBanner, getPersonalized, getRecommend } from '@/api/DiscoverMusic/PersonalRecom'
+
 export default {
   name: "PersonalRecom",
+  computed: {
+    isLogin () {
+      return this.$store.state.login.isLogin
+    }
+  },
   data () {
     return {
       imgList: [],
-      recSongList: []
+      recSongList: [],
+      recommendList: []
     }
   },
   created () {
+    console.log(sessionStorage.getItem('isLogin'))
     this.getImgList()
     this.getRecSongList(10)
+  },
+  watch: {
+    isLogin: {
+      immediate: true,
+      handler () {
+        if (this.isLogin) this.getRecommend()
+      }
+    }
   },
   methods: {
     async getImgList () {
@@ -55,9 +95,22 @@ export default {
     },
     // 获取热门推荐歌单 未登录时
     async getRecSongList (limit) {
+      // if (this.isLogin) return
       const res = await getPersonalized(limit)
       // console.log(res, limit)
+      // if (res.code !== 200) return
       this.recSongList = res.data.result
+    },
+    async getRecommend () {
+      // if (this.isLogin) return
+      const res = await getRecommend()
+      // if (res.code !== 200) return
+      console.log(res)
+      this.recommendList = res.data.recommend
+    },
+    getTo (url, id) {
+      this.$router.push(url + '/' + id)
+      console.log(id)
     }
   }
 }

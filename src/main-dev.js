@@ -4,6 +4,7 @@ import './plugins/vant.js'
 import './plugins/element.js'
 import router from './router'
 import store from './store'
+
 // 引入矢量图
 import '@/assets/css/index.css'
 import '@/assets/fonts/iconfont/iconfont.css'

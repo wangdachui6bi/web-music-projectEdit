@@ -1,6 +1,7 @@
 const state = {
   profile: {},
-  account: {}
+  account: {},
+  isLogin: sessionStorage.getItem('isLogin')
 }
 
 const mutations = {
