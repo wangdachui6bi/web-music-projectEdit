@@ -1,5 +1,5 @@
 <template>
-  <div class="personal-recom">
+  <div class="personal-recom view-main">
     <div class="swiper-wrapper">
       <el-carousel :interval="4000" type="card" height="80px">
         <el-carousel-item v-for="item in imgList" :key="item.imageUrl">

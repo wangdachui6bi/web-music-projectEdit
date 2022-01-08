@@ -26,3 +26,11 @@ export const userAccount = () => {
     url: `/user/account?${new Date().getTime()}`
   })
 }
+
+// 获取用户歌单
+export const playlist = (uid) => {
+  return request({
+    method: 'get',
+    url: `/user/playlist?uid=${uid}`
+  })
+}

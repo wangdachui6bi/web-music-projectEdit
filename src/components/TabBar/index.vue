@@ -39,7 +39,7 @@ export default {
 .TabBar {
   position: fixed;
   top: 60px;
-  z-index: 999;
+  z-index: 997;
   height: 60px;
   width: 100%;
   line-height: 60px;

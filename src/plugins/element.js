@@ -14,11 +14,23 @@ import {
   Empty,
   Pagination,
   Table,
-  TableColumn
+  TableColumn,
+  Menu,
+  MenuItem,
+  Submenu,
+  MenuItemGroup,
+  Skeleton,
+  SkeletonItem
 } from 'element-ui'
 
 Vue.use(Button)
 Vue.use(Form)
+Vue.use(SkeletonItem)
+Vue.use(Submenu)
+Vue.use(Skeleton)
+Vue.use(MenuItemGroup)
+Vue.use(Menu)
+Vue.use(MenuItem)
 Vue.use(FormItem)
 Vue.use(Input)
 Vue.use(Avatar)
