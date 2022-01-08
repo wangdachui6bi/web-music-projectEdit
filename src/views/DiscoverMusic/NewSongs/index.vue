@@ -61,6 +61,7 @@
         </ul>
       </div>
     </div>
+    <!-- 新碟上架 -->
     <div class="newalbum" v-else>
       <van-list
         v-model="loading"
@@ -68,6 +69,7 @@
         finished-text="没有更多了"
         @load="onLoad"
         class="albumlist"
+        :immediate-check="check"
       >
         <ul>
           <li v-for="(item, index) in weekDataalbum" :key="index">
@@ -102,7 +104,8 @@ export default {
       count: 0,
       page: 0,
       limit: 30,
-      wkalbumall: []
+      wkalbumall: [],
+      check: true
     }
   },
   mounted() {
@@ -167,9 +170,7 @@ export default {
         getTopNewalbum({ limit }).then((res) => {
           // 分批请求
           this.wkalbumall = res.data.weekData
-          console.log(this.weekDataalbum)
           this.weekDataalbum = this.weekDataalbum.concat(this.wkalbumall.slice(0, 30))
-          console.log(this.weekDataalbum)
           this.count += res.data.weekData.length
         })
       }
