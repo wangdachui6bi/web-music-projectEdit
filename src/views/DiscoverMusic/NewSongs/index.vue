@@ -154,22 +154,24 @@ export default {
     },
     onLoad() {
       setTimeout(() => {
-        console.log(this.weekDataalbum.length)
         this.getpagealbum()
         this.loading = false
         if (this.weekDataalbum.length >= this.count) {
           this.finished = true
         }
-      }, 1000)
+      }, 2000)
     },
-    async getnewalbum(limit = 30) {
+    getnewalbum(limit = 30) {
       if (!this.isalbum) {
-        const res = await getTopNewalbum({ limit })
         this.isalbum = true
-        // 分批请求
-        this.wkalbumall = res.data.weekData
-        this.weekDataalbum = this.weekDataalbum.concat(this.wkalbumall.slice(this.page * this.limit, this.limit))
-        this.count += res.data.weekData.length
+        getTopNewalbum({ limit }).then((res) => {
+          // 分批请求
+          this.wkalbumall = res.data.weekData
+          console.log(this.weekDataalbum)
+          this.weekDataalbum = this.weekDataalbum.concat(this.wkalbumall.slice(0, 30))
+          console.log(this.weekDataalbum)
+          this.count += res.data.weekData.length
+        })
       }
     },
     // 分批次展示数据 当用户下滑获取更多数据的时候
