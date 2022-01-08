@@ -43,7 +43,7 @@
           <tbody>
             <tr>
               <td style="width: 50px">1</td>
-              <td style="width: 90px">{{ aAlbum.name }}</td>
+              <td class="sl">{{ aAlbum.name }}</td>
               <td>{{ allTime[dex] }}</td>
             </tr>
           </tbody>
@@ -171,6 +171,12 @@ export default {
             line-height: 40px;
             td {
               text-align: center;
+            }
+            .sl{
+              width: 90px;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
         }
