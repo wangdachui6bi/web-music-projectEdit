@@ -17,13 +17,16 @@ export default [
   {
     name: "TopList",
     path: '/toplist',
-    component: () => import('@/views/DiscoverMusic/TopList')
+    component: () => import('@/views/DiscoverMusic/TopList'),
+    meta: {
+      needHead: true
+    }
   },
   {
     name: "ArtistListInfo",
     path: '/artistdetail/:id',
     component: () => import('@/views/DiscoverMusic/ArtistList/ArtistsListInfo'),
-    props:true,
+    props: true,
     meta: {
       needHead: true
     }
@@ -38,8 +41,7 @@ export default [
     }
   },
   {
-
-    name: "NewSongs",
+    name: "Newsongs",
     path: '/newsongs',
     component: () => import("@/views/DiscoverMusic/NewSongs"),
     meta: {
