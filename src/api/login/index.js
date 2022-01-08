@@ -50,3 +50,18 @@ export const checkcode = (key, timestamp) => {
     url: `/login/qr/check?key=${key}&timestamp=${timestamp}`
   })
 }
+// 验证码登录 
+// 获取验证码
+export const sendIdentify = (phone) => {
+  return request({
+    method: 'get',
+    url: `/captcha/sent?phone=${phone}`
+  })
+}
+// 验证验证码
+export const checkIdentify = (phone, captcha) => {
+  return request({
+    method: 'get',
+    url: `/captcha/verify?phone=${phone}&&captcha=${captcha}`
+  })
+}
