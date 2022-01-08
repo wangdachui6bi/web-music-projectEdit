@@ -5,14 +5,20 @@ export default [
     component: () => import('@/views/DiscoverMusic/PersonalRecom')
   },
   {
-    name: "ArtistsList",
+    name: "ArtistList",
     path: '/artistlist',
-    component: () => import('@/views/DiscoverMusic/ArtistsList')
+    component: () => import('@/views/DiscoverMusic/ArtistList')
   },
   {
-    name: "ArtistsListInfo",
-    path: '/ArtistsListInfo',
-    component: () => import('@/views/DiscoverMusic/ArtistsListInfo')
+    name: "TopList",
+    path: '/toplist',
+    component: () => import('@/views/DiscoverMusic/TopList')
+  },
+  {
+    name: "ArtistListInfo",
+    path: '/artistdetail/:id',
+    component: () => import('@/views/DiscoverMusic/ArtistList/ArtistsListInfo'),
+    props:true
   }
 ]
 

@@ -46,4 +46,12 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+// 弹窗
+.el-message-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -50%;
+  margin-top: -25%;
+}
 </style>

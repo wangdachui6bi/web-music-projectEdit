@@ -7,7 +7,7 @@
       </div>
       <!-- 后退 -->
       <div class="btn-history">
-        <button class="btn-circle">
+        <button class="btn-circle" @click="$router.go(-1)">
           <van-icon name="arrow-left" />
         </button>
       </div>
@@ -47,13 +47,14 @@ export default {
     ...mapState('login', ['profile'])
   },
   methods: {
+    // 获取账户信息
     async getAccount () {
       const res = await userAccount()
-      console.log(res)
       // 将数据传给Vuex
       this.$store.commit('login/setProfile', res.data.profile)
       this.$store.commit('login/setAccount', res.data.account)
     },
+    // 退出弹窗
     open () {
       this.$confirm('将要退出登录 是否继续?', '提示', {
         confirmButtonText: '确定',

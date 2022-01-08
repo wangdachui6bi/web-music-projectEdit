@@ -23,8 +23,16 @@ export default {
 
 <style lang="scss" >
 .TabBar {
+  position: fixed;
+  top: 60px;
+  z-index: 999;
   height: 60px;
+  width: 100%;
   line-height: 60px;
+  .van-tab:nth-child(1),
+  .van-tab:nth-child(5) {
+    flex: 1.3;
+  }
   .van-tab--active {
     .van-tab__text {
       font-size: 18px;

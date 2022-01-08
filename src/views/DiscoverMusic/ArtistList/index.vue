@@ -54,16 +54,14 @@
       </div>
     </div>
 
-    <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
   </div>
-
- 
 </template>
 
 <script>
 import { artistList } from '@/api/DiscoverMusic/ArtistList'
+
 export default {
-  name: "ArtistsList",
+  name: "ArtistList",
   data() {
     return {
       message: [],
@@ -144,7 +142,7 @@ export default {
       this.getArtisList()
     },
     toArtisInfo(id) {
-      router.push
+      this.$router.push(`/artistdetail/${id}`)
     }
   }
 }
