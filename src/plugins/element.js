@@ -15,13 +15,25 @@ import {
   Pagination,
   Table,
   TableColumn,
-  Tooltip
+  Tooltip,
+  Menu,
+  MenuItem,
+  Submenu,
+  MenuItemGroup,
+  Skeleton,
+  SkeletonItem
 } from 'element-ui'
 
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(Button)
 Vue.use(Form)
+Vue.use(SkeletonItem)
+Vue.use(Submenu)
+Vue.use(Skeleton)
+Vue.use(MenuItemGroup)
+Vue.use(Menu)
+Vue.use(MenuItem)
 Vue.use(FormItem)
 Vue.use(Input)
 Vue.use(Avatar)
