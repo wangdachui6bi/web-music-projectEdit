@@ -7,3 +7,10 @@ export const getTopNewMusic = (type) => {
     url: `/top/song?type=${type}`
   })
 }
+// 新碟上架
+export const getTopNewalbum = ({ limit, offset, area, type = 'All', year, month }) => {
+  return request({
+    method: 'get',
+    url: `/top/album?limit=${limit}&type=${type}`
+  })
+}

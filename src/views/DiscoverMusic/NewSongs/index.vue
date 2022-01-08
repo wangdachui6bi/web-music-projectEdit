@@ -1,8 +1,27 @@
 <template>
   <div class="newsongs">
     <div class="songbutton">
-      <button @click="btnclick" ref="btnnew" class="active">新歌速递</button>
-      <button @click="btnclick" ref="btnout">新碟上架</button>
+      <button
+        @click="
+          btnclick($event);
+          showFlag = true;
+          isalbum = false;
+        "
+        ref="btnnew"
+        class="active"
+      >
+        新歌速递
+      </button>
+      <button
+        @click="
+          btnclick($event);
+          showFlag = false;
+          getnewalbum();
+        "
+        ref="btnout"
+      >
+        新碟上架
+      </button>
     </div>
     <!-- 新歌速递 -->
     <div class="newsong" v-if="showFlag">
@@ -42,10 +61,27 @@
         </ul>
       </div>
     </div>
+    <div class="newalbum" v-else>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        class="albumlist"
+      >
+        <ul>
+          <li v-for="(item, index) in weekDataalbum" :key="index">
+            <div><img :src="item.blurPicUrl" alt="" /></div>
+            <div>{{ item.name }}</div>
+            <div>{{ item.artist.name }}</div>
+          </li>
+        </ul>
+      </van-list>
+    </div>
   </div>
 </template>
 <script>
-import { getTopNewMusic } from '@/api/DiscoverMusic/newSongs.js'
+import { getTopNewMusic, getTopNewalbum } from '@/api/DiscoverMusic/newSongs.js'
 // 新歌速递
 // import moment from 'moment'
 export default {
@@ -57,17 +93,26 @@ export default {
       typedata: [],
       active: 0,
       showFlag: true,
-      list: []
+      list: [],
+      isalbum: false,
+      // 获取的最新每周的新碟
+      weekDataalbum: [],
+      loading: false,
+      finished: false,
+      count: 0,
+      page: 0,
+      limit: 30,
+      wkalbumall: []
     }
   },
   mounted() {
-    this.changetype(96, 0)
+    this.changetype(0, 0)
   },
   filters: {
     playtime(time) {
       // 转化为播放时间
       const mm = parseInt(time / 1000 / 60).toString().padStart(2, 0)
-      const ss = (time % 60).toString().padStart(2, 0)
+      const ss = parseInt(time / 1000 % 60).toString().padStart(2, 0)
       const str = `${mm}:${ss}`
       return str
     }
@@ -90,6 +135,7 @@ export default {
         // 数据太长放不下 处理一下
         item.album.name = item.album.name.substring(0, 12)
         item.name = item.name.substring(0, 12)
+        // item.duration = moment(item.duration).format('mm:ss')
         const list = []
         list.push({
           id: item.id,
@@ -105,6 +151,31 @@ export default {
       })
       // 直接赋值新数组 也是响应式的 如果直接改老数组数据 不用push这些方法监听不到
       this.typedata = res.data.data
+    },
+    onLoad() {
+      setTimeout(() => {
+        console.log(this.weekDataalbum.length)
+        this.getpagealbum()
+        this.loading = false
+        if (this.weekDataalbum.length >= this.count) {
+          this.finished = true
+        }
+      }, 1000)
+    },
+    async getnewalbum(limit = 30) {
+      if (!this.isalbum) {
+        const res = await getTopNewalbum({ limit })
+        this.isalbum = true
+        // 分批请求
+        this.wkalbumall = res.data.weekData
+        this.weekDataalbum = this.weekDataalbum.concat(this.wkalbumall.slice(this.page * this.limit, this.limit))
+        this.count += res.data.weekData.length
+      }
+    },
+    // 分批次展示数据 当用户下滑获取更多数据的时候
+    getpagealbum() {
+      this.page++
+      this.weekDataalbum = this.weekDataalbum.concat(this.wkalbumall.slice(this.page * this.limit, this.limit + this.page * this.limit))
     }
   }
 }
@@ -133,73 +204,108 @@ export default {
     }
   }
   // 根据type选择歌单
-  .songlistchoose {
-    margin: 34px 0 20px 0;
-    display: flex;
-    .van-row {
-      width: 72%;
-      margin-left: 20px;
-      .van-col {
-        color: #676767;
-        cursor: pointer;
-        width: 19%;
+  .newsong {
+    .songlistchoose {
+      margin: 34px 0 20px 0;
+      display: flex;
+      .van-row {
+        width: 72%;
+        margin-left: 20px;
+        .van-col {
+          color: #676767;
+          cursor: pointer;
+          width: 19%;
+        }
+        .van-col.active {
+          color: #373737;
+          font-weight: 700;
+        }
       }
-      .van-col.active {
-        color: #373737;
-        font-weight: 700;
+      .play-btn {
+        display: flex;
+        i {
+          text-align: center;
+          color: #d8d8d8;
+          border-radius: 15px;
+          border: 1px solid #d8d8d8;
+          padding: 5px;
+          margin-right: 5px;
+          font-size: 14px;
+          align-items: center;
+        }
+        i.acitve {
+          background-color: red;
+          color: white;
+        }
       }
     }
-    .play-btn {
-      display: flex;
-      i {
-        text-align: center;
-        color: #d8d8d8;
-        border-radius: 15px;
-        border: 1px solid #d8d8d8;
-        padding: 5px;
-        margin-right: 5px;
-        font-size: 14px;
-        align-items: center;
+    // 歌曲listdetail
+    .songlistdetail {
+      padding-left: 10px;
+      padding-right: 10px;
+      box-sizing: border-box;
+      .newsongul {
+        display: flex;
+        justify-content: space-between;
+        li {
+          width: 19%;
+          height: 90px;
+          box-sizing: border-box;
+          padding: 10px;
+          font-size: 13px;
+          align-self: center;
+          img {
+            width: 60px;
+            height: 60px;
+          }
+        }
+        li:first-of-type {
+          width: 30px;
+          color: #cfcfdf;
+        }
+        li:last-of-type {
+          color: #cfcfdf;
+        }
+        li:not(:nth-child(2)) {
+          padding-top: 37px;
+        }
       }
-      i.acitve {
-        background-color: red;
-        color: white;
+      .newsongul:nth-of-type(2n + 1) {
+        background-color: #f9f9f9;
       }
     }
   }
-  // 歌曲listdetail
-  .songlistdetail {
-    padding-left: 10px;
-    padding-right: 10px;
+  .newalbum {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
     box-sizing: border-box;
-    .newsongul {
+    padding: 0 14px 0 14px;
+    justify-content: space-between;
+    align-items: center;
+    ul {
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      align-items: center;
       li {
-        width: 19%;
-        height: 90px;
+        width: 32%;
         box-sizing: border-box;
         padding: 10px;
-        font-size: 13px;
-        align-self: center;
+        div {
+          text-align: center;
+        }
+        div:nth-child(2) {
+          font-size: 13px;
+          margin: 2px 0 2px 0;
+        }
+        div:nth-child(3) {
+          color: rgb(159, 159, 159);
+          font-size: 12px;
+        }
         img {
-          width: 60px;
-          height: 60px;
+          width: 100%;
         }
       }
-      li:first-of-type {
-        width: 30px;
-        color: #cfcfdf;
-      }
-      li:last-of-type {
-        color: #cfcfdf;
-      }
-      li:not(:nth-child(2)) {
-        padding-top: 37px;
-      }
-    }
-    .newsongul:nth-of-type(2n + 1) {
-      background-color: #f9f9f9;
     }
   }
 }
