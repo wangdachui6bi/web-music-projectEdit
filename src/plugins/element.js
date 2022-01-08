@@ -11,6 +11,8 @@ import {
   CarouselItem,
   InfiniteScroll,
   Icon,
+  Empty,
+  Pagination,
   Table,
   TableColumn
 } from 'element-ui'
@@ -24,6 +26,8 @@ Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(InfiniteScroll)
 Vue.use(Icon)
+Vue.use(Empty)
+Vue.use(Pagination)
 Vue.use(Table)
 Vue.use(TableColumn)
 

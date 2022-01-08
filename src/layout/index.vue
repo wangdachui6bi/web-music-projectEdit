@@ -1,21 +1,23 @@
 <template>
   <div class="layout">
     <!-- 头部 -->
-    <div v-if="$route.path !== '/login'">
+    <template v-if="$route.meta.needHead">
       <TopBar></TopBar>
       <div class="TopBar-space"></div>
-    </div>
+    </template>
     <!-- 主体 -->
     <div class="main">
-      <TabBar v-if="TabList.includes($route.path)" />
-      <div class="TabBar-space" v-if="TabList.includes($route.path)"></div>
+      <template v-if="TabList.includes($route.path)">
+        <TabBar></TabBar>
+        <div class="TabBar-space"></div>
+      </template>
       <router-view></router-view>
     </div>
     <!-- 底部 -->
-    <div v-if="$route.path !== '/login'">
+    <template v-if="$route.meta.needHead">
       <FooBar></FooBar>
       <div class="FooBar-space"></div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -25,7 +27,7 @@ import TopBar from "@/components/TopBar"
 import TabBar from "@/components/TabBar"
 export default {
   name: "layout",
-  data () {
+  data() {
     return {
       TabList: [
         "/personalrecom",

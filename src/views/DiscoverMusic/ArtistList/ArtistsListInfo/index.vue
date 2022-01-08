@@ -6,7 +6,10 @@
       </div>
       <p class="pname">
         <span>{{ singerDetails.name }}</span>
-        <button>收藏</button>
+        <button>
+          <i class="icon iconfont icon-tianjiawenjian"></i>
+          收藏
+        </button>
       </p>
       <p class="pNumber">
         <span>单曲数:{{ singerDetails.albumSize }}</span>

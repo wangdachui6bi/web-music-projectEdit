@@ -14,7 +14,7 @@ export const getTopList = () => {
 }
 
 /**
- * 获取歌单详情 只差前四个
+ * 获取歌单详情 只查前四个
  * @return {code,playlist} 
  * playlist是被查询的歌单信息  
  * playlist中有一个tracks对象数组, 
@@ -23,6 +23,6 @@ export const getTopList = () => {
 export const getListDetails = (id) => {
   return request({
     method: 'GET',
-    url: `/toplist?${id}`
+    url: `/playlist/detail?id=${id}`
   })
 }

@@ -11,7 +11,6 @@ import '@/assets/fonts/iconfont/iconfont.css'
 // rem适配
 // import 'lib-flexible'
 Vue.config.productionTip = false
-
 new Vue({
   render: h => h(App),
   store,
