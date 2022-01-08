@@ -116,11 +116,13 @@ export default {
       if (res.data.code !== 200) return
       const key = res.data.data.unikey
       createcodemsg(key, timeNow).then((resImg) => {
-        this.codeImg = resImg.data.data.qrimg
+        // 创建二维码的同时 进行查询二维码的状态
         checkcode(key, timeNow).then((res) => {
           this.codeStatus = res.data.message
+          this.codeImg = resImg.data.data.qrimg
         })
       })
+      // 轮询此接口可获取二维码扫码状态,
       this.timer = setInterval((key, timeNow) => {
         checkcode(key, timeNow).then((res) => {
           this.codeStatus = res.data.message
@@ -128,7 +130,13 @@ export default {
       }, 2000, key, timeNow)
     }
   },
-  computed: {
+  watch: {
+    showindex(newVal, oldVal) {
+      // 每次切换到其他登录模式的时候关闭自动检查的定时器 再次点击二维码登录重新
+      // 获取新的二维码
+      clearInterval(this.timer)
+      this.codeImg = ''
+    }
   }
 }
 </script>
