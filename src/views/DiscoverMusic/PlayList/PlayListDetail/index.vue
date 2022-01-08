@@ -1,80 +1,85 @@
 <template>
   <!-- 歌单详情 -->
-  <div class="play-list-detail">
-    <!-- 歌单图片及信息 -->
-    <div class="detail-desc">
-      <!-- 歌单图片 -->
-      <div class="detail-img-wrapper">
-        <img class="img img-radius-8 img-border" :src="playlist.coverImgUrl" />
-      </div>
-      <!-- 歌单信息 -->
-      <div class="detail-desc-info">
-        <div class="info-title">
-          <div class="tag">歌单</div>
-          <span class="titlename">{{ playlist.name }}</span>
+  <el-skeleton :rows="6" animated :loading="loading">
+    <div class="play-list-detail">
+      <!-- 歌单图片及信息 -->
+      <div class="detail-desc">
+        <!-- 歌单图片 -->
+        <div class="detail-img-wrapper">
+          <img
+            class="img img-radius-8 img-border"
+            :src="playlist.coverImgUrl"
+          />
         </div>
-        <!-- 作者信息 -->
-        <div class="author">
-          <div class="author-img">
-            <img :src="playlist.creator.avatarUrl" class="img" />
+        <!-- 歌单信息 -->
+        <div class="detail-desc-info">
+          <div class="info-title">
+            <div class="tag">歌单</div>
+            <span class="titlename">{{ playlist.name }}</span>
           </div>
-          <div class="author-info">
-            <span
-              style="color: rgb(11, 88, 176)"
-              class="mleft-12 font-12 pointer"
-              >{{ playlist.creator.nickname }}</span
-            >
-            <span class="mleft-12 font-12" style="color: #2c3e50">{{
-              playlist.createTime | datefilter
+          <!-- 作者信息 -->
+          <div class="author">
+            <div class="author-img">
+              <img :src="playlist.creator.avatarUrl" class="img" />
+            </div>
+            <div class="author-info">
+              <span
+                style="color: rgb(11, 88, 176)"
+                class="mleft-12 font-12 pointer"
+                >{{ playlist.creator.nickname }}</span
+              >
+              <span class="mleft-12 font-12" style="color: #2c3e50">{{
+                playlist.createTime | datefilter
+              }}</span>
+            </div>
+          </div>
+          <!-- 按钮 -->
+          <ul class="info-btn">
+            <button class="btn btn-red">
+              <i class="el-icon-caret-right"></i>
+            </button>
+            <button class="btn btn-white">
+              <i class="el-icon-folder-checked"></i>
+            </button>
+            <button class="btn btn-white">
+              <i class="el-icon-share"></i>
+            </button>
+            <button class="btn btn-red">
+              <i class="el-icon-hot-water"></i>
+            </button>
+          </ul>
+          <!-- 标签 -->
+          <div class="detail-tag">
+            <span>标签 : </span>
+            <span style="margin: 10px; font-size: 14px">{{
+              playlist.tags[0]
             }}</span>
           </div>
-        </div>
-        <!-- 按钮 -->
-        <ul class="info-btn">
-          <button class="btn btn-red">
-            <i class="el-icon-caret-right"></i>
-          </button>
-          <button class="btn btn-white">
-            <i class="el-icon-folder-checked"></i>
-          </button>
-          <button class="btn btn-white">
-            <i class="el-icon-share"></i>
-          </button>
-          <button class="btn btn-red">
-            <i class="el-icon-hot-water"></i>
-          </button>
-        </ul>
-        <!-- 标签 -->
-        <div class="detail-tag">
-          <span>标签 : </span>
-          <span style="margin: 10px; font-size: 14px">{{
-            playlist.tags[0]
-          }}</span>
-        </div>
-        <!-- 播放数量歌曲数量 -->
-        <div class="num-info">
-          <span>歌曲 : {{ playlist.trackCount }}</span>
-          <span>播放 : {{ playlist.playCount | countFormat }}</span>
-        </div>
-        <!-- 简介 -->
-        <div class="intro">
-          <p style="max-width: 1000px; padding-bottom: 10px">
-            简介：{{ playlist.description }}
-          </p>
+          <!-- 播放数量歌曲数量 -->
+          <div class="num-info">
+            <span>歌曲 : {{ playlist.trackCount }}</span>
+            <span>播放 : {{ playlist.playCount | countFormat }}</span>
+          </div>
+          <!-- 简介 -->
+          <div class="intro">
+            <p style="max-width: 1000px; padding-bottom: 10px">
+              简介：{{ playlist.description }}
+            </p>
+          </div>
         </div>
       </div>
+      <!-- 列表头 -->
+      <div class="detail-head">
+        <van-tabs v-model="active">
+          <van-tab title="歌曲列表"><MusicList :list="playlist" /></van-tab>
+          <van-tab title="评论">评论</van-tab>
+          <van-tab title="收藏者">收藏者</van-tab>
+        </van-tabs>
+      </div>
+      <!-- 列表内容 -->
+      <div></div>
     </div>
-    <!-- 列表头 -->
-    <div class="detail-head">
-      <van-tabs v-model="active">
-        <van-tab title="歌曲列表"><MusicList :list="playlist" /></van-tab>
-        <van-tab title="评论">评论</van-tab>
-        <van-tab title="收藏者">收藏者</van-tab>
-      </van-tabs>
-    </div>
-    <!-- 列表内容 -->
-    <div></div>
-  </div>
+  </el-skeleton>
 </template>
 
 <script>
@@ -94,8 +99,12 @@ export default {
   },
   data () {
     return {
-      playlist: {},
-      active: 0
+      playlist: {
+        creator: {},
+        tags: []
+      },
+      active: 0,
+      loading: true
     }
   },
   created () {
@@ -105,6 +114,7 @@ export default {
     async getPlayListDetail (id) {
       const res = await getPlayListDetail(id)
       this.playlist = res.data.playlist
+      this.loading = false
     }
   },
   filters: {

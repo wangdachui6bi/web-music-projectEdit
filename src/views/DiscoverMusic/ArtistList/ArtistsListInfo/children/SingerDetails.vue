@@ -1,34 +1,38 @@
 <template>
   <div class="introduce">
-    <div class="ins">
-      <h2>个人简介</h2>
-      <p class="selfins">{{ selfDetail }}</p>
-      <div v-for="(item, index) in details" :key="index" class="others">
-        <h2>{{ item.ti }}</h2>
-        <p class="otherp">{{ item.txt }}</p>
+    <el-skeleton :rows="5" animated :loading="loading">
+      <div class="ins">
+        <h2>个人简介</h2>
+        <p class="selfins">{{ selfDetail }}</p>
+        <div v-for="(item, index) in details" :key="index" class="others">
+          <h2>{{ item.ti }}</h2>
+          <p class="otherp">{{ item.txt }}</p>
+        </div>
       </div>
-    </div>
+    </el-skeleton>
   </div>
 </template>
 
 <script>
 import { getArtistDetails } from '@/api/DiscoverMusic/ArtistsListInfo'
 export default {
-  data() {
+  data () {
     return {
       id: this.$route.params.id,
       details: [],
-      selfDetail: []
+      selfDetail: [],
+      loading: true
     }
   },
-  mounted() {
+  mounted () {
     this.getArtisListInfo(this.id)
   },
   methods: {
-    async getArtisListInfo(id) {
+    async getArtisListInfo (id) {
       const res = await getArtistDetails(id)
       this.selfDetail = res.data.briefDesc
       this.details = res.data.introduction
+      this.loading = false
     }
   }
 }
