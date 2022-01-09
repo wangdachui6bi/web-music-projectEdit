@@ -10,7 +10,9 @@ const state = {
   isHavesong: false,
   // 歌单 方别切换上一首下一首
   songListAll: [],
-  isPlay: false
+  isPlay: false,
+  songAllMsg: [],
+  playListTracks: []
 }
 
 const mutations = {
@@ -32,7 +34,14 @@ const mutations = {
     state.singleSongMsg = payload[0]
     state.isHavesong = true
     state.isPlay = true
-    console.log(state.singleSongMsg)
+  },
+  // 获得正在播放歌曲全部信息
+  songAllMsg(state, payload) {
+    state.songAllMsg = payload
+  },
+  // 获取歌单所有歌曲信息
+  setplayListTracks(state, payload) {
+    state.playListTracks = payload
   },
   // 点击歌曲播放 播放状态则没用
   playback(state) {

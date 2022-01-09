@@ -123,7 +123,8 @@ export default {
         this.isHistoryHave = true
       }
       if (!this.isHistoryHave) {
-        this.historyplayList.push(newVal)
+        const songTrack = this.$store.state.songDetail.playListTracks.find(item => item.id === newVal.id)
+        this.historyplayList.push(songTrack)
       }
       localStorage.historyplayList = JSON.stringify(this.historyplayList)
     }

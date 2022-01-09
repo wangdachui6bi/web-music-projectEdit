@@ -68,7 +68,7 @@ export default {
       return this.$store.state.login.profile.userId
     }
   },
-  created () {
+  created() {
     this.getLikeIdList(this.uid)
     this.list.tracks.forEach(track => {
       this.songId.push(track.id)
@@ -79,6 +79,7 @@ export default {
     // 当正在播放的歌曲的id等于想要听歌的id 则无法再点 
     getOneSong(row) {
       if (this.isListenId !== row.id) {
+        this.$store.commit('songDetail/songAllMsg', row)
         this.isListenId = row.id
         // 响应式的数据
         const songDetail = {}

@@ -119,6 +119,7 @@ export default {
       const res = await getPlayListDetail(id, new Date().getTime())
       this.playlist = res.data.playlist
       this.loading = false
+      this.$store.commit('songDetail/setplayListTracks', this.playlist.tracks)
       this.playlist.tracks.forEach(track => {
         const songDetail = {}
         songDetail.songName = track.name

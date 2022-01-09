@@ -38,7 +38,7 @@
 // 最近播放
 export default {
   name: "HistoryPlay",
-  data () {
+  data() {
     return {
       count: 0,
       tableData: []
@@ -47,19 +47,25 @@ export default {
   methods: {
 
   },
-  created () {
+  created() {
     // 获取存储在本地的最近播放的列表
-    this.tableData = JSON.parse(localStorage.getItem("historyplay") || "[]")
+    this.tableData = JSON.parse(localStorage.getItem("historyplayList") || "[]")
+    this.count = this.tableData.length
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .HistoryPlay {
   .info {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .el-table__cell{
+    div.cell{
+      white-space: nowrap;
+    }
   }
 }
 </style>
