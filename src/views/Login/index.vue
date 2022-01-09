@@ -3,7 +3,7 @@
   <div class="login">
     <div class="wrap">
       <div class="containner">
-        <h2>{{ loginType[showindex] }}登录</h2>
+        <h1>{{ loginType[showindex] }}登录</h1>
         <div class="type-btn-wrap">
           <button
             @click="showindex = 0"
@@ -13,8 +13,8 @@
           </button>
           <button
             @click="
-              createcode();
-              showindex = 1;
+              createcode()
+              showindex = 1
             "
             :class="showindex === 1 ? 'active' : ''"
           >
@@ -136,7 +136,7 @@ Vue.use(Field)
 // 登录组件
 export default {
   name: "Login",
-  data() {
+  data () {
     return {
       username: '',
       password: '',
@@ -158,12 +158,12 @@ export default {
   },
   methods: {
     // 验证码匹配
-    async checkIdent() {
+    async checkIdent () {
       if (this.identify === '' && !this.pattern.test(this.username)) return
       const res = await checkIdentify(this.username, this.identify)
       this.ismsgRight = res.data.data
     },
-    async sendIdent() {
+    async sendIdent () {
       // 如果手机号不正确则不能发送验证码
       if (this.pattern.test(this.username)) {
         this.msg = 60
@@ -191,7 +191,7 @@ export default {
       }
       return false
     },
-    async onSubmit(values) {
+    async onSubmit (values) {
       const { data: { code, msg } } = await login(values)
       if (code === 200) {
         Toast("登录成功")
@@ -202,7 +202,7 @@ export default {
         Toast(msg)
       }
     },
-    async createcode() {
+    async createcode () {
       // 如果二维码有效点了就没用
       if (this.isEffect) return
       this.isEffect = true
@@ -232,14 +232,14 @@ export default {
         clearInterval(this.timer)
       }
     },
-    refreshQrcode() {
+    refreshQrcode () {
       this.codeStatus = '请稍等更新中'
       this.codeImg = ''
       this.createcode()
     }
   },
   watch: {
-    showindex(newVal, oldVal) {
+    showindex (newVal, oldVal) {
       // 每次切换到其他登录模式的时候关闭自动检查的定时器 再次点击二维码登录重新
       // 获取新的二维码
       clearInterval(this.timer)
@@ -251,7 +251,7 @@ export default {
       }
     },
     // 监听二维码状态的变换 如果 为800了就可以点击刷新了
-    status(newVal) {
+    status (newVal) {
       if (newVal === 800) {
         // 失效了清空checkcode计时器
         this.isEffect = false
@@ -266,7 +266,7 @@ export default {
         // 
       }
     },
-    ismsgRight(newVal) {
+    ismsgRight (newVal) {
       if (newVal) {
         Toast("登录成功")
         sessionStorage.setItem("isLogin", true)
@@ -285,25 +285,28 @@ export default {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: url("https://cdn.jsdelivr.net/gh/crazybox521/blogImg/login.jpg");
+  background: url('https://cdn.jsdelivr.net/gh/crazybox521/blogImg/login.jpg');
   .wrap {
     background-color: #fff;
     overflow: hidden;
     border-radius: 20px;
     width: 330px;
-    height: 350px;
-    margin: 40% auto;
+    height: 500px;
+    margin: 30% auto;
     .containner {
       width: 274px;
       height: 281px;
       margin: 50px auto;
-      h2 {
+      h1 {
         text-align: center;
+        font-weight: normal;
+        margin-bottom: 40px;
       }
       .type-btn-wrap {
         display: flex;
         justify-content: center;
         font-size: 16px;
+        margin-bottom: 20px;
         button {
           outline: 0;
           border: 0;
@@ -315,7 +318,7 @@ export default {
           font-weight: 700;
         }
         button.active::after {
-          content: "";
+          content: '';
           display: block;
           width: 100%;
           height: 2px;

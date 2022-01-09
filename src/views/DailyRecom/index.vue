@@ -1,45 +1,47 @@
 <template>
   <div class="DailyRecom">
     <div class="view-main mtop-20">
-      <!-- 标题 -->
-      <div class="info">
-        <div class="img-wrap">
-          <div class="day font-bold">
-            {{ new Date().getDate().toString().padStart(2, 0) }}
+      <el-skeleton :rows="6" animated :loading="loading">
+        <!-- 标题 -->
+        <div class="info">
+          <div class="img-wrap">
+            <div class="day font-bold">
+              {{ new Date().getDate().toString().padStart(2, 0) }}
+            </div>
+          </div>
+          <div class="text mleft-30 mtop-20">
+            <div class="font-24 font-bold">每日歌曲推荐</div>
+            <div class="desc mtop-10">根据你的音乐口味生成，每天6:00更新</div>
           </div>
         </div>
-        <div class="text mleft-30 mtop-20">
-          <div class="font-24 font-bold">每日歌曲推荐</div>
-          <div class="desc mtop-10">根据你的音乐口味生成，每天6:00更新</div>
+        <!-- 按钮组 -->
+        <div class="btn-wrap">
+          <div class="btn btn-red">
+            <i class="iconfont icon-bofang1"></i>
+            播放全部
+          </div>
+          <div class="btn btn-white mleft-12">
+            <i class="iconfont icon-tianjiawenjian"></i>
+            收藏全部
+          </div>
         </div>
-      </div>
-      <!-- 按钮组 -->
-      <div class="btn-wrap">
-        <div class="btn btn-red">
-          <i class="iconfont icon-bofang1"></i>
-          播放全部
-        </div>
-        <div class="btn btn-white mleft-12">
-          <i class="iconfont icon-tianjiawenjian"></i>
-          收藏全部
-        </div>
-      </div>
-      <div class="div-line mtop-20"></div>
-      <el-table :data="tableData" style="width: 100%" stripe>
-        <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column prop="favicon" width="30">
-          <i class="iconfont icon-aixin"></i>
-        </el-table-column>
-        <el-table-column prop="name" label="音乐标题" width="211">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.name }}</span>
-            <div class="vip-tag" v-if="scope.row.fee === 1">VIP</div>
-            <div class="vip-tag" v-if="scope.row.mv !== 0">MV</div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ar[0].name" label="歌手" width="80">
-        </el-table-column>
-      </el-table>
+        <div class="div-line mtop-20"></div>
+        <el-table :data="tableData" style="width: 100%" stripe>
+          <el-table-column type="index" width="50"> </el-table-column>
+          <el-table-column prop="favicon" width="30">
+            <i class="iconfont icon-aixin"></i>
+          </el-table-column>
+          <el-table-column prop="name" label="音乐标题" width="211">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.name }}</span>
+              <div class="vip-tag" v-if="scope.row.fee === 1">VIP</div>
+              <div class="vip-tag" v-if="scope.row.mv !== 0">MV</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="ar[0].name" label="歌手" width="80">
+          </el-table-column>
+        </el-table>
+      </el-skeleton>
     </div>
   </div>
 </template>
@@ -51,6 +53,7 @@ export default {
   name: "DailyRecom",
   data () {
     return {
+      loading: true,
       tableData: []
     }
   },
@@ -58,6 +61,7 @@ export default {
     async getLikeList () {
       const { data: { data: { dailySongs } } } = await recommendSongs()
       this.tableData = dailySongs
+      this.loading = false
     }
   },
   created () {

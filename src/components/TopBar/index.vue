@@ -12,13 +12,7 @@
         </button>
       </div>
       <!-- 搜索栏 -->
-      <div class="search-input">
-        <el-input
-          placeholder="搜索"
-          prefix-icon="el-icon-search"
-          v-model="input"
-        ></el-input>
-      </div>
+      <SearchInput></SearchInput>
       <!-- 头像 -->
       <div class="avatar-wrap">
         <el-avatar :size="'small'" :src="profile.avatarUrl"></el-avatar>
@@ -30,52 +24,46 @@
       <!-- 弹出菜单 -->
       <div class="asideBar" :class="isCollapse ? 'active' : ''">
         <el-menu
-          default-active="1-4-1"
+          router
+          :default-active="$route.path"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           :collapse="isCollapse"
         >
-          <el-menu-item index="1-1">发现音乐</el-menu-item>
-          <el-menu-item index="1-2">视频</el-menu-item>
-          <el-menu-item index="1-3">私人FM</el-menu-item>
+          <el-menu-item index="/">发现音乐</el-menu-item>
+          <el-menu-item index="/video">视频</el-menu-item>
+          <el-menu-item index="/personalfm">私人FM</el-menu-item>
           <el-menu-item-group>
             <span slot="title">我的音乐</span>
-            <el-menu-item index="2-1">每日推荐</el-menu-item>
-            <el-menu-item index="2-2">最近播放</el-menu-item>
-            <el-menu-item index="2-3">我的收藏</el-menu-item>
+            <el-menu-item index="/dailyrecom">每日推荐</el-menu-item>
+            <el-menu-item index="historyplay">最近播放</el-menu-item>
+            <el-menu-item index="mycollection">我的收藏</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
             <span slot="title">创建的歌单</span>
-            <template>
-              <li
-                v-for="item in createdList"
-                class="el-menu-item el-menu-item"
-                :index="item.id"
-                :key="item.id"
-              >
-                <i
-                  v-if="item.name.indexOf('喜欢的音乐') !== -1"
-                  class="iconfont icon-aixin"
-                ></i>
-                <i v-else class="iconfont icon-santiaoxian"></i>
-                {{ item.name }}
-              </li>
-            </template>
+            <el-menu-item
+              v-for="item in createdList"
+              :key="item.id"
+              :index="`/playlistdetail/${item.id}`"
+            >
+              <i
+                v-if="item.name.indexOf('喜欢的音乐') !== -1"
+                class="iconfont icon-aixin"
+              ></i>
+              <i v-else class="iconfont icon-gedan"></i>
+              {{ item.name }}
+            </el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
             <span slot="title">收藏的歌单</span>
-            <template>
-              <li
-                v-for="item in collectedList"
-                class="el-menu-item el-menu-item"
-                :index="item.id"
-                :key="item.id"
-              >
-                <i class="iconfont icon-santiaoxian"></i>
-                {{ item.name }}
-              </li>
-            </template>
+            <el-menu-item
+              v-for="item in collectedList"
+              class="el-menu-item el-menu-item"
+              :key="item.id"
+              :index="`/playlistdetail/${item.id}`"
+            >
+              <i class="iconfont icon-gedan"></i>
+              {{ item.name }}
+            </el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </div>
@@ -86,27 +74,24 @@
 <script>
 import { mapState } from "vuex"
 import { logout, userAccount, playlist } from '@/api/login'
+import SearchInput from "@/components/SearchInput"
 
 export default {
   name: "TopBar",
   data () {
     return {
       isCollapse: false,
-      input: '',
       createdList: [],
       collectedList: []
     }
+  },
+  components: {
+    SearchInput
   },
   computed: {
     ...mapState('login', ['profile'])
   },
   methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
-    },
     // 弹出菜单
     showPopup () {
       this.isCollapse = !this.isCollapse
@@ -120,8 +105,6 @@ export default {
       playlist(this.$store.state.login.profile.userId).then(({ data: { playlist } }) => {
         this.createdList = playlist.filter(item => !item.subscribed)
         this.collectedList = playlist.filter(item => item.subscribed)
-        console.log(this.createdList)
-        console.log(this.collectedList)
       })
     },
     // 退出弹窗
@@ -217,14 +200,6 @@ export default {
         border-radius: 50%;
         margin-right: 10px;
         cursor: pointer;
-      }
-    }
-    // 搜索栏
-    .search-input {
-      margin: 0;
-      position: relative;
-      .el-input {
-        width: 200px;
       }
     }
     // 头像

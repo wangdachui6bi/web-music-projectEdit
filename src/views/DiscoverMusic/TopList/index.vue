@@ -86,15 +86,16 @@ export default {
     async topList () {
       const { data: { list, code, msg } } = await getTopList()
       if (code === 200) {
-        this.listDetails(list.slice(0, 4))
+        await this.listDetails(list.slice(0, 4))
         this.globalList = list.slice(4)
+        this.loading = false
       } else {
         Toast(msg)
       }
     },
     // 查询官方榜单
     async listDetails (arr) {
-      arr.forEach(async item => {
+      await arr.forEach(async item => {
         const { data: { playlist } } = await getListDetails(item.id)
         const arr = playlist.tracks.slice(0, 5)
         this.officialList.push({
@@ -105,7 +106,6 @@ export default {
           tracks: arr
         })
       })
-      this.loading = false
     }
   },
   created () {

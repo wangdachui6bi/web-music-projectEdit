@@ -1,7 +1,7 @@
 <template>
   <!-- 歌单详情 -->
-  <el-skeleton :rows="6" animated :loading="loading">
-    <div class="play-list-detail">
+  <div class="play-list-detail">
+    <el-skeleton :rows="6" animated :loading="loading">
       <!-- 歌单图片及信息 -->
       <div class="detail-desc">
         <!-- 歌单图片 -->
@@ -78,9 +78,9 @@
       </div>
       <!-- 列表内容 -->
       <div></div>
-    </div>
+     </el-skeleton>
     <Lyric></Lyric>
-  </el-skeleton>
+  </div>
 </template>
 
 <script>
@@ -114,8 +114,8 @@ export default {
     this.getPlayListDetail(this.id)
   },
   methods: {
-    async getPlayListDetail(id) {
-      const res = await getPlayListDetail(id)
+    async getPlayListDetail (id) {
+      const res = await getPlayListDetail(id, new Date().getTime())
       this.playlist = res.data.playlist
       this.loading = false
     }
@@ -128,6 +128,14 @@ export default {
       if (typeof count === 'undefined') return 0
       if (count < 10000) return count
       else return Math.floor(count / 10000) + '万'
+    }
+  },
+  watch: {
+    "$route"(to, from) {
+      if (this.$route.params.id) {
+        this.loading = true
+        this.getPlayListDetail(this.id)
+      }
     }
   }
 }

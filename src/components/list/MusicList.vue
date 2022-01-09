@@ -68,7 +68,7 @@ export default {
       return this.$store.state.login.profile.userId
     }
   },
-  created() {
+  created () {
     this.getLikeIdList(this.uid)
     this.list.tracks.forEach(track => {
       this.songId.push(track.id)
@@ -101,7 +101,6 @@ export default {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
       this.loading = false
-      // console.log(res)
     },
     isLiked(id) {
       return this.likeIdList.indexOf(id) !== -1
