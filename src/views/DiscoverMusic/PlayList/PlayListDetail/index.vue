@@ -68,7 +68,7 @@
     <div class="detail-head">
       <van-tabs v-model="active">
         <van-tab title="歌曲列表"><MusicList :list="playlist" /></van-tab>
-        <van-tab title="评论">评论</van-tab>
+        <van-tab title="评论"><Comment :list="playlist" /></van-tab>
         <van-tab title="收藏者">收藏者</van-tab>
       </van-tabs>
     </div>
@@ -80,11 +80,13 @@
 <script>
 import { getPlayListDetail } from '@/api/DiscoverMusic/PersonalRecom'
 import MusicList from '@/components/list/MusicList'
+import Comment from '@/components/comment/Comment'
 import moment from 'moment'
 export default {
   name: "PlayListDetail",
   components: {
-    MusicList
+    MusicList,
+    Comment
   },
   props: {
     id: {

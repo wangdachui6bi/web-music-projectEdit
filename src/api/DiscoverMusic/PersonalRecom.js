@@ -38,3 +38,11 @@ export const likeMusic = (id, like, timestamp) => {
     url: `/like?id=${id}&like=${like}&timestamp=${timestamp}`
   })
 }
+
+/* 热门(精彩)评论,调用此接口 , 传入 type, 资源 id 可获得对应资源热门评论 ( 不需要登录 ) */
+export const getHotComment = (id, type, limit, timestamp) => {
+  return request({
+    method: 'get',
+    url: `/comment/hot?id=${id}&type=${type}&limit=${limit}&timestamp=${timestamp}`
+  })
+}
