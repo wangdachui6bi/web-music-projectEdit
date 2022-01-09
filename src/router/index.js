@@ -8,6 +8,8 @@ import login from "./modules/Login"
 import DiscoverMusic from "./modules/DiscoverMusic"
 import DailyRecom from './modules/DailyRecom'
 import Search from './modules/Search'
+import Video from './modules/Video'
+import HistoryPlay from "./modules/HistoryPlay"
 import { Toast } from 'vant'
 Vue.use(Toast)
 Vue.use(VueRouter)
@@ -16,8 +18,10 @@ const routes = [
   ...login,
   ...DiscoverMusic,
   ...DailyRecom,
+  Video,
   Search,
   NoFoundPages,
+  HistoryPlay,
   {
     path: "/",
     redirect: "/personalrecom"
