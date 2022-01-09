@@ -7,6 +7,7 @@ import NoFoundPages from './modules/noFoundPages'
 import login from "./modules/Login"
 import DiscoverMusic from "./modules/DiscoverMusic"
 import DailyRecom from './modules/DailyRecom'
+import Search from './modules/Search'
 import { Toast } from 'vant'
 Vue.use(Toast)
 Vue.use(VueRouter)
@@ -15,6 +16,7 @@ const routes = [
   ...login,
   ...DiscoverMusic,
   ...DailyRecom,
+  Search,
   NoFoundPages,
   {
     path: "/",

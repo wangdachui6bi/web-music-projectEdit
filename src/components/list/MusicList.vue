@@ -60,7 +60,6 @@ export default {
     }
   },
   created () {
-    console.log(this.uid)
     this.getLikeIdList(this.uid)
   },
   methods: {
@@ -68,7 +67,6 @@ export default {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
       this.loading = false
-      console.log(res)
     },
     isLiked (id) {
       return this.likeIdList.indexOf(id) !== -1

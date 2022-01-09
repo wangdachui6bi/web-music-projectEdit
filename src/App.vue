@@ -106,7 +106,9 @@ export default {
 .mleft-200 {
   margin-left: 200px;
 }
-
+.mleft-10 {
+  margin-left: 10px;
+}
 .text-hidden {
   overflow: hidden;
   white-space: nowrap;
