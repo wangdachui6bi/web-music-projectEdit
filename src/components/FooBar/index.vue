@@ -5,32 +5,72 @@
         <div class="player-container">
           <!-- 封面 作者 歌名 -->
           <div class="player-left">
-            <img
-              src="https://cdn.jsdelivr.net/gh/crazybox521/blogImg/music.jpg"
-              class="img-border"
-            />
-            <div class="music-info">
+            <img :src="picUrl" class="img-border" />
+            <div class="music-info" v-if="!listenStatus">
               <div class="font-14 w-150 text-hidden">未知歌名</div>
               <div class="font-12 w-100 text-hidden">未知歌手名</div>
+            </div>
+            <div class="music-info" v-else>
+              <div class="font-14 w-150 text-hidden">
+                {{ singleSongMsg.songName }}
+              </div>
+              <div class="font-12 w-100 text-hidden">
+                {{ singleSongMsg.singer }}
+              </div>
             </div>
           </div>
           <!-- 按钮组 -->
           <div class="player-wrapper">
             <div class="player-bar">
-              <div class="player-bar-btn">
-                <i class="iconfont icon-shangyishou"></i>
+              <!-- 上一首 -->
+              <div
+                class="player-bar-btn"
+                @click="
+                  premusic();
+                  active = 1;
+                "
+              >
+                <i
+                  :class="[
+                    'iconfont',
+                    'icon-shangyishou',
+                    { active: active === 1 },
+                  ]"
+                ></i>
               </div>
-              <div class="player-bar-btn">
-                <i class="iconfont icon-bofang1"></i>
+              <!-- 播放 -->
+              <div class="player-bar-btn" @click="controlPlay">
+                <i class="iconfont icon-bofang1" v-if="!isPlay"></i>
+                <i class="iconfont icon-tingzhi" style="color: red" v-else></i>
               </div>
-              <div class="player-bar-btn">
-                <i class="iconfont icon-xiayishou"></i>
+              <!-- 下一首 -->
+              <div
+                class="player-bar-btn"
+                @click="
+                  nextmusic();
+                  active = 2;
+                "
+              >
+                <i
+                  :class="[
+                    'iconfont',
+                    'icon-xiayishou',
+                    { active: active === 2 },
+                  ]"
+                ></i>
               </div>
+              <!-- 收藏 -->
               <div class="player-bar-btn">
                 <i class="iconfont icon-aixin"></i>
               </div>
             </div>
           </div>
+          <audio
+            ref="audioRef"
+            :src="musicUrl"
+            autoplay
+            @ended="nextmusic"
+          ></audio>
           <div class="btn-other"></div>
         </div>
       </div>
@@ -39,8 +79,58 @@
 </template>
 
 <script>
+// import { mapState } from 'vuex'
 export default {
-  name: "FooBar"
+  name: "FooBar",
+  data() {
+    return {
+      active: 0
+    }
+  },
+  methods: {
+    nextmusic() {
+      this.$store.commit('songDetail/nextsong')
+    },
+    controlPlay() {
+      if (this.singleSongMsg.id === undefined) return
+      this.$store.commit('songDetail/controlPlay')
+    },
+    premusic() {
+      this.$store.commit('songDetail/presong')
+    }
+  },
+  watch: {
+    // 通过vuex的isplay监听是否播放
+    isPlay(newVal) {
+      if (this.musicUrl === '') {
+        return 0
+      }
+      if (newVal) {
+        this.$refs.audioRef.play()
+      } else {
+        this.$refs.audioRef.pause()
+      }
+    }
+  },
+  computed: {
+    // 是否有播放的歌曲状态
+    listenStatus() {
+      return this.$store.state.songDetail.isHavesong
+    },
+    picUrl() {
+      return this.singleSongMsg.picUrl ? this.singleSongMsg.picUrl : 'https://cdn.jsdelivr.net/gh/crazybox521/blogImg/music.jpg'
+    },
+    singleSongMsg() {
+      return this.$store.state.songDetail.singleSongMsg
+    },
+    musicUrl() {
+      return this.singleSongMsg.songUrl ? this.singleSongMsg.songUrl : ''
+    },
+    // 将vuex的isPlay引入
+    isPlay() {
+      return this.$store.state.songDetail.isPlay
+    }
+  }
 }
 </script>
 
@@ -91,6 +181,9 @@ export default {
             border: none;
             background-color: #fff;
             cursor: pointer;
+          }
+          i.active {
+            color: red;
           }
           .player-bar-btn:nth-child(2) {
             height: 32px;

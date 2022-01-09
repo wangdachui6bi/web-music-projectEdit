@@ -1,6 +1,11 @@
 <template>
   <el-skeleton :rows="6" animated :loading="loading">
-    <el-table :data="list.tracks" style="width: 100%" stripe>
+    <el-table
+      :data="list.tracks"
+      style="width: 100%"
+      stripe
+      @row-click="getOneSong"
+    >
       <el-table-column
         type="index"
         label=""
@@ -44,7 +49,8 @@
 
 <script>
 import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
-
+// import { getMusicUrl } from '@/api/musicPlay/getSong.js'
+// import { mapActions } from 'vuex'
 export default {
   props: ['list'],
   data() {
@@ -52,7 +58,9 @@ export default {
       /* 喜欢的音乐列表 */
       likeIdList: [],
       loading: true,
-      songId: []
+      songId: [],
+      isListenId: 0,
+      songMsg: {}
     }
   },
   computed: {
@@ -65,9 +73,30 @@ export default {
     this.list.tracks.forEach(track => {
       this.songId.push(track.id)
     })
-    console.log(this.songId)
   },
   methods: {
+    // 点击歌曲所在行数获得该歌曲 播放地址
+    // 当正在播放的歌曲的id等于想要听歌的id 则无法再点 
+    getOneSong(row) {
+      if (this.isListenId !== row.id) {
+        this.isListenId = row.id
+        // 响应式的数据
+        const songDetail = {}
+        songDetail.songName = row.name
+        songDetail.singer = row.ar[0].name
+        songDetail.id = row.id
+        songDetail.picUrl = row.al.picUrl
+        this.songMsg = songDetail
+        this.$store.dispatch('songDetail/getoneMusic', songDetail)
+      }
+    },
+    // 并且如果是暂停状态则恢复播放
+    // 播放状态则没用
+    playback() {
+      if (!this.$store.state.songDetail.isPlay) {
+        this.$store.commit("songDetail/playback")
+      }
+    },
     async getLikeIdList(uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids

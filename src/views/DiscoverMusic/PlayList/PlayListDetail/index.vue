@@ -79,6 +79,7 @@
       <!-- 列表内容 -->
       <div></div>
     </div>
+    <Lyric></Lyric>
   </el-skeleton>
 </template>
 
@@ -86,10 +87,12 @@
 import { getPlayListDetail } from '@/api/DiscoverMusic/PersonalRecom'
 import MusicList from '@/components/list/MusicList'
 import moment from 'moment'
+import Lyric from '@/components/songLyric'
 export default {
   name: "PlayListDetail",
   components: {
-    MusicList
+    MusicList,
+    Lyric
   },
   props: {
     id: {
@@ -97,7 +100,7 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       playlist: {
         creator: {},
@@ -107,21 +110,21 @@ export default {
       loading: true
     }
   },
-  created () {
+  created() {
     this.getPlayListDetail(this.id)
   },
   methods: {
-    async getPlayListDetail (id) {
+    async getPlayListDetail(id) {
       const res = await getPlayListDetail(id)
       this.playlist = res.data.playlist
       this.loading = false
     }
   },
   filters: {
-    datefilter (date) {
+    datefilter(date) {
       return moment(date).format('YYYY-MM-DD')
     },
-    countFormat (count) {
+    countFormat(count) {
       if (typeof count === 'undefined') return 0
       if (count < 10000) return count
       else return Math.floor(count / 10000) + '万'
