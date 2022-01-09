@@ -47,39 +47,44 @@ import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 
 export default {
   props: ['list'],
-  data () {
+  data() {
     return {
       /* 喜欢的音乐列表 */
       likeIdList: [],
-      loading: true
+      loading: true,
+      songId: []
     }
   },
   computed: {
-    uid () {
+    uid() {
       return this.$store.state.login.profile.userId
     }
   },
-  created () {
-    console.log(this.uid)
+  created() {
     this.getLikeIdList(this.uid)
+    this.list.tracks.forEach(track => {
+      this.songId.push(track.id)
+    })
+    console.log(this.songId)
   },
   methods: {
-    async getLikeIdList (uid) {
+    async getLikeIdList(uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
       this.loading = false
-      console.log(res)
+      // console.log(res)
     },
-    isLiked (id) {
+    isLiked(id) {
       return this.likeIdList.indexOf(id) !== -1
     },
-    async likeMusic (id) {
+    async likeMusic(id) {
       const liked = this.isLiked(id)
-      const res = await likeMusic(id, !liked)
+      likeMusic(id, !liked)
       this.getLikeIdList(this.uid)
-      console.log(res)
+      // console.log(res)
     }
-
+  },
+  computerd: {
   }
 }
 </script>
@@ -95,6 +100,6 @@ export default {
   height: 16px;
   padding: 0 2px;
   line-height: 1;
-  font-family: 'Avenir';
+  font-family: "Avenir";
 }
 </style>
