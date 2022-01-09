@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import NoFoundPages from './modules/noFoundPages'
+// 路由写为数组形式 方便写同级的路由 进行路由懒加载
 // 路由写为数组形式 方便写同级的路由 进行路由懒加载
 // 模块化引入
-import login from "./modules/Login.js"
-import DiscoverMusic from "./modules/DiscoverMusic.js"
+import login from "./modules/Login"
+import DiscoverMusic from "./modules/DiscoverMusic"
+import DailyRecom from './modules/DailyRecom'
 import { Toast } from 'vant'
 Vue.use(Toast)
 Vue.use(VueRouter)
@@ -11,6 +14,8 @@ Vue.use(VueRouter)
 const routes = [
   ...login,
   ...DiscoverMusic,
+  ...DailyRecom,
+  NoFoundPages,
   {
     path: "/",
     redirect: "/personalrecom"

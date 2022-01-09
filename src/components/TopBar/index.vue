@@ -2,7 +2,7 @@
   <div class="TopBar">
     <div class="header-bar">
       <!-- 菜单 -->
-      <div class="menu-btn">
+      <div class="menu-btn" @click="showPopup">
         <span></span>
       </div>
       <!-- 后退 -->
@@ -27,32 +27,102 @@
       <div class="login-info">
         <span @click="open">{{ profile.nickname }}</span>
       </div>
+      <!-- 弹出菜单 -->
+      <div class="asideBar" :class="isCollapse ? 'active' : ''">
+        <el-menu
+          default-active="1-4-1"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+          :collapse="isCollapse"
+        >
+          <el-menu-item index="1-1">发现音乐</el-menu-item>
+          <el-menu-item index="1-2">视频</el-menu-item>
+          <el-menu-item index="1-3">私人FM</el-menu-item>
+          <el-menu-item-group>
+            <span slot="title">我的音乐</span>
+            <el-menu-item index="2-1">每日推荐</el-menu-item>
+            <el-menu-item index="2-2">最近播放</el-menu-item>
+            <el-menu-item index="2-3">我的收藏</el-menu-item>
+          </el-menu-item-group>
+          <el-menu-item-group>
+            <span slot="title">创建的歌单</span>
+            <template>
+              <li
+                v-for="item in createdList"
+                class="el-menu-item el-menu-item"
+                :index="item.id"
+                :key="item.id"
+              >
+                <i
+                  v-if="item.name.indexOf('喜欢的音乐') !== -1"
+                  class="iconfont icon-aixin"
+                ></i>
+                <i v-else class="iconfont icon-santiaoxian"></i>
+                {{ item.name }}
+              </li>
+            </template>
+          </el-menu-item-group>
+          <el-menu-item-group>
+            <span slot="title">收藏的歌单</span>
+            <template>
+              <li
+                v-for="item in collectedList"
+                class="el-menu-item el-menu-item"
+                :index="item.id"
+                :key="item.id"
+              >
+                <i class="iconfont icon-santiaoxian"></i>
+                {{ item.name }}
+              </li>
+            </template>
+          </el-menu-item-group>
+        </el-menu>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex"
-import { logout, userAccount } from '@/api/login'
-
+import { logout, userAccount, playlist } from '@/api/login'
 
 export default {
   name: "TopBar",
   data () {
     return {
-      input: ''
+      isCollapse: false,
+      input: '',
+      createdList: [],
+      collectedList: []
     }
   },
   computed: {
     ...mapState('login', ['profile'])
   },
   methods: {
+    handleOpen (key, keyPath) {
+      console.log(key, keyPath)
+    },
+    handleClose (key, keyPath) {
+      console.log(key, keyPath)
+    },
+    // 弹出菜单
+    showPopup () {
+      this.isCollapse = !this.isCollapse
+    },
     // 获取账户信息
     async getAccount () {
       const res = await userAccount()
       // 将数据传给Vuex
       this.$store.commit('login/setProfile', res.data.profile)
       this.$store.commit('login/setAccount', res.data.account)
+      playlist(this.$store.state.login.profile.userId).then(({ data: { playlist } }) => {
+        this.createdList = playlist.filter(item => !item.subscribed)
+        this.collectedList = playlist.filter(item => item.subscribed)
+        console.log(this.createdList)
+        console.log(this.collectedList)
+      })
     },
     // 退出弹窗
     open () {
@@ -83,7 +153,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .TopBar {
   position: fixed;
   background-color: #ec4141;
@@ -171,6 +241,40 @@ export default {
       color: #fff;
       font-size: 12px;
     }
+  }
+  .asideBar {
+    display: block;
+    width: 48%;
+    max-height: 85vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #fff;
+    border-right: 1px solid #efefef;
+    position: absolute;
+    top: 60px;
+    left: -100%;
+    transition: all 0.5s;
+  }
+  .active {
+    left: 0;
+  }
+  .el-menu-item {
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 3px;
+  }
+  .el-menu-item.is-active {
+    color: #313131;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .el-menu-item.is-active,
+  .el-menu-item:focus,
+  .el-menu-item:hover {
+    background-color: #f6f6f7;
+  }
+  .el-menu--collapse {
+    width: 100%;
   }
 }
 </style>

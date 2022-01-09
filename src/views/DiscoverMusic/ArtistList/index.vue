@@ -1,67 +1,71 @@
 <template>
-  <div class="ArtistsList">
-    <p><button @click="isShow = !isShow">打开列表</button></p>
-    <div class="tag-wrapper" v-show="isShow">
-      <div class="languages">
-        <span class="lang">语种:</span>
-        <div class="el-radio-group">
-          <div class="el-radio" @click="allLang">全部</div>
-          <div
-            class="el-radio"
-            v-for="country in countries"
-            :key="country.id1"
-            @click="countryId(country.id1)"
-          >
-            {{ country.name }}
+  <div class="ArtistList">
+    <el-skeleton :rows="6" animated :loading="loading">
+      <p><button @click="isShow = !isShow">打开列表</button></p>
+      <div class="tag-wrapper" v-show="isShow">
+        <div class="languages">
+          <span class="lang">语种:</span>
+          <div class="el-radio-group">
+            <div class="el-radio" @click="allLang">全部</div>
+            <div
+              class="el-radio"
+              v-for="country in countries"
+              :key="country.id1"
+              @click="countryId(country.id1)"
+            >
+              {{ country.name }}
+            </div>
+          </div>
+        </div>
+        <div class="languages">
+          <span class="sort">分类:</span>
+          <div class="el-radio-group">
+            <div class="el-radio" @click="allsort">全部</div>
+            <div
+              class="el-radio"
+              v-for="sort in sorts"
+              :key="sort.id"
+              @click="sortId(sort.id)"
+            >
+              {{ sort.name }}
+            </div>
+          </div>
+        </div>
+        <div class="languages">
+          <span class="choice">筛选:</span>
+          <div class="el-radio-group">
+            <div class="el-radio" @click="filterAll">全部</div>
+            <div
+              class="el-radio"
+              v-for="(item, index) in alphabet"
+              :key="index"
+              @click="zmId(item)"
+            >
+              {{ item }}
+            </div>
           </div>
         </div>
       </div>
-      <div class="languages">
-        <span class="sort">分类:</span>
-        <div class="el-radio-group">
-          <div class="el-radio" @click="allsort">全部</div>
-          <div
-            class="el-radio"
-            v-for="sort in sorts"
-            :key="sort.id"
-            @click="sortId(sort.id)"
-          >
-            {{ sort.name }}
-          </div>
-        </div>
-      </div>
-      <div class="languages">
-        <span class="choice">筛选:</span>
-        <div class="el-radio-group">
-          <div class="el-radio" @click="filterAll">全部</div>
-          <div
-            class="el-radio"
-            v-for="(item, index) in alphabet"
-            :key="index"
-            @click="zmId(item)"
-          >
-            {{ item }}
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- 歌手图片 -->
-    <div class="imgList">
-      <div class="imgListInfo" v-for="msg in message" :key="msg.id">
-        <img :src="msg.img1v1Url" @click="toArtisInfo(msg.id)" />
-        <p>{{ msg.name }}</p>
+      <!-- 歌手图片 -->
+      <div class="imgList">
+        <div class="imgListInfo" v-for="msg in message" :key="msg.id">
+          <img :src="msg.img1v1Url" @click="toArtisInfo(msg.id)" />
+          <p>{{ msg.name }}</p>
+        </div>
       </div>
-    </div>
+    </el-skeleton>
   </div>
 </template>
 
 <script>
 import { artistList } from '@/api/DiscoverMusic/ArtistList'
+
 export default {
-  name: "ArtistsList",
+  name: "ArtistList",
   data () {
     return {
+      loading: true,
       message: [],
       allid: -1,
       saveSortId: -1,// 保存分类id
@@ -114,6 +118,7 @@ export default {
     async getArtisList (type, area, initial) {
       const res = await artistList({ type: this.saveSortId, area: this.saveCountryId, initial: this.saveZmId })
       this.message = res.data.artists
+      this.loading = false
     },
     sortId (id) {
       this.saveSortId = id
@@ -140,14 +145,14 @@ export default {
       this.getArtisList()
     },
     toArtisInfo (id) {
-      console.log(id)
+      this.$router.push(`/artistdetail/${id}`)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.ArtistsList {
+<style lang="scss">
+.ArtistList {
   width: 90%;
   margin: 0 auto;
   font-size: 14px;
@@ -191,12 +196,14 @@ export default {
   .imgList {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
     .imgListInfo {
       width: 107px;
       height: 146px;
       margin-right: 5px;
       img {
         width: 100%;
+        height: 107px;
         border-radius: 5px;
         padding: 0;
         margin: 0;
