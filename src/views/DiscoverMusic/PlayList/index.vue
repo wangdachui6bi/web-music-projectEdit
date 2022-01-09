@@ -1,72 +1,74 @@
 <template>
-  <div class="playlist">
-    <div class="highquality" v-for="(highlist, index) in arrtag" :key="index">
-      <div class="highlist">
-        <img :src="highlist.coverImgUrl" alt="" />
-        <div class="hgtext">
-          <div>
-            <i class="iconfont icon icon-huiyuan"></i>
-            <span>精品歌单</span>
+  <div class="playlist view-main">
+    <el-skeleton :rows="6" animated :loading="loading">
+      <div class="highquality" v-for="(highlist, index) in arrtag" :key="index">
+        <div class="highlist">
+          <img :src="highlist.coverImgUrl" alt="" />
+          <div class="hgtext">
+            <div>
+              <i class="iconfont icon icon-huiyuan"></i>
+              <span>精品歌单</span>
+            </div>
+            <div>{{ highlist.name }}</div>
           </div>
-          <div>{{ highlist.name }}</div>
         </div>
       </div>
-    </div>
-    <div class="playlist-top">
-      <div class="sheetdetail">
-        <button @click="changisShow" ref="clickbutton">
-          {{ msg }}
-          <i class="iconfont icon icon-youjiantou1"></i>
-        </button>
-        <van-tabs v-model="active" @click="onClickTab">
-          <van-tab
-            v-for="(item, index) in hotcat"
-            :title="item.name"
-            :key="index"
-          ></van-tab>
-        </van-tabs>
-        <div class="totallist" v-show="isShow">
-          <p>全部歌单</p>
-          <dl class="listdl" v-for="(item, index) in categories" :key="index">
-            <dt class="listtitle">
-              <i :class="['icon', 'iconfont', `${iconarr[index]}`]"></i>
-              {{ item }}
-            </dt>
-            <div style="display: flex">
-              <dd v-for="(item2, index2) in catesub[index]" :key="index2">
-                <span
-                  :class="{ borderCir: item2.activity }"
-                  @click="clickChange(item2)"
-                  >{{ item2.name }}</span
-                >
-              </dd>
-            </div>
-          </dl>
+      <div class="playlist-top">
+        <div class="sheetdetail">
+          <button @click="changisShow" ref="clickbutton">
+            {{ msg }}
+            <i class="iconfont icon icon-youjiantou1"></i>
+          </button>
+          <van-tabs v-model="active" @click="onClickTab">
+            <van-tab
+              v-for="(item, index) in hotcat"
+              :title="item.name"
+              :key="index"
+            ></van-tab>
+          </van-tabs>
+          <div class="totallist" v-show="isShow">
+            <p>全部歌单</p>
+            <dl class="listdl" v-for="(item, index) in categories" :key="index">
+              <dt class="listtitle">
+                <i :class="['icon', 'iconfont', `${iconarr[index]}`]"></i>
+                {{ item }}
+              </dt>
+              <div style="display: flex">
+                <dd v-for="(item2, index2) in catesub[index]" :key="index2">
+                  <span
+                    :class="{ borderCir: item2.activity }"
+                    @click="clickChange(item2)"
+                    >{{ item2.name }}</span
+                  >
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+        <div class="listdetail">
+          <ul class="listul" v-for="(list, index) in playlist" :key="index">
+            <li class="img-wrap">
+              <img :src="list.coverImgUrl" alt="" />
+              <div class="play-btn">
+                <i class="el-icon-caret-right"></i>
+              </div>
+            </li>
+            <li class="listtextli">
+              <span>{{ list.name }}</span>
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="listdetail">
-        <ul class="listul" v-for="(list, index) in playlist" :key="index">
-          <li class="img-wrap">
-            <img :src="list.coverImgUrl" alt="" />
-            <div class="play-btn">
-              <i class="el-icon-caret-right"></i>
-            </div>
-          </li>
-          <li class="listtextli">
-            <span>{{ list.name }}</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <el-pagination
-      background
-      layout="prev, pager, next"
-      :total="totallist"
-      :page-size="50"
-      @current-change="currentChange"
-      :current-page="currentPage"
-    >
-    </el-pagination>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="totallist"
+        :page-size="50"
+        @current-change="currentChange"
+        :current-page="currentPage"
+      >
+      </el-pagination>
+    </el-skeleton>
   </div>
 </template>
 
@@ -79,8 +81,9 @@ import { mapState, mapGetters } from 'vuex'
 import { getHotCat, getplaylist, getHighquality } from '../../../api/DiscoverMusic/playList'
 export default {
   name: "playlist",
-  data() {
+  data () {
     return {
+      loading: true,
       msg: '华语',
       active: 0,
       hotcat: [],
@@ -95,21 +98,20 @@ export default {
       iconarr: ["icon-yuzhong", "icon-fengge", "icon-kafei1", "icon-iconweixiao", "icon-zhuti"]
     }
   },
-  async created() {
+  created () {
     this.$store.dispatch("playlist/getAlcat")
-    getHotCat().then((res) => {
+    getHotCat().then(async (res) => {
       const arr = res.data.tags
       arr.forEach((item) => {
         this.$set(item, "acti", false)
       })
       this.hotcat = arr
-    })
-
-    getplaylist({ cat: this.msg }).then((res) => {
-      this.playlist = res.data.playlists
+      const { data: { playlists } } = await getplaylist({ cat: this.msg })
+      this.playlist = playlists
+      this.loading = false
     })
   },
-  mounted() {
+  mounted () {
     this.clickhidden()
   },
   computed: {
@@ -128,7 +130,7 @@ export default {
     msg: {
       // 初始化进行一次监听
       immediate: true,
-      async handler(newVal, oldVal) {
+      async handler (newVal, oldVal) {
         getplaylist({ cat: newVal, page: this.currentPage - 1 }).then((res) => {
           this.playlist = res.data.playlists
           // 更改每次的总条数
@@ -142,14 +144,14 @@ export default {
     }
   },
   methods: {
-    clickhidden() {
+    clickhidden () {
       document.body.onclick = (event) => {
         if (event.target !== this.$refs.clickbutton) {
           this.isShow = false
         }
       }
     },
-    clickChange(item) {
+    clickChange (item) {
       // 改变颜色
       // 排他思想 所有的全部变为false
       this.catesub.forEach((item, index) => {
@@ -161,17 +163,17 @@ export default {
       this.msg = item.name
       this.isShow = false
     },
-    onClickTab(name, title) {
+    onClickTab (name, title) {
       this.msg = title
     },
-    showPopup() {
+    showPopup () {
       this.show = true
     },
     // 改变totallist状态
-    changisShow() {
+    changisShow () {
       this.isShow = !this.isShow
     },
-    currentChange(page) {
+    currentChange (page) {
       this.currentPage = page
       getplaylist({ cat: this.msg, page: this.currentPage - 1 }).then((res) => {
         this.playlist = res.data.playlists
@@ -188,7 +190,7 @@ export default {
     padding: 0px 20px 10px 10px;
     .highlist {
       display: flex;
-      margin: 15px 0 20px 20px;
+      margin-bottom: 20px;
       font-size: 12px;
       box-sizing: border-box;
       background-color: rgba(0, 0, 0, 0.1);
@@ -219,7 +221,7 @@ export default {
   }
   .playlist-top {
     box-sizing: border-box;
-    padding: 0 14px;
+    padding: 0;
     .sheetdetail {
       // display: flex;
       // overflow: hidden;
@@ -310,8 +312,8 @@ export default {
             position: absolute;
             width: 24px;
             height: 24px;
-            right: 5px;
-            bottom: 11px;
+            right: 7px;
+            bottom: 16px;
             color: #ec4141;
             background-color: #fbf7f6;
             border-radius: 50%;
@@ -350,7 +352,8 @@ export default {
         background-color: red;
       }
       li {
-        min-width: 30px;
+        min-width: 26px;
+        min-height: 26px;
       }
     }
   }

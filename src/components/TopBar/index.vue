@@ -47,23 +47,35 @@
           </el-menu-item-group>
           <el-menu-item-group>
             <span slot="title">创建的歌单</span>
-            <el-menu-item
-              v-for="item in createdList"
-              index="`${item.id}`"
-              :key="item.id"
-            >
-              {{ item.name }}
-            </el-menu-item>
+            <template>
+              <li
+                v-for="item in createdList"
+                class="el-menu-item el-menu-item"
+                :index="item.id"
+                :key="item.id"
+              >
+                <i
+                  v-if="item.name.indexOf('喜欢的音乐') !== -1"
+                  class="iconfont icon-aixin"
+                ></i>
+                <i v-else class="iconfont icon-santiaoxian"></i>
+                {{ item.name }}
+              </li>
+            </template>
           </el-menu-item-group>
           <el-menu-item-group>
             <span slot="title">收藏的歌单</span>
-            <el-menu-item
-              v-for="item in collectedList"
-              index="item.id"
-              :key="item.id"
-            >
-              {{ item.name }}
-            </el-menu-item>
+            <template>
+              <li
+                v-for="item in collectedList"
+                class="el-menu-item el-menu-item"
+                :index="item.id"
+                :key="item.id"
+              >
+                <i class="iconfont icon-santiaoxian"></i>
+                {{ item.name }}
+              </li>
+            </template>
           </el-menu-item-group>
         </el-menu>
       </div>

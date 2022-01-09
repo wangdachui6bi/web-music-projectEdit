@@ -1,37 +1,39 @@
 <template>
-  <div class="artistListInfo">
-    <div class="artistInfo">
-      <div class="img-wrap">
-        <img :src="singerDetails.cover" alt="" />
+  <div class="artistListInfo view-main">
+    <el-skeleton :rows="1" animated :loading="loading">
+      <div class="artistInfo">
+        <div class="img-wrap">
+          <img :src="singerDetails.cover" alt="" />
+        </div>
+        <p class="pname">
+          <span>{{ singerDetails.name }}</span>
+          <button>
+            <i class="icon iconfont icon-tianjiawenjian"></i>
+            收藏
+          </button>
+        </p>
+        <p class="pNumber">
+          <span>单曲数:{{ singerDetails.albumSize }}</span>
+          <span>专辑数:{{ singerDetails.albumSize }}</span>
+          <span>MV数:{{ singerDetails.mvSize }}</span>
+        </p>
       </div>
-      <p class="pname">
-        <span>{{ singerDetails.name }}</span>
-        <button>
-          <i class="icon iconfont icon-tianjiawenjian"></i>
-          收藏
-        </button>
-      </p>
-      <p class="pNumber">
-        <span>单曲数:{{ singerDetails.albumSize }}</span>
-        <span>专辑数:{{ singerDetails.albumSize }}</span>
-        <span>MV数:{{ singerDetails.mvSize }}</span>
-      </p>
-    </div>
 
-    <van-tabs v-model="active">
-      <van-tab title="专辑">
-        <Album />
-      </van-tab>
-      <van-tab title="MV">
-        <Mv></Mv>
-      </van-tab>
-      <van-tab title="歌手详情">
-        <Singerdetails></Singerdetails>
-      </van-tab>
-      <van-tab title="相似歌手">
-        <Similar></Similar>
-      </van-tab>
-    </van-tabs>
+      <van-tabs v-model="active">
+        <van-tab title="专辑">
+          <Album />
+        </van-tab>
+        <van-tab title="MV">
+          <Mv></Mv>
+        </van-tab>
+        <van-tab title="歌手详情">
+          <Singerdetails></Singerdetails>
+        </van-tab>
+        <van-tab title="相似歌手">
+          <Similar></Similar>
+        </van-tab>
+      </van-tabs>
+    </el-skeleton>
   </div>
 </template>
 
@@ -50,19 +52,21 @@ export default {
     Similar,
     Singerdetails
   },
-  data() {
+  data () {
     return {
       singerDetails: [],
-      active: 2
+      active: 2,
+      loading: true
     }
   },
-  mounted() {
+  mounted () {
     this.getArtisListInfo(this.id)
   },
   methods: {
-    async getArtisListInfo(id) {
+    async getArtisListInfo (id) {
       const res = await artistListInfo(id)
       this.singerDetails = res.data.data.artist
+      this.loading = false
     }
   }
 }
