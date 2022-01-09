@@ -82,7 +82,6 @@ export default {
     }
   },
   created () {
-    console.log(sessionStorage.getItem('isLogin'))
     this.getImgList()
     this.getRecSongList(10)
   },
