@@ -35,7 +35,7 @@
           </div>
           <!-- 按钮 -->
           <ul class="info-btn">
-            <button class="btn btn-red">
+            <button class="btn btn-red" @click="playListSongs">
               <i class="el-icon-caret-right"></i>
             </button>
             <button class="btn btn-white">
@@ -78,8 +78,8 @@
       </div>
       <!-- 列表内容 -->
       <div></div>
-     </el-skeleton>
-    <Lyric></Lyric>
+    </el-skeleton>
+    <!-- <Lyric></Lyric> -->
   </div>
 </template>
 
@@ -87,12 +87,12 @@
 import { getPlayListDetail } from '@/api/DiscoverMusic/PersonalRecom'
 import MusicList from '@/components/list/MusicList'
 import moment from 'moment'
-import Lyric from '@/components/songLyric'
+// import Lyric from '@/components/songLyric'
 export default {
   name: "PlayListDetail",
   components: {
-    MusicList,
-    Lyric
+    MusicList
+    // Lyric
   },
   props: {
     id: {
@@ -107,17 +107,33 @@ export default {
         tags: []
       },
       active: 0,
-      loading: true
+      loading: true,
+      listSongMsg: []
     }
   },
   created() {
     this.getPlayListDetail(this.id)
   },
   methods: {
-    async getPlayListDetail (id) {
+    async getPlayListDetail(id) {
       const res = await getPlayListDetail(id, new Date().getTime())
       this.playlist = res.data.playlist
       this.loading = false
+      this.playlist.tracks.forEach(track => {
+        const songDetail = {}
+        songDetail.songName = track.name
+        songDetail.singer = track.ar[0].name
+        songDetail.id = track.id
+        songDetail.picUrl = track.al.picUrl
+        this.listSongMsg.push(songDetail)
+      })
+    },
+    // 将该歌单里的的所有歌曲信息添加到vuex 相应数据并且把
+    // 播放的歌曲 singleSongMsg设置为该歌单第一首歌
+    // 而且对第一首歌进行MP3url请求
+    playListSongs() {
+      this.$store.commit("songDetail/setSongList", this.listSongMsg)
+      this.$store.dispatch('songDetail/getoneMusic', this.listSongMsg[0])
     }
   },
   filters: {

@@ -25,6 +25,15 @@ const mutations = {
     if (index !== -1) return
     state.songListAll.push(state.singleSongMsg)
   },
+  // 点击播放全部的时候将歌单里所有歌曲信息传到songListAll
+  // 播放的歌曲 singleSongMsg设置为该歌单第一首歌
+  setSongList(state, payload) {
+    state.songListAll = payload
+    state.singleSongMsg = payload[0]
+    state.isHavesong = true
+    state.isPlay = true
+    console.log(state.singleSongMsg)
+  },
   // 点击歌曲播放 播放状态则没用
   playback(state) {
     state.isPlay = true
@@ -44,10 +53,16 @@ const mutations = {
     }
 
     const indexNow = state.songListAll.findIndex((item) => item.id === state.singleSongMsg.id)
+    // 有俩种情况 当一个一个点击进来的时候 都进行了MP3url的获取所以
+    // 所以MP3url也被放进了songListAll数组
+    // 当直接播放全部的时候 里面的每一首歌还没有进行请求MP3url
+
     state.songListAll.forEach((song, index) => {
       // 为最后一首的时候恢复成第一首歌
       if (indexNow === state.songListAll.length - 1) {
         state.singleSongMsg = state.songListAll[0]
+        if (state.singleSongMsg.songUrl) return 0
+        setUrl(state.singleSongMsg)
         return 0
       } else {
         // 如果不为最后一首歌 就切换到下一首
@@ -56,6 +71,8 @@ const mutations = {
         } else {
           state.singleSongMsg = state.songListAll[indexNow + 1]
         }
+        if (state.singleSongMsg.songUrl) return 0
+        setUrl(state.singleSongMsg)
         return 0
       }
     })
@@ -102,7 +119,11 @@ const actions = {
 const getters = {
 
 }
-
+function setUrl(payload) {
+  getMusicUrl(payload.id).then((res) => {
+    Vue.set(payload, 'songUrl', res.data.data[0].url)
+  })
+}
 export default {
   namespaced: true,
   state,

@@ -10,7 +10,12 @@
           <span>热门50首</span>
           <i class="icon iconfont icon-bofang"></i>
         </p>
-        <el-table :data="tableData" stripe style="width: 100%">
+        <el-table
+          :data="tableData"
+          stripe
+          style="width: 100%"
+          @row-click="getOneSong"
+        >
           <el-table-column prop="index" label="" width="50px">
           </el-table-column>
           <el-table-column prop="name" label="音乐标题" width="90px">
@@ -64,7 +69,9 @@ export default {
       index: 1,
       flag: true,
       allHotAlbums: [],
-      allTime: []
+      allTime: [],
+      isListenId: 0,
+      songMsg: {}
     }
   },
   mounted() {
@@ -72,6 +79,20 @@ export default {
     this.getAlbum(this.id)
   },
   methods: {
+    // 点击歌曲进行播放
+    getOneSong(row) {
+      if (this.isListenId !== row.id) {
+        this.isListenId = row.id
+        // 响应式的数据
+        const songDetail = {}
+        songDetail.songName = row.name
+        songDetail.singer = row.ar[0].name
+        songDetail.id = row.id
+        songDetail.picUrl = row.al.picUrl
+        this.songMsg = songDetail
+        this.$store.dispatch('songDetail/getoneMusic', songDetail)
+      }
+    },
     async getArtisListInfo(id) {
       const res = await getArtistAlbumTop(id)
       const list = res.data.songs
@@ -172,7 +193,7 @@ export default {
             td {
               text-align: center;
             }
-            .sl{
+            .sl {
               width: 90px;
               overflow: hidden;
               white-space: nowrap;

@@ -84,9 +84,12 @@ export default {
   name: "FooBar",
   data() {
     return {
-      active: 0
+      active: 0,
+      historyplayList: [],
+      isHistoryHave: false
     }
   },
+
   methods: {
     nextmusic() {
       this.$store.commit('songDetail/nextsong')
@@ -110,6 +113,19 @@ export default {
       } else {
         this.$refs.audioRef.pause()
       }
+    },
+    singleSongMsg(newVal) {
+      // 检测每次singleSongMsg的变化 如果新的这个历史播放数组没有的话就添加进来
+      const isHaveIndex = this.historyplayList.findIndex((song) => song.id === newVal.id)
+      if (isHaveIndex === -1) {
+        this.isHistoryHave = false
+      } else {
+        this.isHistoryHave = true
+      }
+      if (!this.isHistoryHave) {
+        this.historyplayList.push(newVal)
+      }
+      localStorage.historyplayList = JSON.stringify(this.historyplayList)
     }
   },
   computed: {
