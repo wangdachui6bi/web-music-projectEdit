@@ -31,12 +31,12 @@
         >
           <el-menu-item index="/">发现音乐</el-menu-item>
           <el-menu-item index="/video">视频</el-menu-item>
-          <el-menu-item index="/personalfm">私人FM</el-menu-item>
+          <!-- <el-menu-item index="/personalfm">私人FM</el-menu-item> -->
           <el-menu-item-group>
             <span slot="title">我的音乐</span>
             <el-menu-item index="/dailyrecom">每日推荐</el-menu-item>
-            <el-menu-item index="historyplay">最近播放</el-menu-item>
-            <el-menu-item index="mycollection">我的收藏</el-menu-item>
+            <el-menu-item index="/historyplay">最近播放</el-menu-item>
+            <!-- <el-menu-item index="mycollection">我的收藏</el-menu-item> -->
           </el-menu-item-group>
           <el-menu-item-group>
             <span slot="title">创建的歌单</span>
