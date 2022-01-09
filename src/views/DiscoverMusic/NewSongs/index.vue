@@ -66,14 +66,19 @@
       <van-list
         v-model="loading"
         :finished="finished"
-        finished-text="没有更多了"
+        :finished-text="weekDataalbum.length > 0 ? '没有更多了' : '正在加载中'"
         @load="onLoad"
         class="albumlist"
         :immediate-check="check"
       >
         <ul>
           <li v-for="(item, index) in weekDataalbum" :key="index">
-            <div><img :src="item.blurPicUrl" alt="" /></div>
+            <div class="albumimgli">
+              <img :src="item.blurPicUrl" alt="" />
+              <div class="play-btn">
+                <i class="el-icon-caret-right"></i>
+              </div>
+            </div>
             <div>{{ item.name }}</div>
             <div>{{ item.artist.name }}</div>
           </li>
@@ -169,6 +174,7 @@ export default {
         this.isalbum = true
         getTopNewalbum({ limit }).then((res) => {
           // 分批请求
+          console.log(res)
           this.wkalbumall = res.data.weekData
           this.weekDataalbum = this.weekDataalbum.concat(this.wkalbumall.slice(0, 30))
           this.count += res.data.weekData.length
@@ -290,6 +296,26 @@ export default {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      .albumimgli {
+        position: relative;
+        .play-btn {
+          position: absolute;
+          width: 24px;
+          height: 24px;
+          right: 5px;
+          bottom: 5px;
+          color: #ec4141;
+          background-color: #fbf7f6;
+          border-radius: 50%;
+          opacity: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          i {
+            font-size: 20px;
+          }
+        }
+      }
       li {
         width: 32%;
         box-sizing: border-box;
