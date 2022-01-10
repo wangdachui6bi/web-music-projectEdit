@@ -2,21 +2,22 @@
   <!-- 歌单详情 -->
   <div class="view">
     <el-skeleton :rows="6" animated :loading="loading">
-      <div class="albumdetail">
-        <!-- 歌单图片及信息 -->
-        <div class="detail-desc">
-          <!-- 歌单图片 -->
-          <div class="detail-img-wrapper">
-            <img class="img img-radius-8 img-border" :src="albList.picUrl" />
-          </div>
-          <!-- 歌单信息 -->
-          <div class="detail-desc-info">
-            <div class="info-title">
-              <div class="tag">专辑</div>
-              <span class="titlename">{{ albList.name }}</span>
+      <template v-if="!loading">
+        <div class="albumdetail">
+          <!-- 歌单图片及信息 -->
+          <div class="detail-desc">
+            <!-- 歌单图片 -->
+            <div class="detail-img-wrapper">
+              <img class="img img-radius-8 img-border" :src="albList.picUrl" />
             </div>
-            <!-- 歌手信息 -->
-            <!-- <div class="author">
+            <!-- 歌单信息 -->
+            <div class="detail-desc-info">
+              <div class="info-title">
+                <div class="tag">专辑</div>
+                <span class="titlename">{{ albList.name }}</span>
+              </div>
+              <!-- 歌手信息 -->
+              <!-- <div class="author">
               <div class="author-info">
                 <span
                   style="color: rgb(11, 88, 176)"
@@ -26,46 +27,47 @@
                 <span class="mleft-12 font-12" style="color: #2c3e50"></span>
               </div>
             </div> -->
-            <!-- 按钮 -->
-            <ul class="info-btn">
-              <button class="btn btn-red" @click="playListSongs">
-                <i class="el-icon-caret-right"></i>
-              </button>
-              <button class="btn btn-white">
-                <i class="el-icon-folder-checked"></i>
-              </button>
-              <button class="btn btn-white">
-                <i class="el-icon-share"></i>
-              </button>
-            </ul>
-            <!-- 标签 -->
-            <div class="detail-tag">
-              <span>歌手 : </span>
-              <span style="margin: 10px; font-size: 14px; color: #3771dd">{{
-                albList.artist.name
-              }}</span>
-            </div>
-            <!-- 播放数量歌曲数量 -->
-            <div class="num-info">
-              <span>时间 :</span>
-              <span>{{ albList.publishTime | datefilter }} </span>
+              <!-- 按钮 -->
+              <ul class="info-btn">
+                <button class="btn btn-red" @click="playListSongs">
+                  <i class="el-icon-caret-right"></i>
+                </button>
+                <button class="btn btn-white">
+                  <i class="el-icon-folder-checked"></i>
+                </button>
+                <button class="btn btn-white">
+                  <i class="el-icon-share"></i>
+                </button>
+              </ul>
+              <!-- 标签 -->
+              <div class="detail-tag">
+                <span>歌手 : </span>
+                <span style="margin: 10px; font-size: 14px; color: #3771dd">{{
+                  albList.artist.name
+                }}</span>
+              </div>
+              <!-- 播放数量歌曲数量 -->
+              <div class="num-info">
+                <span>时间 :</span>
+                <span>{{ albList.publishTime | datefilter }} </span>
+              </div>
             </div>
           </div>
+          <!-- 列表头 -->
+          <div class="detail-head">
+            <van-tabs v-model="active">
+              <van-tab title="歌曲列表"><AlbumList :list="songs" /></van-tab>
+              <van-tab title="评论"><AlbumComment :list="albList" /></van-tab>
+              <van-tab title="专辑详情">
+                <div style="font-weight: 700">专辑介绍</div>
+                <div class="my-pre">
+                  <p v-html="albList.description"></p>
+                </div>
+              </van-tab>
+            </van-tabs>
+          </div>
         </div>
-      </div>
-      <!-- 列表头 -->
-      <div class="detail-head">
-        <van-tabs v-model="active">
-          <van-tab title="歌曲列表"><AlbumList :list="songs" /></van-tab>
-          <van-tab title="评论"><AlbumComment :list="albList" /></van-tab>
-          <van-tab title="专辑详情">
-            <div style="font-weight: 700">专辑介绍</div>
-            <div class="my-pre">
-              <p v-html="albList.description"></p>
-            </div>
-          </van-tab>
-        </van-tabs>
-      </div>
+      </template>
     </el-skeleton>
   </div>
 </template>
@@ -91,8 +93,6 @@ export default {
       active: 0,
       loading: true,
       albList: {
-        artist: {},
-        info: {}
       },
       songs: [],
       isListenId: 0,
@@ -103,6 +103,7 @@ export default {
   created() {
     this.getAlbumDetail(this.id)
     // this.getPlayListDetail()
+    // console.log(this.songs)
   },
   methods: {
     // 将该歌单里的的所有歌曲信息添加到vuex 相应数据并且把

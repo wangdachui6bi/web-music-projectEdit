@@ -1,74 +1,75 @@
 <template>
   <div class="comment">
-    <div class="area-wrap">
-      <textarea class="text-area"></textarea>
-      <div class="word-num">140</div>
-    </div>
-    <div class="btn-wrap">
-      <div class="at-btv">
-        <button class="no-btn">@</button>
-        <button class="no-btn">#</button>
-      </div>
-      <div class="send-btn">
-        <button class="btn btn-white">评论</button>
-      </div>
-    </div>
-    <div class="hot-wrap">
-      <div class="font-16 font-bold">最新评论</div>
-      <div class="comment-item" v-for="item in comments" :key="item.commentId">
-        <div class="comment_main">
-          <div class="img-wrap">
-            <img :src="item.user.avatarUrl" class="img" alt="" />
+    <el-skeleton :rows="6" animated :loading="loading">
+      <template v-if="!loading">
+        <div class="area-wrap">
+          <textarea class="text-area"></textarea>
+          <div class="word-num">140</div>
+        </div>
+        <div class="btn-wrap">
+          <div class="at-btv">
+            <button class="no-btn">@</button>
+            <button class="no-btn">#</button>
           </div>
-          <div class="comment-wrap">
-            <div class="comment-content">
-              <span style="color: rgb(80, 125, 175)"
-                >{{ item.user.nickname }}：</span
-              >
-              <span>{{ item.content }}</span>
-            </div>
-            <div
-              class="reply-content"
-              v-for="replied in replied"
-              :key="replied.beRepliedCommentId"
-            >
-              <span style="margin-left: 5px; color: rgb(80, 125, 175)"
-                >{{ replied.user.nickname }}：</span
-              >
-              <span>{{ replied.content }}</span>
-            </div>
-            <div class="comment-info">
-              <div
-                class="time"
-                style="color: rgb(159, 159, 159); font-size: 12px"
-              >
-                {{ item.timeStr }}
-              </div>
-              <div class="comment-btn">
-                <button class="no-btn" style="font-size: 12px">
-                  <i class="iconfont icon-dianzan"></i>
-                  {{ item.likedCount }}
-                  <span></span>
-                </button>
-                <div class="div-column"></div>
-                <button class="no-btn">
-                  <i class="iconfont icon-fenxiang"></i>
-                </button>
-                <div class="div-column"></div>
-                <button class="no-btn">
-                  <i class="iconfont icon-jianyi" style="font-size: 19px"></i>
-                </button>
-              </div>
-            </div>
+          <div class="send-btn">
+            <button class="btn btn-white">评论</button>
           </div>
         </div>
-        <div class="div-line"></div>
-      </div>
-      <div class="flex_center" style="margin-top: 10px">
-        <el-pagination background layout="prev, pager, next" :total="1000">
-        </el-pagination>
-      </div>
-    </div>
+        <div class="hot-wrap">
+          <div class="font-16 font-bold">最新评论</div>
+          <div
+            class="comment-item"
+            v-for="item in comments"
+            :key="item.commentId"
+          >
+            <div class="comment_main">
+              <div class="img-wrap">
+                <img :src="item.user.avatarUrl" class="img" alt="" />
+              </div>
+              <div class="comment-wrap">
+                <div class="comment-content">
+                  <span style="color: rgb(80, 125, 175)"
+                    >{{ item.user.nickname }}：</span
+                  >
+                  <span>{{ item.content }}</span>
+                </div>
+                <div class="comment-info">
+                  <div
+                    class="time"
+                    style="color: rgb(159, 159, 159); font-size: 12px"
+                  >
+                    {{ item.timeStr }}
+                  </div>
+                  <div class="comment-btn">
+                    <button class="no-btn" style="font-size: 12px">
+                      <i class="iconfont icon-dianzan"></i>
+                      {{ item.likedCount }}
+                      <span></span>
+                    </button>
+                    <div class="div-column"></div>
+                    <button class="no-btn">
+                      <i class="iconfont icon-fenxiang"></i>
+                    </button>
+                    <div class="div-column"></div>
+                    <button class="no-btn">
+                      <i
+                        class="iconfont icon-jianyi"
+                        style="font-size: 19px"
+                      ></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="div-line"></div>
+          </div>
+          <div class="flex_center" style="margin-top: 10px">
+            <el-pagination background layout="prev, pager, next" :total="1000">
+            </el-pagination>
+          </div>
+        </div>
+      </template>
+    </el-skeleton>
   </div>
 </template>
 
@@ -78,7 +79,8 @@ export default {
   props: ["list"],
   data () {
     return {
-      comments: []
+      comments: [],
+      loading: true
     }
   },
   created () {
@@ -89,6 +91,7 @@ export default {
       const res = await getAlbumComment(id)
       // console.log(res)
       this.comments = res.data.comments
+      this.loading = false
     }
   }
 
