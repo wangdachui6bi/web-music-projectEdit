@@ -68,29 +68,21 @@ import { getBanner, getPersonalized, getRecommend } from '@/api/DiscoverMusic/Pe
 
 export default {
   name: "PersonalRecom",
-  computed: {
-    isLogin () {
-      return this.$store.state.login.isLogin
-    }
-  },
   data () {
     return {
       imgList: [],
       recSongList: [],
       recommendList: [],
-      loading: true
+      loading: true,
+      isLogin: sessionStorage.getItem("isLogin")
     }
   },
   created () {
     this.getImgList()
-    this.getRecSongList(10)
-  },
-  watch: {
-    isLogin: {
-      immediate: true,
-      handler () {
-        if (this.isLogin) this.getRecommend()
-      }
+    if (this.isLogin) {
+      this.getRecommend()
+    } else {
+      this.getRecSongList(10)
     }
   },
   methods: {
@@ -106,12 +98,13 @@ export default {
       // console.log(res, limit)
       // if (res.code !== 200) return
       this.recSongList = res.data.result
+      this.loading = false
     },
     async getRecommend () {
       // if (this.isLogin) return
       const res = await getRecommend()
       // if (res.code !== 200) return
-      console.log(res)
+      // console.log(res)
       this.recommendList = res.data.recommend
       this.loading = false
     },
