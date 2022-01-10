@@ -30,7 +30,7 @@
           :collapse="isCollapse"
         >
           <el-menu-item index="/">发现音乐</el-menu-item>
-          <!-- <el-menu-item index="/video">视频</el-menu-item> -->
+          <el-menu-item index="/video">视频</el-menu-item>
           <!-- <el-menu-item index="/personalfm">私人FM</el-menu-item> -->
           <el-menu-item-group>
             <span slot="title">我的音乐</span>

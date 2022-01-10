@@ -8,7 +8,7 @@ import login from "./modules/Login"
 import DiscoverMusic from "./modules/DiscoverMusic"
 import DailyRecom from './modules/DailyRecom'
 import Search from './modules/Search'
-// import Video from './modules/Video'
+import Video from './modules/Video'
 import MyCollection from './modules/MyCollection'
 import HistoryPlay from "./modules/HistoryPlay"
 import { Toast } from 'vant'
@@ -19,7 +19,7 @@ const routes = [
   ...login,
   ...DiscoverMusic,
   ...DailyRecom,
-  // Video,
+  ...Video,
   Search,
   NoFoundPages,
   HistoryPlay,
