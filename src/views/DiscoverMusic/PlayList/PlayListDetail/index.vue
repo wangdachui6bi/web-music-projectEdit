@@ -36,7 +36,7 @@
             </div>
             <!-- 按钮 -->
             <ul class="info-btn">
-              <button class="btn btn-red">
+              <button class="btn btn-red" @click="playListSongs">
                 <i class="el-icon-caret-right"></i>
               </button>
               <button class="btn btn-white">
