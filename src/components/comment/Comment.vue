@@ -14,114 +14,135 @@
           <button class="btn btn-white">评论</button>
         </div>
       </div>
-      <div class="hot-wrap">
-        <div class="font-bold font-16">精彩评论</div>
-        <div
-          v-for="item in hotComments"
-          :key="item.userId"
-          class="comment-item"
-        >
-          <div class="comment_main">
-            <div class="img-wrap">
-              <img :src="item.user.avatarUrl" class="img" alt="" />
-            </div>
-            <div class="comment-wrap">
-              <div class="comment-content">
-                <span style="color: rgb(80, 125, 175)"
-                  >{{ item.user.nickname }}：</span
-                >
-                <span>{{ item.content }}</span>
+      <template v-if="!loading">
+        <div class="hot-wrap">
+          <div class="font-bold font-16">精彩评论</div>
+          <div
+            v-for="item in hotComments"
+            :key="item.userId"
+            class="comment-item"
+          >
+            <div class="comment_main">
+              <div class="img-wrap">
+                <img :src="item.user.avatarUrl" class="img" alt="" />
               </div>
-              <div class="comment-info">
-                <div
-                  class="time"
-                  style="color: rgb(159, 159, 159); font-size: 12px"
-                >
-                  {{ item.timeStr }}
+              <div class="comment-wrap">
+                <div class="comment-content">
+                  <span style="color: rgb(80, 125, 175)"
+                    >{{ item.user.nickname }}：</span
+                  >
+                  <span>{{ item.content }}</span>
                 </div>
-                <div class="comment-btn">
-                  <button class="no-btn">
-                    <i class="iconfont icon-dianzan"></i>
-                    <span>{{ item.likedCount }}</span>
-                  </button>
-                  <div class="div-column"></div>
-                  <button class="no-btn">
-                    <i class="iconfont icon-fenxiang"></i>
-                  </button>
-                  <div class="div-column"></div>
-                  <button class="no-btn">
-                    <i class="iconfont icon-jianyi" style="font-size: 19px"></i>
-                  </button>
+                <div class="comment-info">
+                  <div
+                    class="time"
+                    style="color: rgb(159, 159, 159); font-size: 12px"
+                  >
+                    {{ item.timeStr }}
+                  </div>
+                  <div class="comment-btn">
+                    <button class="no-btn">
+                      <i class="iconfont icon-dianzan"></i>
+                      <span>{{ item.likedCount }}</span>
+                    </button>
+                    <div class="div-column"></div>
+                    <button class="no-btn">
+                      <i class="iconfont icon-fenxiang"></i>
+                    </button>
+                    <div class="div-column"></div>
+                    <button class="no-btn">
+                      <i
+                        class="iconfont icon-jianyi"
+                        style="font-size: 19px"
+                      ></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="div-line"></div>
           </div>
-          <div class="div-line"></div>
-        </div>
-        <div class="more-btn-wrap">
-          <button class="btn btn-white">更多精彩评论</button>
-        </div>
-      </div>
-      <div class="hot-wrap">
-        <div class="font-16 font-bold">最新评论</div>
-        <div
-          class="comment-item"
-          v-for="item in comments"
-          :key="item.commentId"
-        >
-          <div class="comment_main">
-            <div class="img-wrap">
-              <img :src="item.user.avatarUrl" class="img" alt="" />
-            </div>
-            <div class="comment-wrap">
-              <div class="comment-content">
-                <span style="color: rgb(80, 125, 175)"
-                  >{{ item.user.nickname }}：</span
-                >
-                <span>{{ item.content }}</span>
-              </div>
-              <div
-                class="reply-content"
-                v-for="replied in replied"
-                :key="replied.beRepliedCommentId"
-              >
-                <span style="margin-left: 5px; color: rgb(80, 125, 175)"
-                  >{{ replied.user.nickname }}：</span
-                >
-                <span>{{ replied.content }}</span>
-              </div>
-              <div class="comment-info">
-                <div
-                  class="time"
-                  style="color: rgb(159, 159, 159); font-size: 12px"
-                >
-                  {{ item.timeStr }}
-                </div>
-                <div class="comment-btn">
-                  <button class="no-btn" style="font-size: 12px">
-                    <i class="iconfont icon-dianzan"></i>
-                    {{ item.likedCount }}
-                    <span></span>
-                  </button>
-                  <div class="div-column"></div>
-                  <button class="no-btn">
-                    <i class="iconfont icon-fenxiang"></i>
-                  </button>
-                  <div class="div-column"></div>
-                  <button class="no-btn">
-                    <i class="iconfont icon-jianyi" style="font-size: 19px"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div class="more-btn-wrap">
+            <button class="btn btn-white">更多精彩评论</button>
           </div>
-          <div class="div-line"></div>
         </div>
-        <div class="flex_center" style="margin-top: 10px">
-          <el-pagination background layout="prev, pager, next" :total="1000">
-          </el-pagination>
+        <div class="hot-wrap">
+          <div class="font-16 font-bold">最新评论</div>
+          <div
+            class="comment-item"
+            v-for="(item, index) in comments"
+            :key="item.commentId"
+          >
+            <div class="comment_main">
+              <div class="img-wrap">
+                <img :src="item.user.avatarUrl" class="img" alt="" />
+              </div>
+              <div class="comment-wrap">
+                <div class="comment-content">
+                  <span style="color: rgb(80, 125, 175)"
+                    >{{ item.user.nickname }}：</span
+                  >
+                  <span>{{ item.content }}</span>
+                  <div class="comtBf">
+                    <div class="reply-content">
+                      <template v-if="replied[index].length > 0">
+                        <span
+                          class="font-12 pointer"
+                          style="margin-left: 5px; color: rgb(80, 125, 175)"
+                        >
+                          @{{ replied[index][0].user.nickname }}：
+                        </span>
+                        <span class="font-12">
+                          {{ replied[index][0].content }}
+                        </span>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+                <div class="comment-info">
+                  <div
+                    class="time"
+                    style="color: rgb(159, 159, 159); font-size: 12px"
+                  >
+                    {{ item.timeStr }}
+                  </div>
+                  <div class="comment-btn">
+                    <button class="no-btn" style="font-size: 12px">
+                      <i class="iconfont icon-dianzan"></i>
+                      {{ item.likedCount }}
+                      <span></span>
+                    </button>
+                    <div class="div-column"></div>
+                    <button class="no-btn">
+                      <i class="iconfont icon-fenxiang"></i>
+                    </button>
+                    <div class="div-column"></div>
+                    <button class="no-btn">
+                      <i
+                        class="iconfont icon-jianyi"
+                        style="font-size: 19px"
+                      ></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="div-line"></div>
+          </div>
+          <div class="flex_center" style="margin-top: 10px">
+            <el-pagination
+              background
+              layout="prev, pager, next"
+              :comment="comments"
+              :page-size="20"
+              @current-change="currentChange"
+              :current-page="currentPage"
+              :total="commentCount"
+            >
+            </el-pagination>
+          </div>
         </div>
-      </div>
+      </template>
     </el-skeleton>
   </div>
 </template>
@@ -135,26 +156,53 @@ export default {
       hotComments: [],
       comments: [],
       replied: [],
-      loading: true
+      loading: true,
+      currentPage: 1,
+      offset: 0,
+      newlist: [],
+      commentCount: 0
     }
   },
   created () {
     this.getHotComment(this.list.id, 2, 5)
-    this.getNewComment(this.list.id, 0, 0)
+    this.getNewComment()
     // console.log(this.list)
   },
   methods: {
     async getHotComment (id, type, limit) {
+      this.loading = true
       const res = await getHotComment(id, type, limit)
       // console.log(res)
       this.hotComments = res.data.hotComments
       this.loading = false
     },
-    async getNewComment (id) {
-      const res = await getNewComment(id)
+    async getNewComment () {
+      this.loading = true
+      console.log(this.list.id)
+      const res = await getNewComment({ id: this.list.id })
       // console.log(res)
       this.comments = res.data.comments
-      this.replied = res.data.comments.beReplied
+      this.commentCount = res.data.total
+      res.data.comments.forEach((com) => {
+        this.replied.push(com.beReplied)
+      })
+      console.log(this.replied)
+      this.loading = false
+    },
+    currentChange (page) {
+      this.currentPage = page
+      getNewComment({ id: this.list.id, page: this.currentPage - 1 }).then((res) => {
+        this.comments = res.data.comments
+      })
+    }
+  },
+  watch: {
+    comments (newVal) {
+      const arr = []
+      newVal.forEach((com) => {
+        arr.push(com.beReplied)
+      })
+      this.replied = arr
     }
   }
 
@@ -219,6 +267,7 @@ export default {
   .font-16 {
     font-size: 16px;
   }
+
   .comment_main {
     display: flex;
     align-items: center;
@@ -245,6 +294,12 @@ export default {
           cursor: pointer;
           font-size: 12px;
         }
+      }
+      .reply-content {
+        background-color: #f4f4f4;
+        border-radius: 6px;
+        word-break: break-all;
+        word-wrap: break-word;
       }
       .comment-info {
         display: flex;

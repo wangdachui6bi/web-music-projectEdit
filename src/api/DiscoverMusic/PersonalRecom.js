@@ -48,10 +48,11 @@ export const getHotComment = (id, type, limit) => {
 }
 
 /* 歌单评论, 调用此接口 , 传入音乐 id 和 limit 参数 , 可获得该歌单的所有评论 ( 不需要 登录 ) */
-export const getNewComment = (id, offset, before) => {
+export const getNewComment = ({ id, limit = 20, page = 0, before = 0 }) => {
+  const offset = page * limit
   return request({
     method: 'get',
-    url: `/comment/playlist?id=${id}`
+    url: `/comment/playlist?id=${id}&limit=${limit}&offset=${offset}&before=${before}`
   })
 }
 
