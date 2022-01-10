@@ -95,7 +95,7 @@ import { getMvDetail, getMvArtist, getMvLikeNumber, getMvComment } from '@/api/D
 import { Toast } from 'vant'
 export default {
   name: 'PlayMvDetail',
-  data() {
+  data () {
     return {
       MvId: this.$route.params.id,
       mvPlayDate: [],
@@ -116,44 +116,45 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
     this.getMv(this.MvId)
     this.getMvName(this.MvId)
     this.getMvLikes(this.MvId)
     this.getComment(this.MvId)
   },
   filters: {
-    filterNumber(number) {
+    filterNumber (number) {
       return parseInt(number / 10000)
     }
   },
   methods: {
-    async getMv(id) {
+    async getMv (id) {
       const res = await getMvDetail(id)
       this.mvPlayDate = res.data.data
+      // this.mvPlayDate = res.data.data
     },
-    async getComment(id) {
+    async getComment (id) {
       const res = await getMvComment(id)
       this.hotComments = res.data.hotComments
       console.log(res.data)
     },
-    async getMvLikes(id) {
+    async getMvLikes (id) {
       const res = await getMvLikeNumber(id)
       this.dzData = res.data
     },
-    async getMvName(id) {
+    async getMvName (id) {
       const res = await getMvArtist(id)
       this.mvArtists = res.data.data.artists[0]
       this.mvDate = res.data.data
       this.artistName = res.data.data.artistName
     },
-    inputLabel() {
+    inputLabel () {
       this.at = "@"
     },
-    inputLa() {
+    inputLa () {
       this.at = "#想说啥#"
     },
-    onSelect(option) {
+    onSelect (option) {
       Toast(option.name)
       this.showShare = false
     }
