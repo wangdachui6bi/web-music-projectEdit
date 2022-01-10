@@ -86,7 +86,7 @@ export default {
     AlbumList,
     AlbumComment
   },
-  data () {
+  data() {
     return {
       active: 0,
       loading: true,
@@ -94,16 +94,33 @@ export default {
         artist: {},
         info: {}
       },
-      songs: []
+      songs: [],
+      isListenId: 0,
+      songMsg: {}
     }
   },
-  created () {
+  created() {
     this.getAlbumDetail(this.id)
     // console.log(this.id)
     // console.log(this.songs)
   },
   methods: {
-    async getAlbumDetail (id) {
+    getOneSong(row) {
+      if (this.isListenId !== row.id) {
+        this.$store.commit('songDetail/songAllMsg', row)
+        this.isListenId = row.id
+        // 响应式的数据
+        const songDetail = {}
+        songDetail.songName = row.name
+        songDetail.singer = row.ar[0].name
+        songDetail.id = row.id
+        songDetail.picUrl = row.al.picUrl
+        this.songMsg = songDetail
+        this.$store.dispatch('songDetail/getoneMusic', songDetail)
+        // this.$store.commit('songDetail/setplayListTracks', row)
+      }
+    },
+    async getAlbumDetail(id) {
       const res = await getAlbumDetail(id)
       // console.log(res.data.songs)
       this.albList = res.data.album
@@ -113,7 +130,7 @@ export default {
     }
   },
   filters: {
-    datefilter (date) {
+    datefilter(date) {
       return moment(date).format('YYYY-MM-DD')
     }
   }
