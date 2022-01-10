@@ -19,7 +19,7 @@
           <div class="font-16 font-bold">最新评论</div>
           <div
             class="comment-item"
-            v-for="item in comments"
+            v-for="(item, index) in comments"
             :key="item.commentId"
           >
             <div class="comment_main">
@@ -32,6 +32,19 @@
                     >{{ item.user.nickname }}：</span
                   >
                   <span>{{ item.content }}</span>
+                  <div class="reply-content">
+                    <template v-if="replied[index].length > 0">
+                      <span
+                        class="font-12 pointer"
+                        style="margin-left: 5px; color: rgb(80, 125, 175)"
+                      >
+                        @{{ replied[index][0].user.nickname }}：
+                      </span>
+                      <span class="font-12">
+                        {{ replied[index][0].content }}
+                      </span>
+                    </template>
+                  </div>
                 </div>
                 <div class="comment-info">
                   <div
@@ -64,7 +77,15 @@
             <div class="div-line"></div>
           </div>
           <div class="flex_center" style="margin-top: 10px">
-            <el-pagination background layout="prev, pager, next" :total="1000">
+            <el-pagination
+              background
+              layout="prev, pager, next"
+              :comments="comments"
+              :page-size="20"
+              @current-change="currentChange"
+              :current-page="currentPage"
+              :total="commentCount"
+            >
             </el-pagination>
           </div>
         </div>
@@ -80,18 +101,35 @@ export default {
   data () {
     return {
       comments: [],
-      loading: true
+      loading: true,
+      replied: [],
+      currentPage: 1,
+      offset: 0,
+      commentCount: 0
     }
   },
   created () {
-    this.getAlbumComment(this.list.id, 2, 5)
+    this.getAlbumComment()
   },
   methods: {
-    async getAlbumComment (id) {
-      const res = await getAlbumComment(id)
-      // console.log(res)
+    async getAlbumComment () {
+      this.loading = true
+      const res = await getAlbumComment({ id: this.list.id })
+      console.log(res)
       this.comments = res.data.comments
+      this.commentCount = res.data.total
+      // console.log(this.commentCount)
+      res.data.comments.forEach((com) => {
+        this.replied.push(com.beReplied)
+      })
+      // console.log(this.replied)
       this.loading = false
+    },
+    currentChange (page) {
+      this.currentPage = page
+      getAlbumComment({ id: this.list.id, page: this.currentPage - 1 }).then((res) => {
+        this.comments = res.data.comments
+      })
     }
   }
 
@@ -182,6 +220,12 @@ export default {
           cursor: pointer;
           font-size: 12px;
         }
+      }
+      .reply-content {
+        background-color: #f4f4f4;
+        border-radius: 6px;
+        word-break: break-all;
+        word-wrap: break-word;
       }
       .comment-info {
         display: flex;

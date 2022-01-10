@@ -64,9 +64,9 @@
               </div>
               <!-- 简介 -->
               <div class="intro">
-                <p style="max-width: 1000px; padding-bottom: 10px">
+                <span style="max-width: 1000px; padding-bottom: 10px">
                   简介：{{ playlist.description }}
-                </p>
+                </span>
               </div>
             </div>
           </div>

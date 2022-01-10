@@ -32,6 +32,7 @@
             class="vip-tag"
             style="color: rgb(236, 73, 73); border-color: rgb(236, 73, 73)"
             v-if="scope.row.mv !== 0"
+            @click="goDetails(scope.row)"
             >MV<i class="el-icon-caret-right"></i
           ></span>
           <span class="vip-tag" v-if="scope.row.fee == 1">VIP</span>
@@ -42,7 +43,7 @@
         label="歌手"
         width="80"
         show-overflow-tooltip
-      >
+        >
       </el-table-column>
     </el-table>
   </el-skeleton>
@@ -72,7 +73,7 @@ export default {
       return this.$store.state.login.profile.userId
     }
   },
-  created() {
+  created () {
     // console.log(this.uid)
     this.getLikeIdList(this.uid)
     this.list.tracks.forEach(track => {
@@ -83,6 +84,7 @@ export default {
   methods: {
     async init() {
       await this.getLikeIdList(this.uid)
+      this.loading = false
       this.list.tracks.forEach(track => {
         this.songId.push(track.id)
       })
@@ -115,10 +117,10 @@ export default {
     },
     // 并且如果是暂停状态则恢复播放
     // 播放状态则没用
-    async getLikeIdList(uid) {
+    async getLikeIdList (uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
-      this.loading = false
+      // this.loading = false
     },
     isLiked(id) {
       return this.likeIdList.indexOf(id) !== -1
@@ -128,6 +130,10 @@ export default {
       await likeMusic(item.id, item.isLiked)
       this.getLikeIdList(this.uid)
       this.updatedList()
+    },
+    goDetails (item) {
+      console.log(item)
+      this.$router.push("/videodetail/mv/" + item.mv)
     }
   }
 }
