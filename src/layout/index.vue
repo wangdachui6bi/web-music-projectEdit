@@ -1,11 +1,23 @@
 <template>
   <div class="layout">
-    <TopBar v-if="$route.path !== '/login'"></TopBar>
+    <!-- 头部 -->
+    <template v-if="$route.meta.needHead">
+      <TopBar></TopBar>
+      <div class="TopBar-space"></div>
+    </template>
+    <!-- 主体 -->
     <div class="main">
-      <TabBar v-if="TabList.includes($route.path)" />
+      <template v-if="TabList.includes($route.path)">
+        <TabBar></TabBar>
+        <div class="TabBar-space"></div>
+      </template>
       <router-view></router-view>
     </div>
-    <FooBar v-if="$route.path !== '/login'"></FooBar>
+    <!-- 底部 -->
+    <template v-if="$route.meta.needHead">
+      <FooBar></FooBar>
+      <div class="FooBar-space"></div>
+    </template>
   </div>
 </template>
 
@@ -15,7 +27,7 @@ import TopBar from "@/components/TopBar"
 import TabBar from "@/components/TabBar"
 export default {
   name: "layout",
-  data () {
+  data() {
     return {
       TabList: [
         "/personalrecom",
@@ -36,8 +48,13 @@ export default {
 
 <style lang="scss" scoped>
 .layout {
-  padding-top: 60px;
-  .main {
+  // 留白 跟随头部和标签栏出现而出现
+  .TopBar-space,
+  .TabBar-space {
+    height: 60px;
+    width: 100%;
+  }
+  .FooBar-space {
     margin-bottom: 51px;
   }
 }
