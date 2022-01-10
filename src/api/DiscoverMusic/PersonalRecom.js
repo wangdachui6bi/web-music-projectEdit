@@ -57,9 +57,10 @@ export const getNewComment = ({ id, limit = 20, page = 0, before = 0 }) => {
 }
 
 /* 歌单收藏者,调用此接口 , 传入歌单 id 可获取歌单的所有收藏者 */
-export const getSuberList = ({ id, limit = 30 }) => {
+export const getSuberList = ({ id, limit = 30, page = 0 }) => {
+  const offset = page * limit
   return request({
     method: 'get',
-    url: `/playlist/subscribers?id=${id}&limit=${limit}`
+    url: `/playlist/subscribers?id=${id}&limit=${limit}&offset=${offset}`
   })
 }

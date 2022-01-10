@@ -83,21 +83,21 @@
                     >{{ item.user.nickname }}：</span
                   >
                   <span>{{ item.content }}</span>
-                  <div class="comtBf">
-                    <div class="reply-content">
-                      <template v-if="replied[index].length > 0">
-                        <span
-                          class="font-12 pointer"
-                          style="margin-left: 5px; color: rgb(80, 125, 175)"
-                        >
-                          @{{ replied[index][0].user.nickname }}：
-                        </span>
-                        <span class="font-12">
-                          {{ replied[index][0].content }}
-                        </span>
-                      </template>
-                    </div>
+                  <!-- <div class="comtBf"> -->
+                  <div class="reply-content">
+                    <template v-if="replied[index].length > 0">
+                      <span
+                        class="font-12 pointer"
+                        style="margin-left: 5px; color: rgb(80, 125, 175)"
+                      >
+                        @{{ replied[index][0].user.nickname }}：
+                      </span>
+                      <span class="font-12">
+                        {{ replied[index][0].content }}
+                      </span>
+                    </template>
                   </div>
+                  <!-- </div> -->
                 </div>
                 <div class="comment-info">
                   <div
@@ -159,7 +159,6 @@ export default {
       loading: true,
       currentPage: 1,
       offset: 0,
-      newlist: [],
       commentCount: 0
     }
   },
@@ -178,15 +177,12 @@ export default {
     },
     async getNewComment () {
       this.loading = true
-      console.log(this.list.id)
       const res = await getNewComment({ id: this.list.id })
-      // console.log(res)
       this.comments = res.data.comments
       this.commentCount = res.data.total
       res.data.comments.forEach((com) => {
         this.replied.push(com.beReplied)
       })
-      console.log(this.replied)
       this.loading = false
     },
     currentChange (page) {
@@ -195,17 +191,7 @@ export default {
         this.comments = res.data.comments
       })
     }
-  },
-  watch: {
-    comments (newVal) {
-      const arr = []
-      newVal.forEach((com) => {
-        arr.push(com.beReplied)
-      })
-      this.replied = arr
-    }
   }
-
 }
 </script>
 

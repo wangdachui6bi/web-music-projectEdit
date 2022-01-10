@@ -43,7 +43,7 @@
         label="歌手"
         width="80"
         show-overflow-tooltip
-      >
+        >git
       </el-table-column>
     </el-table>
   </el-skeleton>

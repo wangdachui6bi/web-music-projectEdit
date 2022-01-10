@@ -30,7 +30,15 @@
         </li>
       </ul>
       <div class="flex_center">
-        <el-pagination background layout="prev, pager, next" :total="1000">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :suberList="suberList"
+          :page-size="20"
+          @current-change="currentChange"
+          :current-page="currentPage"
+          :total="suberCount"
+        >
         </el-pagination>
       </div>
     </el-skeleton>
@@ -44,7 +52,10 @@ export default {
   data () {
     return {
       suberList: [],
-      loading: true
+      loading: true,
+      currentPage: 1,
+      offset: 0,
+      suberCount: 0
     }
   },
   created () {
@@ -56,9 +67,26 @@ export default {
       const res = await getSuberList(id)
       this.suberList = res.data.subscribers
       // console.log(res)
+      this.suberCount = res.data.total
+      // console.log(this.suberCount)
       this.loading = false
+    },
+    currentChange (page) {
+      this.currentPage = page
+      getSuberList({ id: this.list.id, page: this.currentPage - 1 }).then((res) => {
+        this.suberList = res.data.subscribers
+      })
     }
   }
+  // watch: {
+  //   suberList (newVal) {
+  //     const arr = []
+  //     newVal.forEach((com) => {
+  //       arr.push(com.beReplied)
+  //     })
+  //     this.replied = arr
+  //   }
+  // }
 }
 </script>
 
