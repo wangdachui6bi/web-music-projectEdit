@@ -96,8 +96,13 @@ export default {
       this.loading = false
     },
     goDetail (id) {
+      console.log(id, this.active)
       if (this.active === 1) {
         this.$router.push("/artistdetail/" + id)
+      } else if (this.active === 0) {
+        this.$router.push("/albumdetail/" + id)
+      } else if (this.active === 2) {
+        this.$router.push('/videodetail/mv/' + id)
       }
     }
   },
