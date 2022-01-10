@@ -23,7 +23,7 @@
           <el-table-column prop="dt" label="时长"> </el-table-column>
         </el-table>
         <p>
-          <span @click="getMore">{{ flag ? '点击加载更多' : '点我收起' }}</span>
+          <span @click="getMore">{{ flag ? "点击加载更多" : "点我收起" }}</span>
         </p>
       </div>
     </div>
@@ -71,7 +71,7 @@ import { getArtistAlbumTop, getArtistAlbum, getAlbumContent } from '@/api/Discov
 import { getAlbumDetail } from '@/api/musicPlay/getSong.js'
 import moment from 'moment'
 export default {
-  data () {
+  data() {
     return {
       id: this.$route.params.id,
       tableData: [],
@@ -89,7 +89,7 @@ export default {
       return moment(arg).format('mm:ss')
     }
   },
-  mounted () {
+  mounted() {
     this.getArtisListInfo(this.id)
     this.getAlbum(this.id)
   },
@@ -107,14 +107,18 @@ export default {
         this.songMsg = songDetail
         this.$store.dispatch('songDetail/getoneMusic', songDetail)
         this.$store.commit('songDetail/setplayListTracks', [row])
+      } else {
+        if (!this.$store.state.songDetail.isPlay) {
+          this.$store.commit("songDetail/playback")
+        }
       }
     },
     // 点击专辑跳转详情
-    getTo (url, id) {
+    getTo(url, id) {
       this.$router.push("/" + url + '/' + id)
       // console.log(id)
     },
-    async getArtisListInfo (id) {
+    async getArtisListInfo(id) {
       const res = await getArtistAlbumTop(id)
       const list = res.data.songs
       list.forEach((item, index) => {
@@ -127,7 +131,7 @@ export default {
         this.tableData = list
       }
     },
-    async getAlbum (id) {
+    async getAlbum(id) {
       const res = await getArtistAlbum(id)
       const listAl = res.data.hotAlbums
       listAl.forEach((item, index) => {
@@ -137,7 +141,7 @@ export default {
       })
       this.allHotAlbums = listAl
     },
-    async getTime (id) {
+    async getTime(id) {
       const res = await getAlbumContent(id)
       const allTimeone = res.data.songs
       allTimeone.forEach((item, index) => {
@@ -151,7 +155,7 @@ export default {
         return allTime
       }) */
     },
-    getMore () {
+    getMore() {
       this.flag = !this.flag
       this.getArtisListInfo(this.id)
     }

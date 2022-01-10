@@ -155,6 +155,9 @@ export default {
         this.songMsg = songDetail
         this.$store.dispatch('songDetail/getoneMusic', songDetail)
         this.$store.commit('songDetail/setplayListTracks', [row])
+      } else { }
+      if (!this.$store.state.songDetail.isPlay) {
+        this.$store.commit("songDetail/playback")
       }
     },
     // 跳转专辑详情

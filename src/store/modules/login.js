@@ -1,15 +1,19 @@
 const state = {
   profile: {},
   account: {},
-  isLogin: sessionStorage.getItem('isLogin')
+  isLogin: sessionStorage.getItem('isLogin'),
+  // 用来保存不同人的历史歌单
+  accountId: null,
+  accountHistory: []
 }
 
 const mutations = {
-  setProfile (state, profile) {
+  setProfile(state, profile) {
     state.profile = profile
   },
-  setAccount (state, account) {
+  setAccount(state, account) {
     state.account = account
+    state.accountId = account.id
   }
 }
 

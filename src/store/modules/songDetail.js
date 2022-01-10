@@ -12,7 +12,8 @@ const state = {
   songListAll: [],
   isPlay: false,
   songAllMsg: [],
-  playListTracks: []
+  playListTracks: [],
+  islisten: false
 }
 
 const mutations = {
@@ -35,6 +36,7 @@ const mutations = {
     state.singleSongMsg = payload[0]
     state.isHavesong = true
     state.isPlay = true
+    state.islisten = true
   },
   // 获得正在播放歌曲全部信息
   songAllMsg(state, payload) {
@@ -55,6 +57,7 @@ const mutations = {
   // 切换下一首歌
   nextsong(state) {
     if (state.songListAll.length === 1) {
+      state.isPlay = false
       Toast('您的歌单没有其他歌曲了')
       return 0
     } else if (state.songListAll.length === 0) {
@@ -121,7 +124,7 @@ const mutations = {
 }
 
 const actions = {
-  getoneMusic(content, payload) {
+  async getoneMusic(content, payload) {
     getMusicUrl(payload.id).then((res) => {
       Vue.set(payload, 'songUrl', res.data.data[0].url)
       content.commit('setMp3Url', payload)

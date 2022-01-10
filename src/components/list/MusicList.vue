@@ -56,7 +56,7 @@ import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 
 export default {
   props: ['list', "updatedList"],
-  data () {
+  data() {
     return {
       /* 喜欢的音乐列表 */
       likeIdList: [],
@@ -68,7 +68,7 @@ export default {
     }
   },
   computed: {
-    uid () {
+    uid() {
       return this.$store.state.login.profile.userId
     }
   },
@@ -81,7 +81,7 @@ export default {
     this.init()
   },
   methods: {
-    async init () {
+    async init() {
       await this.getLikeIdList(this.uid)
       this.list.tracks.forEach(track => {
         this.songId.push(track.id)
@@ -94,10 +94,7 @@ export default {
     },
     // 点击歌曲所在行数获得该歌曲 播放地址
     // 当正在播放的歌曲的id等于想要听歌的id 则无法再点 
-    getOneSong (row) {
-       if (!this.$store.state.songDetail.isPlay) {
-        this.$store.commit("songDetail/playback")
-      }
+    getOneSong(row) {
       if (this.isListenId !== row.id) {
         this.$store.commit('songDetail/songAllMsg', row)
         this.isListenId = row.id
@@ -110,6 +107,10 @@ export default {
         this.songMsg = songDetail
         this.$store.dispatch('songDetail/getoneMusic', songDetail)
         // this.$store.commit('songDetail/setplayListTracks', row)
+      } else {
+        if (!this.$store.state.songDetail.isPlay) {
+          this.$store.commit("songDetail/playback")
+        }
       }
     },
     // 并且如果是暂停状态则恢复播放
@@ -119,10 +120,10 @@ export default {
       this.likeIdList = res.data.ids
       this.loading = false
     },
-    isLiked (id) {
+    isLiked(id) {
       return this.likeIdList.indexOf(id) !== -1
     },
-    async likeMusic (item) {
+    async likeMusic(item) {
       item.isLiked = !item.isLiked
       await likeMusic(item.id, item.isLiked)
       this.getLikeIdList(this.uid)
@@ -143,6 +144,6 @@ export default {
   height: 16px;
   padding: 0 2px;
   line-height: 1;
-  font-family: 'Avenir';
+  font-family: "Avenir";
 }
 </style>

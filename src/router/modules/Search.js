@@ -4,6 +4,7 @@ export default {
   component: () => import('@/views/Search'),
   props: true,
   meta: {
-    needHead: true
+    needHead: true,
+    tittle:'按歌搜索'
   }
 }

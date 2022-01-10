@@ -80,9 +80,6 @@ export default {
     // 点击歌曲所在行数获得该歌曲 播放地址
     // 当正在播放的歌曲的id等于想要听歌的id 则无法再点 
     getOneSong(row) {
-      if (!this.$store.state.songDetail.isPlay) {
-        this.$store.commit("songDetail/playback")
-      }
       if (this.isListenId !== row.id) {
         this.$store.commit('songDetail/songAllMsg', row)
         this.isListenId = row.id
@@ -95,6 +92,10 @@ export default {
         this.songMsg = songDetail
         this.$store.dispatch('songDetail/getoneMusic', songDetail)
         this.$store.commit('songDetail/setplayListTracks', [row])
+      } else {
+        if (!this.$store.state.songDetail.isPlay) {
+          this.$store.commit("songDetail/playback")
+        }
       }
     },
     playListSongs() {

@@ -91,7 +91,13 @@ export default {
 
   methods: {
     nextmusic() {
-      this.$store.commit('songDetail/nextsong')
+      if (this.$store.state.songListAll.length === 1) {
+        // 如果放到最后一首歌并且只有一首歌的时候 就重新播放
+        this.$refs.audioRef.play()
+        this.$refs.audioRef.currentTime = 0
+      } else {
+        this.$store.commit('songDetail/nextsong')
+      }
     },
     controlPlay() {
       if (this.singleSongMsg.id === undefined) return
@@ -114,7 +120,6 @@ export default {
       }
     },
     singleSongMsg(newVal) {
-      console.log(newVal)
       // 检测每次singleSongMsg的变化 如果新的这个历史播放数组没有的话就添加进来
       const isHaveIndex = this.historyplayList.findIndex((song) => song.id === newVal.id)
       if (isHaveIndex === -1) {
@@ -125,7 +130,6 @@ export default {
       if (!this.isHistoryHave) {
         // console.log(this.$store.state.songDetail.playListTracks)
         const songTrack = this.$store.state.songDetail.playListTracks.find(item => item.id === newVal.id)
-        console.log(this.$store.state.songDetail.playListTracks)
         this.historyplayList.push(songTrack)
       }
       localStorage.historyplayList = JSON.stringify(this.historyplayList)
@@ -134,7 +138,7 @@ export default {
   computed: {
     // 是否有播放的歌曲状态
     historyplayList() {
-      return JSON.parse(localStorage.historyplayList || '[]')
+      return localStorage.historyplayList || []
     },
     listenStatus() {
       return this.$store.state.songDetail.isHavesong
@@ -151,6 +155,14 @@ export default {
     // 将vuex的isPlay引入
     isPlay() {
       return this.$store.state.songDetail.isPlay
+    },
+    // 账户对应本地历史数据
+    local() {
+      return this.$store.state.login.accountHistory
+    },
+    // 账户id
+    accountId() {
+      return this.$store.state.login.accountId
     }
   }
 }
