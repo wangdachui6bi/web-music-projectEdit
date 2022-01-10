@@ -2,38 +2,30 @@
   <!-- 歌单详情 -->
   <div class="view">
     <el-skeleton :rows="6" animated :loading="loading">
-      <div class="play-list-detail">
+      <div class="albumdetail">
         <!-- 歌单图片及信息 -->
         <div class="detail-desc">
           <!-- 歌单图片 -->
           <div class="detail-img-wrapper">
-            <img
-              class="img img-radius-8 img-border"
-              :src="playlist.coverImgUrl"
-            />
+            <img class="img img-radius-8 img-border" :src="albList.picUrl" />
           </div>
           <!-- 歌单信息 -->
           <div class="detail-desc-info">
             <div class="info-title">
-              <div class="tag">歌单</div>
-              <span class="titlename">{{ playlist.name }}</span>
+              <div class="tag">专辑</div>
+              <span class="titlename">{{ albList.name }}</span>
             </div>
-            <!-- 作者信息 -->
-            <div class="author">
-              <div class="author-img">
-                <img :src="playlist.creator.avatarUrl" class="img" />
-              </div>
+            <!-- 歌手信息 -->
+            <!-- <div class="author">
               <div class="author-info">
                 <span
                   style="color: rgb(11, 88, 176)"
                   class="mleft-12 font-12 pointer"
-                  >{{ playlist.creator.nickname }}</span
-                >
-                <span class="mleft-12 font-12" style="color: #2c3e50">{{
-                  playlist.createTime | datefilter
-                }}</span>
+                  >歌手 :
+                </span>
+                <span class="mleft-12 font-12" style="color: #2c3e50"></span>
               </div>
-            </div>
+            </div> -->
             <!-- 按钮 -->
             <ul class="info-btn">
               <button class="btn btn-red">
@@ -45,27 +37,18 @@
               <button class="btn btn-white">
                 <i class="el-icon-share"></i>
               </button>
-              <button class="btn btn-red">
-                <i class="el-icon-hot-water"></i>
-              </button>
             </ul>
             <!-- 标签 -->
             <div class="detail-tag">
-              <span>标签 : </span>
-              <span style="margin: 10px; font-size: 14px">{{
-                playlist.tags[0]
+              <span>歌手 : </span>
+              <span style="margin: 10px; font-size: 14px; color: #3771dd">{{
+                albList.artist.name
               }}</span>
             </div>
             <!-- 播放数量歌曲数量 -->
             <div class="num-info">
-              <span>歌曲 : {{ playlist.trackCount }}</span>
-              <span>播放 : {{ playlist.playCount | countFormat }}</span>
-            </div>
-            <!-- 简介 -->
-            <div class="intro">
-              <span style="max-width: 1000px; padding-bottom: 10px">
-                简介：{{ playlist.description }}
-              </span>
+              <span>时间 :</span>
+              <span>{{ albList.publishTime | datefilter }} </span>
             </div>
           </div>
         </div>
@@ -73,64 +56,65 @@
       <!-- 列表头 -->
       <div class="detail-head">
         <van-tabs v-model="active">
-          <van-tab title="歌曲列表"><MusicList :list="playlist" /></van-tab>
-          <van-tab title="评论"><Comment :list="playlist" /></van-tab>
-          <van-tab title="收藏者"><FollowList :list="playlist" /></van-tab>
+          <van-tab title="歌曲列表"><AlbumList :list="songs" /></van-tab>
+          <van-tab title="评论"><AlbumComment :list="albList" /></van-tab>
+          <van-tab title="专辑详情">
+            <div style="font-weight: 700">专辑介绍</div>
+            <div class="my-pre">
+              <p v-html="albList.description"></p>
+            </div>
+          </van-tab>
         </van-tabs>
       </div>
-      <!-- 列表内容 -->
-      <div></div>
     </el-skeleton>
   </div>
 </template>
-
 <script>
-import { getPlayListDetail } from '@/api/DiscoverMusic/PersonalRecom'
-import MusicList from '@/components/list/MusicList'
-import Comment from '@/components/comment/Comment'
-import FollowList from '@/components/list/FollowList'
+import { getAlbumDetail } from '@/api/DiscoverMusic/AlbumDetail'
+import AlbumList from '@/components/list/AlbumList'
+import AlbumComment from '@/components/comment/AlbumComment'
 import moment from 'moment'
 export default {
-  name: "PlayListDetail",
-  components: {
-    MusicList,
-    Comment,
-    FollowList
-  },
+  name: 'AlbumListDetail',
   props: {
     id: {
       type: String,
       required: true
     }
   },
+  components: {
+    AlbumList,
+    AlbumComment
+  },
   data () {
     return {
-      playlist: {
-        creator: {},
-        tags: []
-      },
       active: 0,
-      loading: true
+      loading: true,
+      albList: {
+        artist: {},
+        info: {}
+      },
+      songs: []
     }
   },
   created () {
-    this.getPlayListDetail(this.id)
+    this.getAlbumDetail(this.id)
+    // console.log(this.id)
+    // console.log(this.songs)
   },
   methods: {
-    async getPlayListDetail (id) {
-      const res = await getPlayListDetail(id)
-      this.playlist = res.data.playlist
+    async getAlbumDetail (id) {
+      const res = await getAlbumDetail(id)
+      // console.log(res.data.songs)
+      this.albList = res.data.album
+      this.songs = res.data.songs
       this.loading = false
+      console.log(this.songs)
     }
   },
   filters: {
     datefilter (date) {
       return moment(date).format('YYYY-MM-DD')
-    },
-    countFormat (count) {
-      if (typeof count === 'undefined') return 0
-      if (count < 10000) return count
-      else return Math.floor(count / 10000) + '万'
     }
   }
 }
@@ -142,7 +126,7 @@ export default {
   margin: 0 auto;
   max-width: 1200px;
 }
-.play-list-detail {
+.albumdetail {
   margin-top: 20px;
 }
 .pointer {
@@ -265,6 +249,14 @@ export default {
   .van-tab--active {
     font-size: 20px;
     font-weight: 700;
+  }
+}
+.my-pre {
+  text-indent: 2em;
+  line-height: 2;
+  width: 100%;
+  p {
+    color: #676767;
   }
 }
 </style>

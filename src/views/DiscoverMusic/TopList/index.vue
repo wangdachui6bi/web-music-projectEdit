@@ -14,6 +14,7 @@
                 <img
                   :src="item.coverImgUrl"
                   class="img-h img-radius-4 pointer"
+                  @click="getTo('playlistdetail', item.id)"
                 />
               </div>
               <ul class="mleft-30">
@@ -46,6 +47,7 @@
                   <img
                     :src="item.coverImgUrl"
                     class="img img-radius-8 img-border"
+                    @click="getTo('playlistdetail', item.id)"
                   />
                   <!-- 播放量 -->
                   <div class="video-playcount font-12">
@@ -82,6 +84,11 @@ export default {
     }
   },
   methods: {
+    // 跳转歌单详情
+    getTo (url, id) {
+      this.$router.push(url + '/' + id)
+      // console.log(id)
+    },
     // 获取全部榜单
     async topList () {
       const { data: { list, code, msg } } = await getTopList()

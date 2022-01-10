@@ -3,9 +3,9 @@
     <div class="songbutton">
       <button
         @click="
-          btnclick($event);
-          showFlag = true;
-          isalbum = false;
+          btnclick($event)
+          showFlag = true
+          isalbum = false
         "
         ref="btnnew"
         class="active"
@@ -14,9 +14,9 @@
       </button>
       <button
         @click="
-          btnclick($event);
-          showFlag = false;
-          getnewalbum();
+          btnclick($event)
+          showFlag = false
+          getnewalbum()
         "
         ref="btnout"
       >
@@ -74,7 +74,11 @@
         <ul>
           <li v-for="(item, index) in weekDataalbum" :key="index">
             <div class="albumimgli">
-              <img :src="item.blurPicUrl" alt="" />
+              <img
+                :src="item.blurPicUrl"
+                alt=""
+                @click="getTo('albumdetail', item.id)"
+              />
               <div class="play-btn">
                 <i class="el-icon-caret-right"></i>
               </div>
@@ -93,7 +97,7 @@ import { getTopNewMusic, getTopNewalbum } from '@/api/DiscoverMusic/newSongs.js'
 // import moment from 'moment'
 export default {
   name: "NewSongs",
-  data() {
+  data () {
     return {
       typelist: [{ name: '全部', type: 0 }, { name: '华语', type: 7 }, { name: '欧美', type: 96 }, { name: '日本', type: 8 }, { name: '韩国', type: 16 }
       ],
@@ -113,11 +117,11 @@ export default {
       check: true
     }
   },
-  mounted() {
+  mounted () {
     this.changetype(0, 0)
   },
   filters: {
-    playtime(time) {
+    playtime (time) {
       // 转化为播放时间
       const mm = parseInt(time / 1000 / 60).toString().padStart(2, 0)
       const ss = parseInt(time / 1000 % 60).toString().padStart(2, 0)
@@ -126,14 +130,19 @@ export default {
     }
   },
   methods: {
-    btnclick(event) {
+    // 跳转专辑详情
+    getTo (url, id) {
+      this.$router.push(url + '/' + id)
+      // console.log(id)
+    },
+    btnclick (event) {
       for (var key in this.$refs) {
         this.$refs[key].className = ''
       }
       event.target.className = 'active'
     },
     // 点击改变颜色 并且改变歌单
-    async changetype(type, index) {
+    async changetype (type, index) {
       this.active = index
       const res = await getTopNewMusic(type)
       res.data.data.forEach((item, index) => {
@@ -160,7 +169,7 @@ export default {
       // 直接赋值新数组 也是响应式的 如果直接改老数组数据 不用push这些方法监听不到
       this.typedata = res.data.data
     },
-    onLoad() {
+    onLoad () {
       setTimeout(() => {
         this.getpagealbum()
         this.loading = false
@@ -169,7 +178,7 @@ export default {
         }
       }, 2000)
     },
-    getnewalbum(limit = 30) {
+    getnewalbum (limit = 30) {
       if (!this.isalbum) {
         this.isalbum = true
         getTopNewalbum({ limit }).then((res) => {
@@ -182,7 +191,7 @@ export default {
       }
     },
     // 分批次展示数据 当用户下滑获取更多数据的时候
-    getpagealbum() {
+    getpagealbum () {
       this.page++
       this.weekDataalbum = this.weekDataalbum.concat(this.wkalbumall.slice(this.page * this.limit, this.limit + this.page * this.limit))
     }

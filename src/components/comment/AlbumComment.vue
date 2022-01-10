@@ -14,50 +14,6 @@
       </div>
     </div>
     <div class="hot-wrap">
-      <div class="font-bold font-16">精彩评论</div>
-      <div v-for="item in hotComments" :key="item.userId" class="comment-item">
-        <div class="comment_main">
-          <div class="img-wrap">
-            <img :src="item.user.avatarUrl" class="img" alt="" />
-          </div>
-          <div class="comment-wrap">
-            <div class="comment-content">
-              <span style="color: rgb(80, 125, 175)"
-                >{{ item.user.nickname }}：</span
-              >
-              <span>{{ item.content }}</span>
-            </div>
-            <div class="comment-info">
-              <div
-                class="time"
-                style="color: rgb(159, 159, 159); font-size: 12px"
-              >
-                {{ item.timeStr }}
-              </div>
-              <div class="comment-btn">
-                <button class="no-btn">
-                  <i class="iconfont icon-dianzan"></i>
-                  <span>{{ item.likedCount }}</span>
-                </button>
-                <div class="div-column"></div>
-                <button class="no-btn">
-                  <i class="iconfont icon-fenxiang"></i>
-                </button>
-                <div class="div-column"></div>
-                <button class="no-btn">
-                  <i class="iconfont icon-jianyi" style="font-size: 19px"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="div-line"></div>
-      </div>
-      <div class="more-btn-wrap">
-        <button class="btn btn-white">更多精彩评论</button>
-      </div>
-    </div>
-    <div class="hot-wrap">
       <div class="font-16 font-bold">最新评论</div>
       <div class="comment-item" v-for="item in comments" :key="item.commentId">
         <div class="comment_main">
@@ -117,32 +73,22 @@
 </template>
 
 <script>
-import { getHotComment, getNewComment } from '@/api/DiscoverMusic/PersonalRecom'
+import { getAlbumComment } from '@/api/DiscoverMusic/AlbumDetail'
 export default {
   props: ["list"],
   data () {
     return {
-      hotComments: [],
-      comments: [],
-      replied: []
+      comments: []
     }
   },
   created () {
-    this.getHotComment(this.list.id, 2, 5)
-    this.getNewComment(this.list.id, 0, 0)
-    // console.log(this.list)
+    this.getAlbumComment(this.list.id, 2, 5)
   },
   methods: {
-    async getHotComment (id, type, limit) {
-      const res = await getHotComment(id, type, limit)
+    async getAlbumComment (id) {
+      const res = await getAlbumComment(id)
       // console.log(res)
-      this.hotComments = res.data.hotComments
-    },
-    async getNewComment (id) {
-      const res = await getNewComment(id)
-      console.log(res)
       this.comments = res.data.comments
-      this.replied = res.data.comments.beReplied
     }
   }
 

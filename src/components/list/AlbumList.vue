@@ -1,6 +1,6 @@
 <template>
   <el-skeleton :rows="6" animated :loading="loading">
-    <el-table :data="list.tracks" style="width: 100%" stripe>
+    <el-table :data="list" style="width: 100%" stripe>
       <el-table-column
         type="index"
         label=""
@@ -45,15 +45,11 @@
 </template>
 
 <script>
-// import Vue from 'vue'
 import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
-// import { Toast } from 'vant'
-// Vue.use(Toast)
 export default {
   props: ['list'],
   data () {
     return {
-      /* 喜欢的音乐列表 */
       likeIdList: [],
       loading: true
     }
@@ -64,8 +60,8 @@ export default {
     }
   },
   created () {
-    // console.log(this.uid)
     this.getLikeIdList(this.uid)
+    console.log(this.list)
   },
   methods: {
     async getLikeIdList (uid) {

@@ -82,7 +82,7 @@ export default {
     }
   },
   created () {
-    console.log(sessionStorage.getItem('isLogin'))
+    // console.log(sessionStorage.getItem('isLogin'))
     this.getImgList()
     this.getRecSongList(10)
   },
@@ -118,7 +118,7 @@ export default {
     },
     getTo (url, id) {
       this.$router.push(url + '/' + id)
-      console.log(id)
+      // console.log(id)
     }
   }
 }
