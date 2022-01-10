@@ -78,6 +78,7 @@ export default {
     }
   },
   created () {
+    // console.log(sessionStorage.getItem('isLogin'))
     this.getImgList()
     if (this.isLogin) {
       this.getRecommend()
@@ -110,7 +111,7 @@ export default {
     },
     getTo (url, id) {
       this.$router.push(url + '/' + id)
-      console.log(id)
+      // console.log(id)
     }
   }
 }

@@ -48,7 +48,11 @@
         <div class="listdetail">
           <ul class="listul" v-for="(list, index) in playlist" :key="index">
             <li class="img-wrap">
-              <img :src="list.coverImgUrl" alt="" />
+              <img
+                :src="list.coverImgUrl"
+                alt=""
+                @click="getTo('playlistdetail', list.id)"
+              />
               <div class="play-btn">
                 <i class="el-icon-caret-right"></i>
               </div>
@@ -71,11 +75,6 @@
     </el-skeleton>
   </div>
 </template>
-
-
-
-
-
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { getHotCat, getplaylist, getHighquality } from '../../../api/DiscoverMusic/playList'
@@ -144,6 +143,10 @@ export default {
     }
   },
   methods: {
+    getTo (url, id) {
+      this.$router.push(url + '/' + id)
+      // console.log(id)
+    },
     clickhidden () {
       document.body.onclick = (event) => {
         if (event.target !== this.$refs.clickbutton) {

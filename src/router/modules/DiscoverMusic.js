@@ -57,6 +57,16 @@ export default [
     meta: {
       needHead: true
     }
+  },
+  // 专辑详情页
+  {
+    name: "AlbumDetail",
+    path: "/albumdetail/:id",
+    component: () => import('@/views/DiscoverMusic/NewSongs/AlbumListDetail'),
+    props: true,
+    meta: {
+      needHead: true
+    }
   }
 ]
 

@@ -1,11 +1,6 @@
 <template>
   <el-skeleton :rows="6" animated :loading="loading">
-    <el-table
-      :data="list.tracks"
-      style="width: 100%"
-      stripe
-      @row-click="getOneSong"
-    >
+    <el-table :data="list" style="width: 100%" stripe>
       <el-table-column
         type="index"
         label=""
@@ -50,68 +45,32 @@
 </template>
 
 <script>
-// import Vue from 'vue'
 import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
-// import { getMusicUrl } from '@/api/musicPlay/getSong.js'
-// import { mapActions } from 'vuex'
-// import { Toast } from 'vant'
-// Vue.use(Toast)
 export default {
   props: ['list'],
-  data() {
+  data () {
     return {
-      /* 喜欢的音乐列表 */
       likeIdList: [],
-      loading: true,
-      songId: [],
-      isListenId: 0,
-      songMsg: {}
+      loading: true
     }
   },
   computed: {
-    uid() {
+    uid () {
       return this.$store.state.login.profile.userId
     }
   },
   created () {
-    // console.log(this.uid)
     this.getLikeIdList(this.uid)
-    this.list.tracks.forEach(track => {
-      this.songId.push(track.id)
-    })
+    console.log(this.list)
   },
   methods: {
-    // 点击歌曲所在行数获得该歌曲 播放地址
-    // 当正在播放的歌曲的id等于想要听歌的id 则无法再点 
-    getOneSong(row) {
-      if (this.isListenId !== row.id) {
-        this.$store.commit('songDetail/songAllMsg', row)
-        this.isListenId = row.id
-        // 响应式的数据
-        const songDetail = {}
-        songDetail.songName = row.name
-        songDetail.singer = row.ar[0].name
-        songDetail.id = row.id
-        songDetail.picUrl = row.al.picUrl
-        this.songMsg = songDetail
-        this.$store.dispatch('songDetail/getoneMusic', songDetail)
-        // this.$store.commit('songDetail/setplayListTracks', row)
-      }
-    },
-    // 并且如果是暂停状态则恢复播放
-    // 播放状态则没用
-    playback() {
-      if (!this.$store.state.songDetail.isPlay) {
-        this.$store.commit("songDetail/playback")
-      }
-    },
-    async getLikeIdList(uid) {
+    async getLikeIdList (uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
       this.loading = false
       // console.log(res)
     },
-    isLiked(id) {
+    isLiked (id) {
       return this.likeIdList.indexOf(id) !== -1
     },
     async likeMusic (id) {
@@ -137,6 +96,6 @@ export default {
   height: 16px;
   padding: 0 2px;
   line-height: 1;
-  font-family: "Avenir";
+  font-family: 'Avenir';
 }
 </style>
