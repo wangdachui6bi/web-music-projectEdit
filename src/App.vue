@@ -103,6 +103,9 @@ export default {
 .mtop-20 {
   margin-top: 20px;
 }
+.mtop-60 {
+  margin-top: 60px;
+}
 .mleft-200 {
   margin-left: 200px;
 }
