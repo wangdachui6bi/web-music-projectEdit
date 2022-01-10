@@ -46,7 +46,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(alumSong, index) in allAlbumSongMsg[dex]" :key="index" @click="getOneSong(alumSong)">
+            <tr
+              v-for="(alumSong, index) in allAlbumSongMsg[dex]"
+              :key="index"
+              @click="getOneSong(alumSong)"
+            >
               <td style="width: 50px">{{ alumSong.idKey }}</td>
               <td class="sl">{{ alumSong.name }}</td>
               <td>{{ alumSong.dt | dataFilter }}</td>
