@@ -2,84 +2,88 @@
   <!-- 歌单详情 -->
   <div class="view">
     <el-skeleton :rows="6" animated :loading="loading">
-      <div class="play-list-detail">
-        <!-- 歌单图片及信息 -->
-        <div class="detail-desc">
-          <!-- 歌单图片 -->
-          <div class="detail-img-wrapper">
-            <img
-              class="img img-radius-8 img-border"
-              :src="playlist.coverImgUrl"
-            />
-          </div>
-          <!-- 歌单信息 -->
-          <div class="detail-desc-info">
-            <div class="info-title">
-              <div class="tag">歌单</div>
-              <span class="titlename">{{ playlist.name }}</span>
+      <template v-if="!loading">
+        <div class="play-list-detail">
+          <!-- 歌单图片及信息 -->
+          <div class="detail-desc">
+            <!-- 歌单图片 -->
+            <div class="detail-img-wrapper">
+              <img
+                class="img img-radius-8 img-border"
+                :src="playlist.coverImgUrl"
+              />
             </div>
-            <!-- 作者信息 -->
-            <div class="author">
-              <div class="author-img">
-                <img :src="playlist.creator.avatarUrl" class="img" />
+            <!-- 歌单信息 -->
+            <div class="detail-desc-info">
+              <div class="info-title">
+                <div class="tag">歌单</div>
+                <span class="titlename">{{ playlist.name }}</span>
               </div>
-              <div class="author-info">
-                <span
-                  style="color: rgb(11, 88, 176)"
-                  class="mleft-12 font-12 pointer"
-                  >{{ playlist.creator.nickname }}</span
-                >
-                <span class="mleft-12 font-12" style="color: #2c3e50">{{
-                  playlist.createTime | datefilter
+              <!-- 作者信息 -->
+              <div class="author">
+                <div class="author-img">
+                  <img :src="playlist.creator.avatarUrl" class="img" />
+                </div>
+                <div class="author-info">
+                  <span
+                    style="color: rgb(11, 88, 176)"
+                    class="mleft-12 font-12 pointer"
+                    >{{ playlist.creator.nickname }}</span
+                  >
+                  <span class="mleft-12 font-12" style="color: #2c3e50">{{
+                    playlist.createTime | datefilter
+                  }}</span>
+                </div>
+              </div>
+              <!-- 按钮 -->
+              <ul class="info-btn">
+                <button class="btn btn-red" @click="playListSongs">
+                  <i class="el-icon-caret-right"></i>
+                </button>
+                <button class="btn btn-white">
+                  <i class="el-icon-folder-checked"></i>
+                </button>
+                <button class="btn btn-white">
+                  <i class="el-icon-share"></i>
+                </button>
+                <button class="btn btn-red">
+                  <i class="el-icon-hot-water"></i>
+                </button>
+              </ul>
+              <!-- 标签 -->
+              <div class="detail-tag">
+                <span>标签 : </span>
+                <span style="margin: 10px; font-size: 14px">{{
+                  playlist.tags[0]
                 }}</span>
               </div>
-            </div>
-            <!-- 按钮 -->
-            <ul class="info-btn">
-              <button class="btn btn-red" @click="playListSongs">
-                <i class="el-icon-caret-right"></i>
-              </button>
-              <button class="btn btn-white">
-                <i class="el-icon-folder-checked"></i>
-              </button>
-              <button class="btn btn-white">
-                <i class="el-icon-share"></i>
-              </button>
-              <button class="btn btn-red">
-                <i class="el-icon-hot-water"></i>
-              </button>
-            </ul>
-            <!-- 标签 -->
-            <div class="detail-tag">
-              <span>标签 : </span>
-              <span style="margin: 10px; font-size: 14px">{{
-                playlist.tags[0]
-              }}</span>
-            </div>
-            <!-- 播放数量歌曲数量 -->
-            <div class="num-info">
-              <span>歌曲 : {{ playlist.trackCount }}</span>
-              <span>播放 : {{ playlist.playCount | countFormat }}</span>
-            </div>
-            <!-- 简介 -->
-            <div class="intro">
-              <p style="max-width: 1000px; padding-bottom: 10px">
-                简介：{{ playlist.description }}
-              </p>
+              <!-- 播放数量歌曲数量 -->
+              <div class="num-info">
+                <span>歌曲 : {{ playlist.trackCount }}</span>
+                <span>播放 : {{ playlist.playCount | countFormat }}</span>
+              </div>
+              <!-- 简介 -->
+              <div class="intro">
+                <p style="max-width: 1000px; padding-bottom: 10px">
+                  简介：{{ playlist.description }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- 列表头 -->
-      <div class="detail-head">
-        <van-tabs v-model="active">
-          <van-tab title="歌曲列表"><MusicList :list="playlist" /></van-tab>
-          <van-tab title="评论"><Comment :list="playlist" /></van-tab>
-          <van-tab title="收藏者"><FollowList :list="playlist" /></van-tab>
-        </van-tabs>
-      </div>
-      <!-- 列表内容 -->
-      <div></div>
+        <!-- 列表头 -->
+        <div class="detail-head">
+          <van-tabs v-model="active">
+            <van-tab title="歌曲列表"
+              ><MusicList :list="playlist" :updatedList="updatedList"
+            /></van-tab>
+            <van-tab title="评论"><Comment :list="playlist" /></van-tab>
+            <van-tab title="收藏者"><FollowList :list="playlist" /></van-tab>
+          </van-tabs>
+        </div>
+        <!-- 列表内容 -->
+        <div></div>
+      </template>
     </el-skeleton>
     <!-- <Lyric></Lyric> -->
   </div>
@@ -91,6 +95,8 @@ import MusicList from '@/components/list/MusicList'
 import Comment from '@/components/comment/Comment'
 import FollowList from '@/components/list/FollowList'
 import moment from 'moment'
+
+
 // import Lyric from '@/components/songLyric'
 export default {
   name: "PlayListDetail",
@@ -105,24 +111,21 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
-      playlist: {
-        creator: {},
-        tags: []
-      },
+      playlist: {},
       active: 0,
       loading: true,
       listSongMsg: []
     }
   },
-  created() {
+  created () {
     this.getPlayListDetail(this.id)
   },
   methods: {
-    async getPlayListDetail(id) {
-      const res = await getPlayListDetail(id, new Date().getTime())
-      this.playlist = res.data.playlist
+    async getPlayListDetail (id) {
+      const { data: { playlist } } = await getPlayListDetail(id, new Date().getTime())
+      this.playlist = playlist
       this.loading = false
       this.$store.commit('songDetail/setplayListTracks', this.playlist.tracks)
       this.playlist.tracks.forEach(track => {
@@ -137,23 +140,26 @@ export default {
     // 将该歌单里的的所有歌曲信息添加到vuex 相应数据并且把
     // 播放的歌曲 singleSongMsg设置为该歌单第一首歌
     // 而且对第一首歌进行MP3url请求
-    playListSongs() {
+    playListSongs () {
       this.$store.commit("songDetail/setSongList", this.listSongMsg)
       this.$store.dispatch('songDetail/getoneMusic', this.listSongMsg[0])
+    },
+    updatedList () {
+      this.getPlayListDetail(this.id)
     }
   },
   filters: {
-    datefilter(date) {
+    datefilter (date) {
       return moment(date).format('YYYY-MM-DD')
     },
-    countFormat(count) {
+    countFormat (count) {
       if (typeof count === 'undefined') return 0
       if (count < 10000) return count
       else return Math.floor(count / 10000) + '万'
     }
   },
   watch: {
-    "$route"(to, from) {
+    "$route" (to, from) {
       if (this.$route.params.id) {
         this.loading = true
         this.getPlayListDetail(this.id)

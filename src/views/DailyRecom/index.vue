@@ -29,7 +29,18 @@
         <el-table :data="tableData" style="width: 100%" stripe>
           <el-table-column type="index" width="50"> </el-table-column>
           <el-table-column prop="favicon" width="30">
-            <i class="iconfont icon-aixin"></i>
+            <template slot-scope="scope">
+              <span @click="likeMusic(scope.row)">
+                <div>
+                  <i
+                    v-if="scope.row.isLiked"
+                    style="color: red"
+                    class="iconfont icon-aixin1"
+                  ></i>
+                  <i v-else class="iconfont icon-aixin"></i>
+                </div>
+              </span>
+            </template>
           </el-table-column>
           <el-table-column prop="name" label="音乐标题" width="211">
             <template slot-scope="scope">
@@ -48,24 +59,50 @@
 
 <script>
 import { recommendSongs } from "@/api/DailyRecom"
+import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 // 每日推荐     
 export default {
   name: "DailyRecom",
   data () {
     return {
       loading: true,
-      tableData: []
+      tableData: [],
+      likeIdList: []
     }
   },
   methods: {
     async getLikeList () {
       const { data: { data: { dailySongs } } } = await recommendSongs()
-      this.tableData = dailySongs
+      dailySongs.forEach((item) => {
+        this.$set(item, "isLiked", this.isLiked(item.id))
+        this.tableData.push(item)
+      })
+    },
+    async getLikeIdList (uid) {
+      const res = await getLikeIdList(uid)
+      this.likeIdList = res.data.ids
       this.loading = false
+    },
+    isLiked (id) {
+      return this.likeIdList.indexOf(id) !== -1
+    },
+    async likeMusic (item) {
+      item.isLiked = !item.isLiked
+      // this.getLikeList(this.uid)
+      await likeMusic(item.id, item.isLiked)
+      // if (res.code !== 200) return
+      // Toast(`${liked ? '取消喜欢' : '喜欢'}成功`)
+      this.getLikeList(this.uid)
     }
   },
   created () {
     this.getLikeList()
+    this.getLikeIdList(this.uid)
+  },
+  computed: {
+    uid () {
+      return this.$store.state.login.profile.userId
+    }
   }
 }
 </script>

@@ -1,11 +1,6 @@
 <template>
   <el-skeleton :rows="6" animated :loading="loading">
-    <el-table
-      :data="list.tracks"
-      style="width: 100%"
-      stripe
-      @row-click="getOneSong"
-    >
+    <el-table :data="tracks" style="width: 100%" stripe @row-click="getOneSong">
       <el-table-column
         type="index"
         label=""
@@ -15,10 +10,14 @@
       </el-table-column>
       <el-table-column prop="tag" label="" width="30">
         <template slot-scope="scope">
-          <span @click="likeMusic(scope.row.id)">
+          <span @click="likeMusic(scope.row)">
             <div>
-              <i v-if="!isLiked(scope.row.id)" class="iconfont icon-aixin"></i>
-              <i v-else style="color: red" class="iconfont icon-aixin1"></i>
+              <i
+                v-if="scope.row.isLiked"
+                style="color: red"
+                class="iconfont icon-aixin1"
+              ></i>
+              <i v-else class="iconfont icon-aixin"></i>
             </div>
           </span>
         </template>
@@ -50,18 +49,18 @@
 </template>
 
 <script>
-// import Vue from 'vue'
+
 import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 // import { getMusicUrl } from '@/api/musicPlay/getSong.js'
 // import { mapActions } from 'vuex'
-// import { Toast } from 'vant'
-// Vue.use(Toast)
+
 export default {
-  props: ['list'],
-  data() {
+  props: ['list', "updatedList"],
+  data () {
     return {
       /* 喜欢的音乐列表 */
       likeIdList: [],
+      tracks: [],
       loading: true,
       songId: [],
       isListenId: 0,
@@ -69,21 +68,28 @@ export default {
     }
   },
   computed: {
-    uid() {
+    uid () {
       return this.$store.state.login.profile.userId
     }
   },
   created () {
-    // console.log(this.uid)
-    this.getLikeIdList(this.uid)
-    this.list.tracks.forEach(track => {
-      this.songId.push(track.id)
-    })
+    this.init()
   },
   methods: {
+    async init () {
+      await this.getLikeIdList(this.uid)
+      this.list.tracks.forEach(track => {
+        this.songId.push(track.id)
+      })
+      const arr = JSON.parse(JSON.stringify(this.list.tracks))
+      arr.forEach(item => {
+        this.$set(item, "isLiked", this.isLiked(item.id))
+        this.tracks.push(item)
+      })
+    },
     // 点击歌曲所在行数获得该歌曲 播放地址
     // 当正在播放的歌曲的id等于想要听歌的id 则无法再点 
-    getOneSong(row) {
+    getOneSong (row) {
       if (this.isListenId !== row.id) {
         this.$store.commit('songDetail/songAllMsg', row)
         this.isListenId = row.id
@@ -100,27 +106,24 @@ export default {
     },
     // 并且如果是暂停状态则恢复播放
     // 播放状态则没用
-    playback() {
+    playback () {
       if (!this.$store.state.songDetail.isPlay) {
         this.$store.commit("songDetail/playback")
       }
     },
-    async getLikeIdList(uid) {
+    async getLikeIdList (uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
       this.loading = false
-      // console.log(res)
     },
-    isLiked(id) {
+    isLiked (id) {
       return this.likeIdList.indexOf(id) !== -1
     },
-    async likeMusic (id) {
+    async likeMusic (item) {
+      item.isLiked = !item.isLiked
+      await likeMusic(item.id, item.isLiked)
       this.getLikeIdList(this.uid)
-      const liked = this.isLiked(id)
-      likeMusic(id, !liked)
-      // if (res.code !== 200) return
-      // Toast(`${liked ? '取消喜欢' : '喜欢'}成功`)
-      this.getLikeIdList(this.uid)
+      this.updatedList()
     }
   }
 }
@@ -137,6 +140,6 @@ export default {
   height: 16px;
   padding: 0 2px;
   line-height: 1;
-  font-family: "Avenir";
+  font-family: 'Avenir';
 }
 </style>

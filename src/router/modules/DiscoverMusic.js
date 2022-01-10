@@ -62,6 +62,7 @@ export default [
   {
     name: "AlbumDetail",
     path: "/albumdetail/:id",
+    props: true,
     component: () => import('@/views/DiscoverMusic/NewSongs/AlbumListDetail'),
     meta: {
       needHead: true
