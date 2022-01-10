@@ -68,7 +68,7 @@ import { getColAlbum, getColArtists, getColMV } from "@/api/MyCollection"
 // 我的收藏
 export default {
   name: "MyCollection",
-  data () {
+  data() {
     return {
       tabs: ["专辑", "歌手", "MV"],
       active: 0,
@@ -78,7 +78,7 @@ export default {
     }
   },
   methods: {
-    async change (index = 0) {
+    async change(index = 0) {
       this.loading = true
       this.active = index
       this.tab = this.tabs[index]
@@ -95,7 +95,7 @@ export default {
       // console.log(this.list)
       this.loading = false
     },
-    goDetail (id) {
+    goDetail(id) {
       console.log(id, this.active)
       if (this.active === 1) {
         this.$router.push("/artistdetail/" + id)
@@ -106,8 +106,8 @@ export default {
       }
     }
   },
-  created () {
-    this.change(2)
+  created() {
+    this.change(0)
   }
 }
 </script>
@@ -142,7 +142,7 @@ export default {
         }
         li.isActive:after {
           display: block;
-          content: '';
+          content: "";
           height: 4px;
           width: 90%;
           margin: 0 auto;
