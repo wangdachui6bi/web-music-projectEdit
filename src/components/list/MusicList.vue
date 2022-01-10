@@ -89,6 +89,7 @@ export default {
         songDetail.picUrl = row.al.picUrl
         this.songMsg = songDetail
         this.$store.dispatch('songDetail/getoneMusic', songDetail)
+        // this.$store.commit('songDetail/setplayListTracks', row)
       }
     },
     // 并且如果是暂停状态则恢复播放

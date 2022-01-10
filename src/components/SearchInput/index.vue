@@ -5,8 +5,9 @@
       prefix-icon="el-icon-search"
       v-model="input"
       @focus="onFocus"
-      @change="onChange"
+      @blur="onChange"
       @keyup.enter.native="search(input)"
+      ref="refInput"
     ></el-input>
     <div class="search-info_tip" v-show="isOnFocus">
       <!-- 搜索历史 -->
@@ -62,46 +63,59 @@
 import { hotSearch } from "@/api/Search"
 export default {
   name: "SearchInput",
-  data () {
+  data() {
     return {
       input: '',
       isOnFocus: false,
       searchHistory: [],
-      hotList: []
+      hotList: [],
+      keyword: ''
     }
   },
-  created () {
+  created() {
     this.init()
     this.input = this.$store.state.search.keyword
   },
+  mounted() {
+    console.log(this.$refs.refInput.$el.focus())
+  },
   methods: {
     // 点击搜索事件
-    async search (keyword) {
+    async search(keyword) {
+      console.log(123)
       this.input = keyword
-      this.$router.push(`/search/${keyword}`)
-      this.isOnFocus = false
-      this.$store.commit('search/setKeyword', keyword)
+      this.keyword = keyword
     },
     // 搜索框的聚焦和失焦事件
-    onChange () {
-      this.isOnFocus = false
+    onChange() {
+      setTimeout(() => {
+        this.isOnFocus = false
+      }, 50)
     },
-    onFocus () {
+    onFocus() {
       this.isOnFocus = true
     },
     // 删除搜索历史
-    delHistory () {
+    delHistory() {
       this.searchHistory = []
       localStorage.removeItem("search")
     },
     // 初始化数据
-    async init () {
+    async init() {
       // 获取搜索历史
       // localStorage.setItem("search", JSON.stringify(['孤勇者', '情绪收音机']))
       this.searchHistory = JSON.parse(localStorage.getItem("search") || "[]")
       // 获取热搜榜
       const { data: { data } } = await hotSearch()
       this.hotList = data
+    }
+  },
+  watch: {
+    keyword(newVal, oldVal) {
+      if (newVal === oldVal) return
+      this.$router.push(`/search/${this.keyword}`)
+      this.isOnFocus = false
+      this.$store.commit('search/setKeyword', this.keyword)
     }
   }
 }

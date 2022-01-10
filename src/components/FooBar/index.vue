@@ -85,7 +85,6 @@ export default {
   data() {
     return {
       active: 0,
-      historyplayList: [],
       isHistoryHave: false
     }
   },
@@ -131,6 +130,9 @@ export default {
   },
   computed: {
     // 是否有播放的歌曲状态
+    historyplayList() {
+      return JSON.parse(localStorage.historyplayList || '[]')
+    },
     listenStatus() {
       return this.$store.state.songDetail.isHavesong
     },

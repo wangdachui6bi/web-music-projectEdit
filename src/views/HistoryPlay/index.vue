@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="btn-wrap mtop-10">
-      <button class="btn btn-red">
+      <button class="btn btn-red" @click="playHistorySong">
         <i class="iconfont icon-bofang"></i>
         播放全部
       </button>
@@ -41,16 +41,37 @@ export default {
   data() {
     return {
       count: 0,
-      tableData: []
+      tableData: [],
+      hislistSongMsg: []
     }
   },
-  methods: {
 
+  methods: {
+    changHistoryList() {
+      const hisAll = JSON.parse(localStorage.historyplayList || '[]')
+      hisAll.forEach(item => {
+        const songDetail = {}
+        songDetail.songName = item.name
+        songDetail.singer = item.ar[0].name
+        songDetail.id = item.id
+        songDetail.picUrl = item.al.picUrl
+        this.hislistSongMsg.push(songDetail)
+      })
+    },
+    playHistorySong() {
+      // 将该歌单里的的所有歌曲信息添加到vuex 相应数据并且把
+      // 播放的歌曲 singleSongMsg设置为该歌单第一首歌
+      // 而且对第一首歌进行MP3url请求
+      this.$store.commit("songDetail/setSongList", this.hislistSongMsg)
+      this.$store.dispatch('songDetail/getoneMusic', this.hislistSongMsg[0])
+    }
   },
   created() {
     // 获取存储在本地的最近播放的列表
     this.tableData = JSON.parse(localStorage.getItem("historyplayList") || "[]")
     this.count = this.tableData.length
+    // 将本地localhitorylist数据进行截取
+    this.changHistoryList()
   }
 }
 </script>
@@ -62,8 +83,8 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
-  .el-table__cell{
-    div.cell{
+  .el-table__cell {
+    div.cell {
       white-space: nowrap;
     }
   }

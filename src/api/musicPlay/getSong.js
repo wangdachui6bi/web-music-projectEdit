@@ -31,3 +31,10 @@ export const getCover = (id) => {
     url: '/playlist/cover/update?id=' + id
   })
 }
+// 获得专辑内容
+export const getAlbumDetail = (id) => {
+  return request({
+    method: 'get',
+    url: '/album?id=' + id
+  })
+}

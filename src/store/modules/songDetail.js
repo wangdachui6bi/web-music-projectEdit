@@ -39,7 +39,7 @@ const mutations = {
   songAllMsg(state, payload) {
     state.songAllMsg = payload
   },
-  // 获取歌单所有歌曲信息
+  // 获取当时歌单所有歌曲信息
   setplayListTracks(state, payload) {
     state.playListTracks = payload
   },
@@ -70,7 +70,9 @@ const mutations = {
       // 为最后一首的时候恢复成第一首歌
       if (indexNow === state.songListAll.length - 1) {
         state.singleSongMsg = state.songListAll[0]
+        // 有的话return
         if (state.singleSongMsg.songUrl) return 0
+        // 歌单状态播放 没有MP3Url 则走进行set MP3url
         setUrl(state.singleSongMsg)
         return 0
       } else {
@@ -100,11 +102,16 @@ const mutations = {
       // 为最后一首的时候恢复成第一首歌
       if (indexNow === 0) {
         state.singleSongMsg = state.songListAll[state.songListAll.length - 1]
+        if (state.singleSongMsg.songUrl) return 0
+        // 歌单状态播放 没有MP3Url 则走进行set MP3url
+        setUrl(state.singleSongMsg)
         return 0
       } else {
         if (song.id === state.singleSongMsg.id) {
           state.singleSongMsg = state.songListAll[index - 1]
           // 更换了就退出循环
+          if (state.singleSongMsg.songUrl) return 0
+          setUrl(state.singleSongMsg)
           return 0
         }
       }

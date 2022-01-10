@@ -133,6 +133,7 @@ export default {
     // 请求数据
     getOneSong(row) {
       if (this.isListenId !== row.id) {
+        console.log(row)
         this.isListenId = row.id
         // 响应式的数据
         const songDetail = {}
@@ -142,6 +143,7 @@ export default {
         songDetail.picUrl = row.al.picUrl
         this.songMsg = songDetail
         this.$store.dispatch('songDetail/getoneMusic', songDetail)
+        this.$store.commit('songDetail/setplayListTracks', [row])
       }
     },
     async init(keyword = this.keyword, type = 1, offset = 0) {

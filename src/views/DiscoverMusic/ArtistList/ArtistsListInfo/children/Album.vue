@@ -46,10 +46,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td style="width: 50px">1</td>
-              <td class="sl">{{ aAlbum.name }}</td>
-              <td>{{ allTime[dex] }}</td>
+            <tr v-for="(alumSong, index) in allAlbumSongMsg[dex]" :key="index" @click="getOneSong(alumSong)">
+              <td style="width: 50px">{{ alumSong.idKey }}</td>
+              <td class="sl">{{ alumSong.name }}</td>
+              <td>{{ alumSong.dt | dataFilter }}</td>
             </tr>
           </tbody>
         </table>
@@ -60,6 +60,7 @@
 
 <script>
 import { getArtistAlbumTop, getArtistAlbum, getAlbumContent } from '@/api/DiscoverMusic/ArtistsListInfo'
+import { getAlbumDetail } from '@/api/musicPlay/getSong.js'
 import moment from 'moment'
 export default {
   data() {
@@ -71,7 +72,13 @@ export default {
       allHotAlbums: [],
       allTime: [],
       isListenId: 0,
-      songMsg: {}
+      songMsg: {},
+      allAlbumSongMsg: []
+    }
+  },
+  filters: {
+    dataFilter(arg) {
+      return moment(arg).format('mm:ss')
     }
   },
   mounted() {
@@ -91,6 +98,7 @@ export default {
         songDetail.picUrl = row.al.picUrl
         this.songMsg = songDetail
         this.$store.dispatch('songDetail/getoneMusic', songDetail)
+        this.$store.commit('songDetail/setplayListTracks', [row])
       }
     },
     async getArtisListInfo(id) {
@@ -145,6 +153,28 @@ export default {
       this.flag = !this.flag
       console.log(this.flag)
     } */
+  },
+  watch: {
+    allAlumId(newVal) {
+      newVal.forEach((alumId) => {
+        getAlbumDetail(alumId).then((res) => {
+          res.data.songs.forEach((song, index) => {
+            song.idKey = index + 1
+          })
+          this.allAlbumSongMsg.push(res.data.songs)
+        })
+      })
+      console.log(this.allHotAlbums)
+      console.log(this.allAlbumSongMsg)
+    }
+  },
+  computed: {
+    allAlumId() {
+      const alumIdarr = this.allHotAlbums.map((alum) => {
+        return alum.id
+      })
+      return alumIdarr
+    }
   }
 }
 </script>
