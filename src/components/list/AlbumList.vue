@@ -1,6 +1,6 @@
 <template>
   <el-skeleton :rows="6" animated :loading="loading">
-    <el-table :data="list" style="width: 100%" stripe>
+    <el-table :data="list" style="width: 100%" stripe @row-click="getOneSong">
       <el-table-column
         type="index"
         label=""
@@ -48,32 +48,46 @@
 import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 export default {
   props: ['list'],
-  data () {
+  data() {
     return {
       likeIdList: [],
       loading: true
     }
   },
   computed: {
-    uid () {
+    uid() {
       return this.$store.state.login.profile.userId
     }
   },
-  created () {
+  created() {
     this.getLikeIdList(this.uid)
-    console.log(this.list)
   },
   methods: {
-    async getLikeIdList (uid) {
+    getOneSong(row) {
+      if (this.isListenId !== row.id) {
+        this.$store.commit('songDetail/songAllMsg', row)
+        this.isListenId = row.id
+        // 响应式的数据
+        const songDetail = {}
+        songDetail.songName = row.name
+        songDetail.singer = row.ar[0].name
+        songDetail.id = row.id
+        songDetail.picUrl = row.al.picUrl
+        this.songMsg = songDetail
+        this.$store.dispatch('songDetail/getoneMusic', songDetail)
+        // this.$store.commit('songDetail/setplayListTracks', row)
+      }
+    },
+    async getLikeIdList(uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
       this.loading = false
       // console.log(res)
     },
-    isLiked (id) {
+    isLiked(id) {
       return this.likeIdList.indexOf(id) !== -1
     },
-    async likeMusic (id) {
+    async likeMusic(id) {
       this.getLikeIdList(this.uid)
       const liked = this.isLiked(id)
       likeMusic(id, !liked)
@@ -96,6 +110,6 @@ export default {
   height: 16px;
   padding: 0 2px;
   line-height: 1;
-  font-family: 'Avenir';
+  font-family: "Avenir";
 }
 </style>

@@ -29,6 +29,7 @@ const mutations = {
   },
   // 点击播放全部的时候将歌单里所有歌曲信息传到songListAll
   // 播放的歌曲 singleSongMsg设置为该歌单第一首歌
+  // 并且在前面进行了第一首歌的MP3url请求
   setSongList(state, payload) {
     state.songListAll = payload
     state.singleSongMsg = payload[0]
@@ -41,7 +42,6 @@ const mutations = {
   },
   // 获取当时歌单所有歌曲信息
   setplayListTracks(state, payload) {
-    console.log(payload)
     state.playListTracks = payload
   },
   // 点击歌曲播放 播放状态则没用

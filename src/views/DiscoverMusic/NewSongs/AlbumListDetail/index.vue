@@ -28,7 +28,7 @@
             </div> -->
             <!-- 按钮 -->
             <ul class="info-btn">
-              <button class="btn btn-red">
+              <button class="btn btn-red" @click="playListSongs">
                 <i class="el-icon-caret-right"></i>
               </button>
               <button class="btn btn-white">
@@ -96,29 +96,23 @@ export default {
       },
       songs: [],
       isListenId: 0,
-      songMsg: {}
+      songMsg: {},
+      listSongMsg: []
     }
   },
   created() {
     this.getAlbumDetail(this.id)
-    // console.log(this.id)
-    // console.log(this.songs)
+    // this.getPlayListDetail()
   },
   methods: {
-    getOneSong(row) {
-      if (this.isListenId !== row.id) {
-        this.$store.commit('songDetail/songAllMsg', row)
-        this.isListenId = row.id
-        // 响应式的数据
-        const songDetail = {}
-        songDetail.songName = row.name
-        songDetail.singer = row.ar[0].name
-        songDetail.id = row.id
-        songDetail.picUrl = row.al.picUrl
-        this.songMsg = songDetail
-        this.$store.dispatch('songDetail/getoneMusic', songDetail)
-        // this.$store.commit('songDetail/setplayListTracks', row)
-      }
+    // 将该歌单里的的所有歌曲信息添加到vuex 相应数据并且把
+    // 播放的歌曲 singleSongMsg设置为该歌单第一首歌
+    // 而且对第一首歌进行MP3url请求
+    playListSongs() {
+      // 把该歌单歌曲数据提交到后面 并进行第一首歌播放
+      this.$store.commit("songDetail/setSongList", this.listSongMsg)
+      // 获取第一首歌MP3url
+      this.$store.dispatch('songDetail/getoneMusic', this.listSongMsg[0])
     },
     async getAlbumDetail(id) {
       const res = await getAlbumDetail(id)
@@ -126,6 +120,16 @@ export default {
       this.albList = res.data.album
       this.songs = res.data.songs
       this.loading = false
+      // 将该专辑所有歌曲的信息存到vuex
+      this.$store.commit('songDetail/setplayListTracks', this.songs)
+      this.songs.forEach((song) => {
+        const songDetail = {}
+        songDetail.songName = song.name
+        songDetail.singer = song.ar[0].name
+        songDetail.id = song.id
+        songDetail.picUrl = song.al.picUrl
+        this.listSongMsg.push(songDetail)
+      })
       console.log(this.songs)
     }
   },

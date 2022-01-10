@@ -60,7 +60,7 @@ export default [
   },
   // 专辑详情页
   {
-    proo: true,
+    props: true,
     name: "AlbumDetail",
     path: "/albumdetail/:id",
     component: () => import('@/views/DiscoverMusic/NewSongs/AlbumListDetail'),

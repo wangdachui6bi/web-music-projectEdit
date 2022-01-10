@@ -73,7 +73,7 @@ export default {
       return this.$store.state.login.profile.userId
     }
   },
-  created () {
+  created() {
     // console.log(this.uid)
     this.getLikeIdList(this.uid)
     this.list.tracks.forEach(track => {
@@ -84,6 +84,10 @@ export default {
     // 点击歌曲所在行数获得该歌曲 播放地址
     // 当正在播放的歌曲的id等于想要听歌的id 则无法再点 
     getOneSong(row) {
+      // 如果点击时候暂停播放了就让继续播放
+      if (!this.$store.state.songDetail.isPlay) {
+        this.$store.commit("songDetail/playback")
+      }
       if (this.isListenId !== row.id) {
         this.$store.commit('songDetail/songAllMsg', row)
         this.isListenId = row.id
@@ -100,11 +104,6 @@ export default {
     },
     // 并且如果是暂停状态则恢复播放
     // 播放状态则没用
-    playback() {
-      if (!this.$store.state.songDetail.isPlay) {
-        this.$store.commit("songDetail/playback")
-      }
-    },
     async getLikeIdList(uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
@@ -114,7 +113,7 @@ export default {
     isLiked(id) {
       return this.likeIdList.indexOf(id) !== -1
     },
-    async likeMusic (id) {
+    async likeMusic(id) {
       this.getLikeIdList(this.uid)
       const liked = this.isLiked(id)
       likeMusic(id, !liked)

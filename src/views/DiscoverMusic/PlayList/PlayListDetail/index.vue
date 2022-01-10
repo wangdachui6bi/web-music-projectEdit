@@ -120,6 +120,7 @@ export default {
     this.getPlayListDetail(this.id)
   },
   methods: {
+    // 获取当前歌单全部信息 不带MP3url 的 要的话再去请求
     async getPlayListDetail(id) {
       const res = await getPlayListDetail(id, new Date().getTime())
       this.playlist = res.data.playlist
