@@ -16,7 +16,12 @@
       </button>
     </div>
     <div class="div-line mtop-20"></div>
-    <el-table :data="tableData" style="width: 100%" stripe>
+    <el-table
+      :data="tableData"
+      style="width: 100%"
+      stripe
+      @row-click="getOneSong"
+    >
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column prop="favicon" width="30">
         <i class="iconfont icon-aixin"></i>
@@ -47,6 +52,22 @@ export default {
   },
 
   methods: {
+    getOneSong(row) {
+      if (this.isListenId !== row.id) {
+        console.log(row)
+        this.$store.commit('songDetail/songAllMsg', row)
+        this.isListenId = row.id
+        // 响应式的数据
+        const songDetail = {}
+        songDetail.songName = row.name
+        songDetail.singer = row.ar[0].name
+        songDetail.id = row.id
+        songDetail.picUrl = row.al.picUrl
+        this.songMsg = songDetail
+        this.$store.dispatch('songDetail/getoneMusic', songDetail)
+        // this.$store.commit('songDetail/setplayListTracks', row)
+      }
+    },
     changHistoryList() {
       const hisAll = JSON.parse(localStorage.historyplayList || '[]')
       hisAll.forEach(item => {

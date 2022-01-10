@@ -41,6 +41,7 @@ const mutations = {
   },
   // 获取当时歌单所有歌曲信息
   setplayListTracks(state, payload) {
+    console.log(payload)
     state.playListTracks = payload
   },
   // 点击歌曲播放 播放状态则没用

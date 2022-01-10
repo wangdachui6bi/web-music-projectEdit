@@ -122,6 +122,7 @@ export default {
         this.isHistoryHave = true
       }
       if (!this.isHistoryHave) {
+        console.log(this.$store.state.songDetail.playListTracks)
         const songTrack = this.$store.state.songDetail.playListTracks.find(item => item.id === newVal.id)
         this.historyplayList.push(songTrack)
       }
