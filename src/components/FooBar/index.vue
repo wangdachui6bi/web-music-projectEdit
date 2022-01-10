@@ -114,6 +114,7 @@ export default {
       }
     },
     singleSongMsg(newVal) {
+      console.log(newVal)
       // 检测每次singleSongMsg的变化 如果新的这个历史播放数组没有的话就添加进来
       const isHaveIndex = this.historyplayList.findIndex((song) => song.id === newVal.id)
       if (isHaveIndex === -1) {
@@ -124,6 +125,7 @@ export default {
       if (!this.isHistoryHave) {
         // console.log(this.$store.state.songDetail.playListTracks)
         const songTrack = this.$store.state.songDetail.playListTracks.find(item => item.id === newVal.id)
+        console.log(this.$store.state.songDetail.playListTracks)
         this.historyplayList.push(songTrack)
       }
       localStorage.historyplayList = JSON.stringify(this.historyplayList)

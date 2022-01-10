@@ -18,7 +18,11 @@
                 />
               </div>
               <ul class="mleft-30">
-                <li v-for="(item2, index2) in item.tracks" :key="item2.id">
+                <li
+                  v-for="(item2, index2) in item.tracks"
+                  :key="item2.id"
+                  @click="getOneSong(item2)"
+                >
                   <span class="mleft-12 text-hidden">{{ index2 + 1 }}</span>
                   <span class="mleft-12 geming text-hidden">{{
                     item2.al.name
@@ -76,7 +80,7 @@ import { Toast } from 'vant'
 import { getTopList, getListDetails } from "@/api/DiscoverMusic/TopList"
 export default {
   name: "TopList",
-  data () {
+  data() {
     return {
       loading: true,
       officialList: [],
@@ -84,13 +88,32 @@ export default {
     }
   },
   methods: {
+    getOneSong(row) {
+      console.log(row)
+      if (!this.$store.state.songDetail.isPlay) {
+        this.$store.commit("songDetail/playback")
+      }
+      if (this.isListenId !== row.id) {
+        this.$store.commit('songDetail/songAllMsg', row)
+        this.isListenId = row.id
+        // 响应式的数据
+        const songDetail = {}
+        songDetail.songName = row.name
+        songDetail.singer = row.ar[0].name
+        songDetail.id = row.id
+        songDetail.picUrl = row.al.picUrl
+        this.songMsg = songDetail
+        this.$store.dispatch('songDetail/getoneMusic', songDetail)
+        this.$store.commit('songDetail/setplayListTracks', [row])
+      }
+    },
     // 跳转歌单详情
-    getTo (url, id) {
+    getTo(url, id) {
       this.$router.push(url + '/' + id)
       // console.log(id)
     },
     // 获取全部榜单
-    async topList () {
+    async topList() {
       const { data: { list, code, msg } } = await getTopList()
       if (code === 200) {
         await this.listDetails(list.slice(0, 4))
@@ -101,7 +124,7 @@ export default {
       }
     },
     // 查询官方榜单
-    async listDetails (arr) {
+    async listDetails(arr) {
       await arr.forEach(async item => {
         const { data: { playlist } } = await getListDetails(item.id)
         const arr = playlist.tracks.slice(0, 5)
@@ -115,7 +138,7 @@ export default {
       })
     }
   },
-  created () {
+  created() {
     this.topList()
   }
 }

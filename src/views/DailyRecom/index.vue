@@ -16,7 +16,7 @@
         </div>
         <!-- 按钮组 -->
         <div class="btn-wrap">
-          <div class="btn btn-red">
+          <div class="btn btn-red" @click="playListSongs">
             <i class="iconfont icon-bofang1"></i>
             播放全部
           </div>
@@ -26,7 +26,12 @@
           </div>
         </div>
         <div class="div-line mtop-20"></div>
-        <el-table :data="tableData" style="width: 100%" stripe>
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          stripe
+          @row-click="getOneSong"
+        >
           <el-table-column type="index" width="50"> </el-table-column>
           <el-table-column prop="favicon" width="30">
             <template slot-scope="scope">
@@ -63,30 +68,64 @@ import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 // 每日推荐     
 export default {
   name: "DailyRecom",
-  data () {
+  data() {
     return {
       loading: true,
       tableData: [],
-      likeIdList: []
+      likeIdList: [],
+      listSongMsg: []
     }
   },
   methods: {
-    async getLikeList () {
+    // 点击歌曲所在行数获得该歌曲 播放地址
+    // 当正在播放的歌曲的id等于想要听歌的id 则无法再点 
+    getOneSong(row) {
+      if (!this.$store.state.songDetail.isPlay) {
+        this.$store.commit("songDetail/playback")
+      }
+      if (this.isListenId !== row.id) {
+        this.$store.commit('songDetail/songAllMsg', row)
+        this.isListenId = row.id
+        // 响应式的数据
+        const songDetail = {}
+        songDetail.songName = row.name
+        songDetail.singer = row.ar[0].name
+        songDetail.id = row.id
+        songDetail.picUrl = row.al.picUrl
+        this.songMsg = songDetail
+        this.$store.dispatch('songDetail/getoneMusic', songDetail)
+        this.$store.commit('songDetail/setplayListTracks', [row])
+      }
+    },
+    playListSongs() {
+      this.$store.commit("songDetail/setSongList", this.listSongMsg)
+      this.$store.dispatch('songDetail/getoneMusic', this.listSongMsg[0])
+    },
+    async getLikeList() {
       const { data: { data: { dailySongs } } } = await recommendSongs()
       dailySongs.forEach((item) => {
         this.$set(item, "isLiked", this.isLiked(item.id))
         this.tableData.push(item)
       })
+      this.tableData.forEach((item) => {
+        const songDetail = {}
+        songDetail.songName = item.name
+        songDetail.singer = item.ar[0].name
+        songDetail.id = item.id
+        songDetail.picUrl = item.al.picUrl
+        this.listSongMsg.push(songDetail)
+      })
+      this.$store.commit('songDetail/setplayListTracks', this.tableData)
     },
-    async getLikeIdList (uid) {
+    async getLikeIdList(uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
       this.loading = false
     },
-    isLiked (id) {
+    isLiked(id) {
       return this.likeIdList.indexOf(id) !== -1
     },
-    async likeMusic (item) {
+    async likeMusic(item) {
       item.isLiked = !item.isLiked
       // this.getLikeList(this.uid)
       await likeMusic(item.id, item.isLiked)
@@ -95,12 +134,12 @@ export default {
       this.getLikeList(this.uid)
     }
   },
-  created () {
+  created() {
     this.getLikeList()
     this.getLikeIdList(this.uid)
   },
   computed: {
-    uid () {
+    uid() {
       return this.$store.state.login.profile.userId
     }
   }

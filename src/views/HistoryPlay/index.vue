@@ -47,7 +47,8 @@ export default {
     return {
       count: 0,
       tableData: [],
-      hislistSongMsg: []
+      hislistSongMsg: [],
+      isListenId: -1
     }
   },
 
