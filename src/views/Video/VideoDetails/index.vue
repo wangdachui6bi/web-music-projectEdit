@@ -1,23 +1,23 @@
 <template>
-  <div class="MvInfo">
+  <div class="VideoDetail">
     <el-skeleton :rows="6" animated :loading="loading">
       <template v-if="!loading">
-        <h1>←&nbsp;&nbsp;MV详情</h1>
+        <h1>←&nbsp;&nbsp;视频详情</h1>
         <div class="playVideo">
           <video
-            :src="mvPlayDate.url"
+            :src="videoPlayDate.url"
             controls="controls"
             width="370px"
           ></video>
         </div>
         <div class="artistInfo">
-          <img :src="mvArtists.img1v1Url" alt="" />
-          <span class="nameInfo">{{ mvDate.artistName }}</span>
+          <img :src="videoArtists.avatarUrl" alt="" />
+          <span class="nameInfo">{{ videoArtists.nickname }}</span>
         </div>
-        <div class="mvN">{{ mvDate.name }}</div>
+        <div class="mvN">{{ videoDate.title }}</div>
         <p class="number">
-          <span>发布时间:{{ mvDate.publishTime }}</span>
-          <span>播放次数:{{ mvDate.playCount | filterNumber }}万</span>
+          <span>发布时间:{{ publishTime }}</span>
+          <span>播放次数:{{ videoDate.playTime | filterNumber }}万</span>
         </p>
 
         <!-- 点赞 -->
@@ -102,21 +102,22 @@
 </template>
 
 <script>
-import { getMvDetail, getMvArtist, getMvLikeNumber, getMvComment } from '@/api/DiscoverMusic/MvInfo'
+import moment from "moment"
+import { getVideoUrl, getVideoDetail, getVideoLikeNumber, getVideoComment } from '@/api/Video'
 import { Toast } from 'vant'
 export default {
-  name: 'PlayMvDetail',
+  name: 'VideoDetail',
   data () {
     return {
-      MvId: this.$route.params.id,
-      mvPlayDate: [],
-      mvDate: [],
-      mvArtists: {},
+      VideoId: this.$route.params.id,
+      videoPlayDate: [],
+      videoDate: [],
+      videoArtists: {},
       dzData: {},
       at: "",
       loading: true,
       message: '',
-      mvComments: [],
+      videoComments: [],
       hotComments: [],
       showShare: false,
       options: [
@@ -128,8 +129,13 @@ export default {
       ]
     }
   },
-  mounted () {
+  created () {
     this.init()
+  },
+  computed: {
+    publishTime () {
+      return moment(this.videoDate.publishTime).format("YYYY-MM-DD hh:mm:ss")
+    }
   },
   filters: {
     filterNumber (number) {
@@ -138,31 +144,30 @@ export default {
   },
   methods: {
     async init () {
-      await this.getMv(this.MvId)
-      await this.getMvName(this.MvId)
-      await this.getMvLikes(this.MvId)
-      await this.getComment(this.MvId)
+      await this.getVideo(this.VideoId)
+      await this.getVideoName(this.VideoId)
+      await this.getVideoLikes(this.VideoId)
+      await this.getComment(this.VideoId)
       this.loading = false
     },
-    async getMv (id) {
-      const res = await getMvDetail(id)
-      this.mvPlayDate = res.data.data
-      // this.mvPlayDate = res.data.data
+    async getVideo (id) {
+      const res = await getVideoUrl(id)
+      this.videoPlayDate = res.data.urls[0]
     },
     async getComment (id) {
-      const res = await getMvComment(id)
+      const res = await getVideoComment(id)
       this.hotComments = res.data.hotComments
       // console.log(res.data)
     },
-    async getMvLikes (id) {
-      const res = await getMvLikeNumber(id)
+    async getVideoLikes (id) {
+      const res = await getVideoLikeNumber(id)
       this.dzData = res.data
     },
-    async getMvName (id) {
-      const res = await getMvArtist(id)
-      this.mvArtists = res.data.data.artists[0]
-      this.mvDate = res.data.data
-      this.artistName = res.data.data.artistName
+    async getVideoName (id) {
+      const res = await getVideoDetail(id)
+      console.log(res)
+      this.videoArtists = res.data.data.creator
+      this.videoDate = res.data.data
     },
     inputLabel () {
       this.at = "@"
@@ -179,7 +184,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.MvInfo {
+.VideoDetail {
   h1 {
     font-size: 16px;
   }
