@@ -4,7 +4,8 @@ export default [
     path: '/dailyrecom',
     component: () => import('@/views/DailyRecom'),
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'每日推荐'
     }
   }
 ]

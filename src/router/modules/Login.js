@@ -4,7 +4,8 @@ export default [
     path: '/login',
     component: () => import('@/views/Login'),
     meta: {
-      needHead: false
+      needHead: false,
+      tittle:"登录"
     }
   }
 ]

@@ -3,6 +3,7 @@ export default {
   path: '*',
   component: () => import('@/views/NoFoundPages/NoFoundPages'),
   meta: {
-    needHead: false
+    needHead: false,
+    tittle:'NotFound'
   }
 }

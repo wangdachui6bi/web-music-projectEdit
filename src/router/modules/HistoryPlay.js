@@ -3,6 +3,7 @@ export default {
   path: '/historyplay',
   component: () => import('@/views/HistoryPlay'),
   meta: {
-    needHead: true
+    needHead: true,
+    tittle:'最近播放'
   }
 }

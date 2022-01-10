@@ -160,8 +160,12 @@ export default {
     // 验证码匹配
     async checkIdent() {
       if (this.identify === '' && !this.pattern.test(this.username)) return
-      const res = await checkIdentify(this.username, this.identify)
-      this.ismsgRight = res.data.data
+      try {
+        const res = await checkIdentify(this.username, this.identify)
+        this.ismsgRight = res.data.data
+      } catch (error) {
+        Toast('验证码错误')
+      }
     },
     async sendIdent() {
       // 如果手机号不正确则不能发送验证码
@@ -184,7 +188,7 @@ export default {
         if (this.isSend) {
           Toast('验证码发送成功')
         } else {
-          Toast('发送失败,请检查手机号或者等下更换登录方式')
+          Toast(res.data.message)
         }
       } else {
         Toast('请输入正确的手机号')
@@ -285,7 +289,7 @@ export default {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-image: url('https://img0.baidu.com/it/u=3645292787,606932856&fm=26&fmt=auto?qq-pf-to=pcqq.group');
+  background-image: url("https://img0.baidu.com/it/u=3645292787,606932856&fm=26&fmt=auto?qq-pf-to=pcqq.group");
   .wrap {
     background-color: #fff;
     overflow: hidden;
@@ -318,7 +322,7 @@ export default {
           font-weight: 700;
         }
         button.active::after {
-          content: '';
+          content: "";
           display: block;
           width: 100%;
           height: 2px;

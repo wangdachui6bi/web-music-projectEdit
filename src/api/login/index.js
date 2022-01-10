@@ -61,15 +61,20 @@ export const checkcode = (key, timestamp) => {
 // 验证码登录 
 // 获取验证码
 export const sendIdentify = (phone) => {
+  // const timestamp = Date.now()
   return request({
     method: 'get',
     url: `/captcha/sent?phone=${phone}`
   })
 }
+/* 手机号密码登录 */
+// export const doLogin = ({ phone, md5_password, captcha }) => get('/login/cellphone', { phone, md5_password, captcha, timestamp: Date.now() })
+
 // 验证验证码
 export const checkIdentify = (phone, captcha) => {
+  const timestamp = Date.now()
   return request({
     method: 'get',
-    url: `/captcha/verify?phone=${phone}&&captcha=${captcha}`
+    url: `/captcha/verify?phone=${phone}&&captcha=${captcha}&timestamp=${timestamp}`
   })
 }

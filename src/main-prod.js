@@ -1,12 +1,17 @@
 import Vue from 'vue'
 import App from './App.vue'
-import './plugins/vant.js'
-import './plugins/element.js'
+// 生产版本通过cdn引入
+// import './plugins/vant.js'
+// import './plugins/element.js'
 import router from './router'
 import store from './store'
 
+// 引入矢量图
+import '@/assets/css/index.css'
+import '@/assets/fonts/iconfont/iconfont.css'
+
 // rem适配
-// import 'lib-flexible'
+import 'lib-flexible'
 Vue.config.productionTip = false
 
 new Vue({

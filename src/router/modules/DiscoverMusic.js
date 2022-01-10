@@ -3,7 +3,8 @@ export default [
     path: '/personalrecom',
     component: () => import('@/views/DiscoverMusic/PersonalRecom'),
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'个性推荐'
     }
   },
   {
@@ -11,7 +12,8 @@ export default [
     path: '/artistlist',
     component: () => import('@/views/DiscoverMusic/ArtistList'),
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'歌手列表'
     }
   },
   {
@@ -19,7 +21,8 @@ export default [
     path: '/toplist',
     component: () => import('@/views/DiscoverMusic/TopList'),
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'排行榜'
     }
   },
   {
@@ -28,7 +31,9 @@ export default [
     component: () => import('@/views/DiscoverMusic/ArtistList/ArtistsListInfo'),
     props: true,
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'歌手主页'
+
     }
   },
   {
@@ -37,7 +42,8 @@ export default [
     path: '/playlist',
     component: () => import("@/views/DiscoverMusic/PlayList"),
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'歌单列表'
     }
   },
   {
@@ -45,7 +51,8 @@ export default [
     path: '/newsongs',
     component: () => import("@/views/DiscoverMusic/NewSongs"),
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'最新音乐'
     }
   },
   // 歌单详情页
@@ -55,7 +62,8 @@ export default [
     component: () => import('@/views/DiscoverMusic/PlayList/PlayListDetail'),
     props: true,
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'歌单详情'
     }
   },
   // 专辑详情页
@@ -65,7 +73,8 @@ export default [
     path: "/albumdetail/:id",
     component: () => import('@/views/DiscoverMusic/NewSongs/AlbumListDetail'),
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'专辑详情'
     }
   },
   {
@@ -74,7 +83,8 @@ export default [
     component: () => import('@/views/DiscoverMusic/MvInfo'),
     props: true,
     meta: {
-      needHead: true
+      needHead: true,
+      tittle:'MV详情'
     }
   }
 ]

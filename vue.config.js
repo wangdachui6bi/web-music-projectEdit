@@ -27,7 +27,8 @@ module.exports = {
           'vue-router': 'VueRouter',
           axios: 'axios',
           nprogress: 'NProgress',
-          moment: 'moment'
+          moment: 'moment',
+          "element-ui": "element-ui"
         })
       config.plugin('html').tap(args => {
         args[0].isProd = true

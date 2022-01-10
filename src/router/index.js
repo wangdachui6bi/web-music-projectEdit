@@ -52,5 +52,8 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
-
+// 全局后置守卫
+router.afterEach((to, from) => {
+  document.title = to.meta.tittle
+})
 export default router
