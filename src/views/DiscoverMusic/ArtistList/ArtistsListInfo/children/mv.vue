@@ -1,40 +1,54 @@
 <template>
-  <el-skeleton :rows="5" animated :loading="loading">
-    <div class="mv">
-      <div class="mvInfo" v-for="video in videos" :key="video.id">
-        <div class="mvImgInfo">
-          <img :src="video.imgurl16v9" alt="" />
+  <div class="mv">
+    <div class="mvInfo" v-for="video in videos" :key="video.id">
+      <div class="mvImgInfo">
+        <img :src="video.imgurl16v9" alt=""  @click="turnToPlay(video.id)"/>
+        <div class="positionIcon">
+          <i class="el-icon-video-play icon1"></i>
+          <span class="spn1">{{ video.num }}</span>
+          <span>{{video.flag?"万":""}}</span>
         </div>
-        <p>{{ video.name }}</p>
       </div>
+      <p>{{ video.name }}</p>
     </div>
-  </el-skeleton>
+  </div>
 </template>
 
 <script>
 import { getArtistMV } from '@/api/DiscoverMusic/ArtistsListInfo'
 export default {
-  data () {
+  data() {
     return {
       videos: [],
-      id: this.$route.params.id,
-      loading: true
+      id: this.$route.params.id
     }
   },
-  mounted () {
+  mounted() {
     this.getArtisListInfo(this.id)
   },
   methods: {
-    async getArtisListInfo (id) {
+    async getArtisListInfo(id) {
       const res = await getArtistMV(id)
-      this.videos = res.data.mvs
-      this.loading = false
+      const list = res.data.mvs
+      list.forEach((item) => {
+        if (item.playCount > 10000) {
+          item.num = parseInt(item.playCount / 10000)
+          item.flag = true
+        } else {
+          item.num = item.playCount
+           item.flag = false
+        }
+      })
+      this.videos = list
+    },
+    turnToPlay(id){
+       this.$router.push(`/videodetail/mv/${id}`)
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .mv {
   * {
     margin: 0;
@@ -48,8 +62,24 @@ export default {
     width: 177px;
     .mvImgInfo {
       width: 177px;
+      position: relative;
       img {
         width: 100%;
+      }
+      .positionIcon {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        color: white;
+        font-size: 12px;
+        text-align: center;
+        .icon1 {
+          font-size: 16px;
+          float: left;
+        }
+        .spn1 {
+          margin-left: 2px;
+        }
       }
     }
     p {

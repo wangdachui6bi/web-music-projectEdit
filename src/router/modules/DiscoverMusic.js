@@ -63,6 +63,14 @@ export default [
     name: "AlbumDetail",
     path: "/albumdetail/:id",
     component: () => import('@/views/DiscoverMusic/NewSongs/AlbumListDetail'),
+    meta: {
+      needHead: true
+    }
+  },
+  {
+    name: "PlayMvDetail",
+    path: "/videodetail/mv/:id",
+    component: () => import('@/views/DiscoverMusic/MvInfo'),
     props: true,
     meta: {
       needHead: true
