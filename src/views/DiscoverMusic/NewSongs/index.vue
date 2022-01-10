@@ -211,7 +211,7 @@ export default {
         this.isalbum = true
         getTopNewalbum({ limit }).then((res) => {
           // 分批请求
-          console.log(res)
+          // console.log(res)
           this.wkalbumall = res.data.weekData
           this.weekDataalbum = this.weekDataalbum.concat(this.wkalbumall.slice(0, 30))
           this.count += res.data.weekData.length

@@ -17,9 +17,6 @@ export default {
     return {
       data: ['A', 'B']
     }
-  },
-  mounted() {
-    console.log(this.$route)
   }
 }
 </script>

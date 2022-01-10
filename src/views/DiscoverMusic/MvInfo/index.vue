@@ -135,7 +135,7 @@ export default {
     async getComment(id) {
       const res = await getMvComment(id)
       this.hotComments = res.data.hotComments
-      console.log(res.data)
+      // console.log(res.data)
     },
     async getMvLikes(id) {
       const res = await getMvLikeNumber(id)

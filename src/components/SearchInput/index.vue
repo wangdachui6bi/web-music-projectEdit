@@ -76,13 +76,9 @@ export default {
     this.init()
     this.input = this.$store.state.search.keyword
   },
-  mounted() {
-    console.log(this.$refs.refInput.$el.focus())
-  },
   methods: {
     // 点击搜索事件
     async search(keyword) {
-      console.log(123)
       this.input = keyword
       this.keyword = keyword
     },

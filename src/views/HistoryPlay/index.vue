@@ -54,7 +54,7 @@ export default {
   methods: {
     getOneSong(row) {
       if (this.isListenId !== row.id) {
-        console.log(row)
+        // console.log(row)
         this.$store.commit('songDetail/songAllMsg', row)
         this.isListenId = row.id
         // 响应式的数据

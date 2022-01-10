@@ -177,8 +177,8 @@ export default {
           this.allAlbumSongMsg.push(res.data.songs)
         })
       })
-      console.log(this.allHotAlbums)
-      console.log(this.allAlbumSongMsg)
+      // console.log(this.allHotAlbums)
+      // console.log(this.allAlbumSongMsg)
     }
   },
   computed: {

@@ -126,7 +126,6 @@ export default {
     }
   },
   created() {
-    console.log(this.keyword)
     this.init()
   },
   methods: {

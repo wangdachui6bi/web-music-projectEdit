@@ -140,7 +140,7 @@ export default {
     },
     async getNewComment (id) {
       const res = await getNewComment(id)
-      console.log(res)
+      // console.log(res)
       this.comments = res.data.comments
       this.replied = res.data.comments.beReplied
     }

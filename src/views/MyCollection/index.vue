@@ -92,7 +92,7 @@ export default {
         const { data: { data } } = await getColMV()
         this.list = data
       }
-      console.log(this.list)
+      // console.log(this.list)
       this.loading = false
     },
     goDetail (id) {

@@ -130,7 +130,7 @@ export default {
         songDetail.picUrl = song.al.picUrl
         this.listSongMsg.push(songDetail)
       })
-      console.log(this.songs)
+      // console.log(this.songs)
     }
   },
   filters: {

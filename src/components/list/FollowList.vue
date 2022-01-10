@@ -52,7 +52,7 @@ export default {
     async getSuberList (id) {
       const res = await getSuberList(id)
       this.suberList = res.data.subscribers
-      console.log(res)
+      // console.log(res)
     }
   }
 }
