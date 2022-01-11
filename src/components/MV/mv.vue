@@ -56,9 +56,9 @@ export default {
     turnToPlay(id) {
       this.$router.push(`/videodetail/mv/${id}`)
     },
-    async MVGujia() {
+    async MVGujia(name, title) {
       this.eleLoading = true
-      const res = await this.getMv()
+      const res = await this.getMv(title)
       this.newMVAll = res.data
       this.eleLoading = false
     }

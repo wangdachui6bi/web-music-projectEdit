@@ -99,6 +99,7 @@ export default {
   },
   methods: {
     async getMvNew(title = '内地') {
+      console.log(title)
       const { data } = await getMvNewByArea(title)
       return data
     },
