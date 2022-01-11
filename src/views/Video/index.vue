@@ -51,7 +51,15 @@
                 </ul>
               </div>
             </van-tab>
-            <van-tab title="MV"></van-tab>
+            <van-tab title="MV" class="MVdetail">
+              <MV :title="type[0]" :getMv="getMvNew"></MV>
+              <MV
+                :title="type[1]"
+                :getMv="getMvWy"
+                :isHaveClick="isHaveClick"
+              ></MV>
+              <MV :title="type[2]" :getMv="getMvTop"></MV>
+            </van-tab>
           </van-tabs>
         </div>
       </template>
@@ -62,7 +70,8 @@
 <script>
 // 视频
 // getVideoByTag
-import { getVideoHotTag, getAllVideo, getVideoAlltag, getVideoByTag } from '@/api/Video'
+import { getVideoHotTag, getAllVideo, getVideoAlltag, getVideoByTag, getMvNewByArea, getMvWY, getMVTopArea } from '@/api/Video'
+import MV from '@/components/MV/mv.vue'
 export default {
   name: "Video",
   data() {
@@ -79,10 +88,28 @@ export default {
       finished: false,
       check: true,
       allTag: [],
-      tabShow: false
+      tabShow: false,
+      isHaveClick: false,
+      type: ['最新MV', '网易出品', 'MV排行榜']
+
     }
   },
+  components: {
+    MV
+  },
   methods: {
+    async getMvNew(title = '内地') {
+      const { data } = await getMvNewByArea(title)
+      return data
+    },
+    async getMvWy() {
+      const { data } = await getMvWY()
+      return data
+    },
+    async getMvTop(title = '内地') {
+      const { data } = await getMVTopArea(title)
+      return data
+    },
     async clickChange(item) {
       // 改变颜色
       // 排他思想 所有的全部变为false
@@ -92,8 +119,14 @@ export default {
       item.activity = !item.activity
       this.msg = item.name
       this.tabShow = false
-      const res = await getVideoByTag(item.id, 0)
-      this.videoAll = res.data.datas
+      var data = []
+      var offset = 0
+      for (var i = 0; i < 2; i++) {
+        const res = await getVideoByTag(item.id, offset)
+        data = data.concat(res.data.datas)
+        offset = offset + 8
+      }
+      this.videoAll = data
     },
     goDetail(id) {
       this.$router.push("/videodetail/v/" + id)
@@ -116,7 +149,6 @@ export default {
         offset += 8
       }
       this.videoAll = data
-      console.log(this.videoAll)
     },
     async getAllVideo() {
       // 把这个设置成true再设置成false模板会在请求返回结果才重新解析
@@ -158,7 +190,7 @@ export default {
       overflow: hidden;
       margin-bottom: 10px;
       button {
-        position: relative;
+        position: absolute;
         z-index: 200;
         float: left;
         width: 122px;
@@ -167,6 +199,9 @@ export default {
         margin-top: 8px;
         height: 36px;
         border: none;
+      }
+      .van-tabs {
+        margin-left: 120px;
       }
       .totallist {
         margin-top: 40px;

@@ -2,7 +2,7 @@
   <div class="MvInfo">
     <el-skeleton :rows="6" animated :loading="loading">
       <template v-if="!loading">
-        <h1>←&nbsp;&nbsp;MV详情</h1>
+        <h1>&nbsp;MV详情</h1>
         <div class="playVideo">
           <video
             :src="mvPlayDate.url"
@@ -19,7 +19,6 @@
           <span>发布时间:{{ mvDate.publishTime }}</span>
           <span>播放次数:{{ mvDate.playCount | filterNumber }}万</span>
         </p>
-
         <!-- 点赞 -->
         <div class="dz">
           <button>

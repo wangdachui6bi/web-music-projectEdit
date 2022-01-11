@@ -67,3 +67,27 @@ export const getVideoComment = (id) => {
     url: `/comment/hot?id=${id}&type=5&limit=5`
   })
 }
+// 根据arer 获取不同地区最新mv
+export const getMvNewByArea = (area, limit = 8) => {
+  area = encodeURIComponent(area)
+  return request({
+    method: 'get',
+    url: `/mv/first?area=${area}&&limit=${limit}`
+  })
+}
+// 获取网易出品 mv
+export const getMvWY = (limit = 8) => {
+  return request({
+    method: 'get',
+    url: `/mv/exclusive/rcmd?limit=${limit}`
+  })
+}
+
+// 获取不同area排行榜mv
+export const getMVTopArea = (area, limit = 8) => {
+  area = encodeURIComponent(area)
+  return request({
+    method: 'get',
+    url: `/top/mv?area=${area}&&limit=${limit}`
+  })
+}
