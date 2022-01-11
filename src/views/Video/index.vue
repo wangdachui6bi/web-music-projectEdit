@@ -1,61 +1,61 @@
 <template>
   <div class="Video">
-    <!-- <el-skeleton :rows="6" animated :loading="eleLoading"> -->
-    <template v-if="!eleLoading">
-      <div class="chooseType">
-        <van-tabs v-model="activeTop">
-          <van-tab title="视频">
-            <div class="Video-top">
-              <div class="sheetdetail">
-                <button ref="clickbutton" @click="tabShow = !tabShow">
-                  {{ msg }}
-                  <i class="iconfont icon icon-youjiantou1"></i>
-                </button>
-                <van-tabs v-model="active" @click="onClickTab">
-                  <van-tab
-                    v-for="(item, index) in hotcat"
-                    :title="item.name"
-                    :key="index"
-                  ></van-tab>
-                </van-tabs>
-                <div class="totallist" v-if="tabShow">
-                  <div>
-                    <p><span>全部视频</span></p>
-                    <ul class="tabAll">
-                      <li v-for="(tag, index) in allTag" :key="index">
-                        <span
-                          :class="{ borderCir: tag.activity }"
-                          @click="clickChange(tag)"
-                          >{{ tag.name }}</span
-                        >
-                      </li>
-                    </ul>
+    <el-skeleton :rows="6" animated :loading="eleLoading">
+      <template v-if="!eleLoading">
+        <div class="chooseType">
+          <van-tabs v-model="activeTop">
+            <van-tab title="视频">
+              <div class="Video-top">
+                <div class="sheetdetail">
+                  <button ref="clickbutton" @click="tabShow = !tabShow">
+                    {{ msg }}
+                    <i class="iconfont icon icon-youjiantou1"></i>
+                  </button>
+                  <van-tabs v-model="active" @click="onClickTab">
+                    <van-tab
+                      v-for="(item, index) in hotcat"
+                      :title="item.name"
+                      :key="index"
+                    ></van-tab>
+                  </van-tabs>
+                  <div class="totallist" v-if="tabShow">
+                    <div>
+                      <p><span @click="getAllVideo">全部视频</span></p>
+                      <ul class="tabAll">
+                        <li v-for="(tag, index) in allTag" :key="index">
+                          <span
+                            :class="{ borderCir: tag.activity }"
+                            @click="clickChange(tag)"
+                            >{{ tag.name }}</span
+                          >
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="vdDetail">
-              <ul>
-                <li
-                  v-for="(video, index) in videoAll"
-                  :key="index"
-                  @click="goDetail(video.data.vid)"
-                >
-                  <!-- 数据在video.data -->
-                  <div class="vd">
-                    <img :src="video.data.coverUrl" alt="" />
-                    <p>{{ video.data.title }}</p>
-                    <!-- <span>{{ "by" + video.data.creator.nickname }}</span> -->
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </van-tab>
-          <van-tab title="MV"></van-tab>
-        </van-tabs>
-      </div>
-    </template>
-    <!-- </el-skeleton> -->
+              <div class="vdDetail">
+                <ul>
+                  <li
+                    v-for="(video, index) in videoAll"
+                    :key="index"
+                    @click="goDetail(video.data.vid)"
+                  >
+                    <!-- 数据在video.data -->
+                    <div class="vd">
+                      <img :src="video.data.coverUrl" alt="" />
+                      <p>{{ video.data.title }}</p>
+                      <!-- <span>{{ "by" + video.data.creator.nickname }}</span> -->
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </van-tab>
+            <van-tab title="MV"></van-tab>
+          </van-tabs>
+        </div>
+      </template>
+    </el-skeleton>
   </div>
 </template>
 
@@ -107,15 +107,28 @@ export default {
     async onClickTab(name, title) {
       this.msg = title
       const catId = this.hotcat.find((item) => item.name === title)
-      const res = await getVideoByTag(catId.id, 0)
-      this.videoAll = res.data.datas
+      var data = []
+      var offset = 0
+      for (var i = 0; i < 2; i++) {
+        const res = await getVideoByTag(catId.id, offset)
+        // concat对原数组无影响 会返回结合后的新数组
+        data = data.concat(res.data.datas)
+        offset += 8
+      }
+      this.videoAll = data
+      console.log(this.videoAll)
     },
     async getAllVideo() {
       // 把这个设置成true再设置成false模板会在请求返回结果才重新解析
       this.eleLoading = true
-      this.offset += 10
+      this.tabShow = false
       const res = await getAllVideo(this.offset)
-      this.videoAll = this.videoAll.concat(res.data.datas)
+      this.videoAll = res.data.datas
+      this.offset += 8
+      if (this.allTag.length !== 0) {
+        this.eleLoading = false
+        return 0
+      }
       const allTag = await getVideoAlltag()
       this.allTag = allTag.data.data
       this.allTag.forEach(tag => {
@@ -141,9 +154,8 @@ export default {
     box-sizing: border-box;
     padding: 0;
     .sheetdetail {
-      // display: flex;
-      // overflow: hidden;
-      position: relative;
+      display: flex;
+      overflow: hidden;
       margin-bottom: 10px;
       button {
         position: relative;
@@ -157,12 +169,15 @@ export default {
         border: none;
       }
       .totallist {
-        margin-top: 4px;
+        margin-top: 40px;
         border-radius: 15px;
         position: absolute;
         padding: 0 20px 0 20px;
-        box-sizing: border-box;
         div {
+          box-sizing: border-box;
+          z-index: 9999;
+          box-shadow: 5px -5px 8px 0px rgba(0, 0, 0, 0.2),
+            -5px -5px 8px 0px rgba(0, 0, 0, 0.2);
           background-color: #fff;
           overflow: hidden;
           .borderCir {
@@ -185,7 +200,11 @@ export default {
               width: 26%;
               margin-right: 20px;
               span {
-                font-size: 12px;
+                text-align: center;
+                display: block;
+                cursor: pointer;
+                padding: 4px 10px;
+                font-size: 14px;
               }
             }
           }
