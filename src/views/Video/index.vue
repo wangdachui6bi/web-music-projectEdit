@@ -18,28 +18,7 @@
                     :key="index"
                   ></van-tab>
                 </van-tabs>
-                <!-- <div class="totallist" v-show="isShow">
-                <p>全部歌单</p>
-                <dl
-                  class="listdl"
-                  v-for="(item, index) in categories"
-                  :key="index"
-                >
-                  <dt class="listtitle">
-                    <i :class="['icon', 'iconfont', `${iconarr[index]}`]"></i>
-                    {{ item }}
-                  </dt>
-                  <div style="display: flex">
-                    <dd v-for="(item2, index2) in catesub[index]" :key="index2">
-                      <span
-                        :class="{ borderCir: item2.activity }"
-                        @click="clickChange(item2)"
-                        >{{ item2.name }}</span
-                      >
-                    </dd>
-                  </div>
-                </dl>
-              </div> -->
+                <div class="totallist"></div>
               </div>
             </div>
             <div class="vdDetail">
@@ -60,7 +39,7 @@
                     <div class="vd">
                       <img :src="video.data.coverUrl" alt="" />
                       <p>{{ video.data.title }}</p>
-                      <span>{{ "by" + video.data.creator.nickname }}</span>
+                      <!-- <span>{{ "by" + video.data.creator.nickname }}</span> -->
                     </div>
                   </li>
                 </ul></van-list
@@ -77,7 +56,8 @@
 
 <script>
 // 视频
-import { getVideoHotTag, getAllVideo } from '@/api/Video'
+// getVideoByTag
+import { getVideoHotTag, getAllVideo, getVideoAlltag, getVideoByTag } from '@/api/Video'
 export default {
   name: "Video",
   data() {
@@ -92,7 +72,9 @@ export default {
       finishedText: '没有更多了',
       offset: 0,
       finished: false,
-      check: true
+      check: true,
+      allTag: [],
+      tabShow: false
     }
   },
   methods: {
@@ -104,13 +86,21 @@ export default {
         this.getAllVideo(this.offset)
       }, 2000)
     },
-    onClickTab(name, title) {
+    // getVideoByTag
+    async onClickTab(name, title) {
       this.msg = title
+      const catId = this.hotcat.find((item) => item.name === title)
+      const res = await getVideoByTag(catId.id, 0)
+      this.videoAll = res.data.datas
     },
     async getAllVideo() {
+      // 把这个设置成true再设置成false模板会在请求返回结果才重新解析
+      this.eleLoading = true
       this.offset += 10
-      const res = await getAllVideo()
+      const res = await getAllVideo(this.offset)
       this.videoAll = this.videoAll.concat(res.data.datas)
+      const allTag = await getVideoAlltag()
+      this.allTag = allTag.data.data
       this.eleLoading = false
     }
   },
@@ -133,6 +123,7 @@ export default {
     .sheetdetail {
       // display: flex;
       // overflow: hidden;
+      position: relative;
       margin-bottom: 10px;
       button {
         position: relative;
@@ -144,6 +135,9 @@ export default {
         margin-top: 8px;
         height: 36px;
         border: none;
+        .totallist {
+          position: absolute;
+        }
       }
     }
   }
@@ -157,6 +151,7 @@ export default {
       justify-content: space-between;
       li {
         width: 45%;
+        margin-bottom: 14px;
         div {
           img {
             width: 100%;

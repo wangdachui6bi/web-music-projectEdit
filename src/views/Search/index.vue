@@ -132,7 +132,6 @@ export default {
     // 请求数据
     getOneSong(row) {
       if (this.isListenId !== row.id) {
-        console.log(row)
         this.isListenId = row.id
         // 响应式的数据
         const songDetail = {}

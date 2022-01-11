@@ -29,6 +29,7 @@ export const getVideoAlltag = () => {
   })
 }
 /* 根据标签获取视频列表 */
+// /related/allvideo?id=89ADDE33C0AAE8EC14B99F6750DB954D
 export const getVideoByTag = (id, offset) => {
   return request({
     method: 'get',

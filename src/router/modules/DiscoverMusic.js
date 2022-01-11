@@ -86,15 +86,6 @@ export default [
       needHead: true,
       tittle: 'MV详情'
     }
-  }, {
-    name: "Video",
-    path: "/video",
-    component: () => import('@/views/Video'),
-    props: true,
-    meta: {
-      needHead: true,
-      tittle: '视频'
-    }
   }
 ]
 
