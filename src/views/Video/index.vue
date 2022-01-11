@@ -39,11 +39,7 @@
                     <div class="vd">
                       <img :src="video.data.coverUrl" alt="" />
                       <p>{{ video.data.title }}</p>
-<<<<<<< HEAD
-                      <span>{{ 'by' + video.data.creator.nickname }}</span>
-=======
                       <!-- <span>{{ "by" + video.data.creator.nickname }}</span> -->
->>>>>>> 90a1f27a8efafeb0bc64124f964eca72948aa502
                     </div>
                   </li>
                 </ul>
@@ -90,24 +86,16 @@ export default {
         this.getAllVideo(this.offset)
       }, 2000)
     },
-<<<<<<< HEAD
-    onClickTab (name, title) {
-=======
     // getVideoByTag
-    async onClickTab(name, title) {
->>>>>>> 90a1f27a8efafeb0bc64124f964eca72948aa502
+    async onClickTab (name, title) {
       this.msg = title
       const catId = this.hotcat.find((item) => item.name === title)
       const res = await getVideoByTag(catId.id, 0)
       this.videoAll = res.data.datas
     },
-<<<<<<< HEAD
     async getAllVideo () {
-=======
-    async getAllVideo() {
       // 把这个设置成true再设置成false模板会在请求返回结果才重新解析
       this.eleLoading = true
->>>>>>> 90a1f27a8efafeb0bc64124f964eca72948aa502
       this.offset += 10
       const res = await getAllVideo(this.offset)
       this.videoAll = this.videoAll.concat(res.data.datas)
