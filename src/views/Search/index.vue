@@ -14,35 +14,46 @@
           {{ type.name }}
         </li>
       </ul>
-      <!-- 单曲 -->
-      <el-skeleton :rows="6" animated :loading="loading" v-show="type === 1">
-        <el-table
-          :data="searchRes"
-          style="width: 100%"
-          stripe
-          @row-click="getOneSong"
-        >
-          <el-table-column type="index" width="50"> </el-table-column>
-          <el-table-column prop="favicon" width="30">
-            <i class="iconfont icon-aixin"></i>
-          </el-table-column>
-          <el-table-column prop="name" label="音乐标题" width="211">
-            <template slot-scope="scope">
-              <span style="margin-left: 10px" class="nameText">{{
-                scope.row.name
-              }}</span>
-              <div class="vip-tag" v-if="scope.row.fee === 1">VIP</div>
-              <div class="vip-tag" v-if="scope.row.mv !== 0">MV</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="ar[0].name" label="歌手" width="80">
-          </el-table-column>
-        </el-table>
-      </el-skeleton>
-      <!-- 专辑 -->
-      <el-skeleton :rows="6" animated :loading="loading" v-show="type === 10">
-        <ul class="info-list" v-if="type === 10">
-          <template v-if="!loading">
+      <el-skeleton :rows="6" animated :loading="loading">
+        <!-- 单曲 -->
+        <template v-if="!loading && type === 1">
+          <el-table
+            :data="searchRes"
+            style="width: 100%"
+            stripe
+            @row-click="getOneSong"
+          >
+            <el-table-column type="index" width="50"> </el-table-column>
+            <el-table-column prop="favicon" width="30">
+              <template slot-scope="scope">
+                <span @click="likeMusic(scope.row)">
+                  <div style="width: 38px">
+                    <i
+                      v-if="scope.row.isLiked"
+                      style="color: red"
+                      class="iconfont icon-aixin1"
+                    ></i>
+                    <i v-else class="iconfont icon-aixin"></i>
+                  </div>
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="音乐标题" width="211">
+              <template slot-scope="scope">
+                <span style="margin-left: 10px" class="nameText">{{
+                  scope.row.name
+                }}</span>
+                <div class="vip-tag" v-if="scope.row.fee === 1">VIP</div>
+                <div class="vip-tag" v-if="scope.row.mv !== 0">MV</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="ar[0].name" label="歌手" width="80">
+            </el-table-column>
+          </el-table>
+        </template>
+        <!-- 专辑 -->
+        <template v-if="!loading && type === 10">
+          <ul class="info-list">
             <li class="info-item" v-for="item in searchRes" :key="item.id">
               <img :src="item.blurPicUrl" class="sub-img mleft-10" alt="" />
               <div class="sub-title font-14 mleft-10">{{ item.name }}</div>
@@ -52,13 +63,11 @@
                 </span>
               </div>
             </li>
-          </template>
-        </ul>
-      </el-skeleton>
-      <!-- 歌手 -->
-      <el-skeleton :rows="6" animated :loading="loading" v-show="type === 100">
-        <ul class="info-list" v-if="type === 100">
-          <template v-if="!loading">
+          </ul>
+        </template>
+        <!-- 歌手 -->
+        <template v-if="!loading && type === 100">
+          <ul class="info-list">
             <li
               class="info-item"
               v-for="item in searchRes"
@@ -68,13 +77,11 @@
               <img :src="item.picUrl" class="sub-img mleft-10" alt="" />
               <div class="sub-title font-14 mleft-10">{{ item.name }}</div>
             </li>
-          </template>
-        </ul>
-      </el-skeleton>
-      <!-- 歌单 -->
-      <el-skeleton :rows="6" animated :loading="loading" v-show="type === 1000">
-        <ul class="info-list" v-if="type === 1000">
-          <template v-if="!loading">
+          </ul>
+        </template>
+        <!-- 歌单 -->
+        <template v-if="!loading && type === 1000">
+          <ul class="info-list">
             <li
               class="info-item"
               v-for="item in searchRes"
@@ -89,19 +96,38 @@
                 </span>
               </div>
             </li>
-          </template>
-        </ul>
-      </el-skeleton>
-      <!-- 用户 -->
-      <el-skeleton :rows="6" animated :loading="loading" v-show="type === 1002">
-        <ul class="info-list" v-if="type === 1002">
-          <template v-if="!loading">
+          </ul>
+        </template>
+        <!-- 用户 -->
+        <template v-if="!loading && type === 1002">
+          <ul class="info-list">
             <li class="info-item" v-for="item in searchRes" :key="item.id">
               <img :src="item.avatarUrl" class="sub-img mleft-10" alt="" />
-              <div class="sub-title font-14 mleft-10">{{ item.nickname }}</div>
+              <div class="sub-title font-14 mleft-10">
+                {{ item.nickname }}
+              </div>
             </li>
-          </template>
-        </ul>
+          </ul>
+        </template>
+        <!-- Mv -->
+        <template v-if="!loading && type === 1004">
+          <div class="vdDetail">
+            <ul>
+              <li
+                v-for="(video, index) in searchRes"
+                :key="index"
+                @click="goMvDetail(video.id)"
+              >
+                <!-- 数据在video.data -->
+                <div class="vd">
+                  <img :src="video.cover" alt="" />
+                  <p>{{ video.name }}</p>
+                  <span>{{ 'by' + video.artists[0].name }}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </template>
       </el-skeleton>
     </div>
   </div>
@@ -109,10 +135,11 @@
 
 <script>
 import { searchKeyword } from "@/api/Search"
+import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 export default {
   name: "Search",
   props: ["keyword"],
-  data() {
+  data () {
     return {
       searchRes: [],
       Count: 0,
@@ -122,15 +149,21 @@ export default {
       type: 1,
       typename: "单曲",
       isListenId: 0,
-      songMsg: {}
+      songMsg: {},
+      likeIdList: []
     }
   },
-  created() {
+  created () {
     this.init()
+  },
+  computed: {
+    uid () {
+      return this.$store.state.login.profile.userId
+    }
   },
   methods: {
     // 请求数据
-    getOneSong(row) {
+    getOneSong (row) {
       if (this.isListenId !== row.id) {
         this.isListenId = row.id
         // 响应式的数据
@@ -144,14 +177,17 @@ export default {
         this.$store.commit('songDetail/setplayListTracks', [row])
       }
     },
-    async init(keyword = this.keyword, type = 1, offset = 0) {
-      this.loading = true
+    async init (keyword = this.keyword, type = 1, offset = 0) {
       this.type = type
       const { data: { result } } = await searchKeyword(keyword, type, offset)
+      await this.getLikeIdList(this.uid)
       if (type === 1) {
         this.type = type
-        this.searchRes = result.songs
         this.Count = result.songCount
+        result.songs.forEach((item) => {
+          this.$set(item, "isLiked", this.isLiked(item.id))
+          this.searchRes.push(item)
+        })
       } else if (type === 10) {
         this.searchRes = result.albums
         this.Count = result.albumCount
@@ -164,26 +200,48 @@ export default {
       } else if (type === 1002) {
         this.searchRes = result.userprofiles
         this.Count = result.userprofileCount
+      } else if (type === 1004) {
+        this.searchRes = result.mvs
+        this.Count = result.mvCount
+        console.log(this.searchRes)
       }
       this.loading = false
     },
+    goMvDetail (id) {
+      this.$router.push("/videodetail/mv/" + id)
+    },
     // 改变搜索的type
-    search(index, typename, type) {
+    search (index, typename, type) {
+      this.loading = true
       this.active = index
       this.typename = typename
       this.init(this.keyword, type)
     },
     // 去歌单详情页
-    goPlayListDetail(id) {
+    goPlayListDetail (id) {
       this.$router.push(`/playlistdetail/${id}`)
     },
     // 去歌手详情页
-    goArtistInfo(id) {
+    goArtistInfo (id) {
       this.$router.push(`/artistdetail/${id}`)
+    },
+    async getLikeIdList (uid) {
+      const res = await getLikeIdList(uid)
+      this.likeIdList = res.data.ids
+    },
+    // 判断当前是否喜欢
+    isLiked (id) {
+      return this.likeIdList.indexOf(id) !== -1
+    },
+    // 点击喜欢
+    async likeMusic (item) {
+      item.isLiked = !item.isLiked
+      await likeMusic(item.id, item.isLiked)
+      this.init(this.keyword, this.type)
     }
   },
   watch: {
-    '$route'(to, from) {
+    '$route' (to, from) {
       this.init(this.keyword, this.type)
     }
   }
@@ -209,7 +267,7 @@ export default {
     }
     .search-menu-item.isActive:after {
       display: block;
-      content: "";
+      content: '';
       height: 4px;
       width: 90%;
       margin: 0 auto;
@@ -252,6 +310,35 @@ export default {
     }
     .info-item:nth-child(odd) {
       background-color: #f9f9f9;
+    }
+  }
+  .vdDetail {
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      li {
+        width: 45%;
+        margin-bottom: 14px;
+        div {
+          img {
+            width: 100%;
+          }
+        }
+        p {
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        span {
+          color: #e0e0e0;
+        }
+      }
     }
   }
 }

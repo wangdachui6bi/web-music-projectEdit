@@ -16,44 +16,63 @@
       </button>
     </div>
     <div class="div-line mtop-20"></div>
-    <el-table
-      :data="tableData"
-      style="width: 100%"
-      stripe
-      @row-click="getOneSong"
-    >
-      <el-table-column type="index" width="50"> </el-table-column>
-      <el-table-column prop="favicon" width="30">
-        <i class="iconfont icon-aixin"></i>
-      </el-table-column>
-      <el-table-column prop="name" label="音乐标题" width="211">
-        <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.name }}</span>
-          <div class="vip-tag" v-if="scope.row.fee === 1">VIP</div>
-          <div class="vip-tag" v-if="scope.row.mv !== 0">MV</div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="ar[0].name" label="歌手" width="80">
-      </el-table-column>
-    </el-table>
+    <el-skeleton :rows="6" animated :loading="loading">
+      <template v-if="!loading">
+        <el-table :data="hislistSongMsg" style="width: 100%" stripe>
+          <el-table-column type="index" width="50"> </el-table-column>
+          <el-table-column prop="favicon" width="30">
+            <template slot-scope="scope">
+              <span @click="likeMusic(scope.row)">
+                <div>
+                  <i
+                    v-if="scope.row.isLiked"
+                    style="color: red"
+                    class="iconfont icon-aixin1"
+                  ></i>
+                  <i v-else class="iconfont icon-aixin"></i>
+                </div>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="songName" label="音乐标题" width="211">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.songName }}</span>
+              <div class="vip-tag" v-if="scope.row.fee === 1">VIP</div>
+              <div
+                class="vip-tag"
+                v-if="scope.row.mv !== 0"
+                @click="$router.push(`/videodetail/mv/${scope.row.mv}`)"
+              >
+                MV
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="singer" label="歌手" width="80">
+          </el-table-column>
+        </el-table>
+      </template>
+    </el-skeleton>
   </div>
 </template>
 
 <script>
+import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 // 最近播放
 export default {
   name: "HistoryPlay",
-  data() {
+  data () {
     return {
       count: 0,
       tableData: [],
       hislistSongMsg: [],
-      isListenId: -1
+      isListenId: -1,
+      likeIdList: [],
+      loading: true
     }
   },
 
   methods: {
-    getOneSong(row) {
+    getOneSong (row) {
       if (this.isListenId !== row.id) {
         // console.log(row)
         this.$store.commit('songDetail/songAllMsg', row)
@@ -73,32 +92,54 @@ export default {
         }
       }
     },
-    changHistoryList() {
+    async changHistoryList () {
+      this.loading = true
+      // 获取存储在本地的最近播放的列表
+      this.hislistSongMsg = []
       const hisAll = JSON.parse(localStorage.historyplayList || '[]')
-      hisAll.forEach(item => {
+      this.count = hisAll.length
+      await this.getLikeIdList(this.uid)
+      hisAll.forEach((item) => {
         const songDetail = {}
         songDetail.songName = item.name
+        songDetail.mv = item.mv
+        songDetail.fee = item.fee
         songDetail.singer = item.ar[0].name
         songDetail.id = item.id
         songDetail.picUrl = item.al.picUrl
+        songDetail.isLiked = this.isLiked(item.id)
         this.hislistSongMsg.push(songDetail)
       })
+      this.loading = false
     },
-    playHistorySong() {
+    playHistorySong () {
       // 将该歌单里的的所有歌曲信息添加到vuex 相应数据并且把
       // 播放的歌曲 singleSongMsg设置为该歌单第一首歌
       // 而且对第一首歌进行MP3url请求
       if (this.hislistSongMsg.length === 0) return
       this.$store.commit("songDetail/setSongList", this.hislistSongMsg)
       this.$store.dispatch('songDetail/getoneMusic', this.hislistSongMsg[0])
+    },
+    async getLikeIdList (uid) {
+      const res = await getLikeIdList(uid)
+      this.likeIdList = res.data.ids
+    },
+    isLiked (id) {
+      return this.likeIdList.indexOf(id) !== -1
+    },
+    async likeMusic (item) {
+      item.isLiked = !item.isLiked
+      await likeMusic(item.id, item.isLiked)
     }
   },
-  created() {
-    // 获取存储在本地的最近播放的列表
-    this.tableData = JSON.parse(localStorage.getItem("historyplayList") || "[]")
-    this.count = this.tableData.length
+  created () {
     // 将本地localhitorylist数据进行截取
     this.changHistoryList()
+  },
+  computed: {
+    uid () {
+      return this.$store.state.login.profile.userId
+    }
   }
 }
 </script>

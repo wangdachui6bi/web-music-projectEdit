@@ -1,61 +1,61 @@
 <template>
   <div class="Video">
-    <!-- <el-skeleton :rows="6" animated :loading="eleLoading"> -->
-    <template v-if="!eleLoading">
-      <div class="chooseType">
-        <van-tabs v-model="activeTop">
-          <van-tab title="视频">
-            <div class="Video-top">
-              <div class="sheetdetail">
-                <button ref="clickbutton" @click="tabShow = !tabShow">
-                  {{ msg }}
-                  <i class="iconfont icon icon-youjiantou1"></i>
-                </button>
-                <van-tabs v-model="active" @click="onClickTab">
-                  <van-tab
-                    v-for="(item, index) in hotcat"
-                    :title="item.name"
-                    :key="index"
-                  ></van-tab>
-                </van-tabs>
-                <div class="totallist" v-if="tabShow">
-                  <div>
-                    <p><span>全部视频</span></p>
-                    <ul class="tabAll">
-                      <li v-for="(tag, index) in allTag" :key="index">
-                        <span
-                          :class="{ borderCir: tag.activity }"
-                          @click="clickChange(tag)"
-                          >{{ tag.name }}</span
-                        >
-                      </li>
-                    </ul>
+    <el-skeleton :rows="6" animated :loading="eleLoading">
+      <template v-if="!eleLoading">
+        <div class="chooseType">
+          <van-tabs v-model="activeTop">
+            <van-tab title="视频">
+              <div class="Video-top">
+                <div class="sheetdetail">
+                  <button ref="clickbutton" @click="tabShow = !tabShow">
+                    {{ msg }}
+                    <i class="iconfont icon icon-youjiantou1"></i>
+                  </button>
+                  <van-tabs v-model="active" @click="onClickTab">
+                    <van-tab
+                      v-for="(item, index) in hotcat"
+                      :title="item.name"
+                      :key="index"
+                    ></van-tab>
+                  </van-tabs>
+                  <div class="totallist" v-if="tabShow">
+                    <div>
+                      <p><span>全部视频</span></p>
+                      <ul class="tabAll">
+                        <li v-for="(tag, index) in allTag" :key="index">
+                          <span
+                            :class="{ borderCir: tag.activity }"
+                            @click="clickChange(tag)"
+                            >{{ tag.name }}</span
+                          >
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="vdDetail">
-              <ul>
-                <li
-                  v-for="(video, index) in videoAll"
-                  :key="index"
-                  @click="goDetail(video.data.vid)"
-                >
-                  <!-- 数据在video.data -->
-                  <div class="vd">
-                    <img :src="video.data.coverUrl" alt="" />
-                    <p>{{ video.data.title }}</p>
-                    <!-- <span>{{ "by" + video.data.creator.nickname }}</span> -->
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </van-tab>
-          <van-tab title="MV"></van-tab>
-        </van-tabs>
-      </div>
-    </template>
-    <!-- </el-skeleton> -->
+              <div class="vdDetail">
+                <ul>
+                  <li
+                    v-for="(video, index) in videoAll"
+                    :key="index"
+                    @click="goDetail(video.data.vid)"
+                  >
+                    <!-- 数据在video.data -->
+                    <div class="vd">
+                      <img :src="video.data.coverUrl" alt="" />
+                      <p>{{ video.data.title }}</p>
+                      <!-- <span>{{ "by" + video.data.creator.nickname }}</span> -->
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </van-tab>
+            <van-tab title="MV"></van-tab>
+          </van-tabs>
+        </div>
+      </template>
+    </el-skeleton>
   </div>
 </template>
 
