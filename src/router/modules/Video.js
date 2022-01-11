@@ -8,7 +8,7 @@ export default [
     }
   },
   {
-    name: "Video",
+    name: "VideoDetails",
     path: "/videodetail/v/:id",
     props: true,
     component: () => import('@/views/Video/VideoDetails'),

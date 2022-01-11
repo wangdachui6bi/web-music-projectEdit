@@ -60,11 +60,11 @@
                     <div class="vd">
                       <img :src="video.data.coverUrl" alt="" />
                       <p>{{ video.data.title }}</p>
-                      <span>{{ "by" + video.data.creator.nickname }}</span>
+                      <span>{{ 'by' + video.data.creator.nickname }}</span>
                     </div>
                   </li>
-                </ul></van-list
-              >
+                </ul>
+              </van-list>
             </div>
           </van-tab>
           <van-tab title="MV"></van-tab>
@@ -80,7 +80,7 @@
 import { getVideoHotTag, getAllVideo } from '@/api/Video'
 export default {
   name: "Video",
-  data() {
+  data () {
     return {
       activeTop: 0,
       active: 0,
@@ -96,28 +96,28 @@ export default {
     }
   },
   methods: {
-    goDetail(id) {
+    goDetail (id) {
       this.$router.push("/videodetail/v/" + id)
     },
-    onLoad() {
+    onLoad () {
       setTimeout(() => {
         this.getAllVideo(this.offset)
       }, 2000)
     },
-    onClickTab(name, title) {
+    onClickTab (name, title) {
       this.msg = title
     },
-    async getAllVideo() {
+    async getAllVideo () {
       this.offset += 10
       const res = await getAllVideo()
       this.videoAll = this.videoAll.concat(res.data.datas)
       this.eleLoading = false
     }
   },
-  created() {
+  created () {
     this.getAllVideo()
   },
-  mounted() {
+  mounted () {
     getVideoHotTag().then((res) => {
       this.hotcat = res.data.data
     })
