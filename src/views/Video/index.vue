@@ -7,7 +7,7 @@
           <van-tab title="视频">
             <div class="Video-top">
               <div class="sheetdetail">
-                <button ref="clickbutton">
+                <button ref="clickbutton" @click="tabShow = !tabShow">
                   {{ msg }}
                   <i class="iconfont icon icon-youjiantou1"></i>
                 </button>
@@ -18,32 +18,37 @@
                     :key="index"
                   ></van-tab>
                 </van-tabs>
-                <div class="totallist"></div>
+                <div class="totallist" v-if="tabShow">
+                  <div>
+                    <p><span>全部视频</span></p>
+                    <ul class="tabAll">
+                      <li v-for="(tag, index) in allTag" :key="index">
+                        <span
+                          :class="{ borderCir: tag.activity }"
+                          @click="clickChange(tag)"
+                          >{{ tag.name }}</span
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="vdDetail">
-              <van-list
-                v-model="loading"
-                :finished="finished"
-                :finished-text="finishedText"
-                @load="onLoad"
-                class="vdDetailList"
-              >
-                <ul>
-                  <li
-                    v-for="(video, index) in videoAll"
-                    :key="index"
-                    @click="goDetail(video.data.vid)"
-                  >
-                    <!-- 数据在video.data -->
-                    <div class="vd">
-                      <img :src="video.data.coverUrl" alt="" />
-                      <p>{{ video.data.title }}</p>
-                      <!-- <span>{{ "by" + video.data.creator.nickname }}</span> -->
-                    </div>
-                  </li>
-                </ul></van-list
-              >
+              <ul>
+                <li
+                  v-for="(video, index) in videoAll"
+                  :key="index"
+                  @click="goDetail(video.data.vid)"
+                >
+                  <!-- 数据在video.data -->
+                  <div class="vd">
+                    <img :src="video.data.coverUrl" alt="" />
+                    <p>{{ video.data.title }}</p>
+                    <!-- <span>{{ "by" + video.data.creator.nickname }}</span> -->
+                  </div>
+                </li>
+              </ul>
             </div>
           </van-tab>
           <van-tab title="MV"></van-tab>
@@ -78,6 +83,18 @@ export default {
     }
   },
   methods: {
+    async clickChange(item) {
+      // 改变颜色
+      // 排他思想 所有的全部变为false
+      this.allTag.forEach((tag, index) => {
+        tag.activity = false
+      })
+      item.activity = !item.activity
+      this.msg = item.name
+      this.tabShow = false
+      const res = await getVideoByTag(item.id, 0)
+      this.videoAll = res.data.datas
+    },
     goDetail(id) {
       this.$router.push("/videodetail/v/" + id)
     },
@@ -101,6 +118,9 @@ export default {
       this.videoAll = this.videoAll.concat(res.data.datas)
       const allTag = await getVideoAlltag()
       this.allTag = allTag.data.data
+      this.allTag.forEach(tag => {
+        tag.activity = false
+      })
       this.eleLoading = false
     }
   },
@@ -135,8 +155,40 @@ export default {
         margin-top: 8px;
         height: 36px;
         border: none;
-        .totallist {
-          position: absolute;
+      }
+      .totallist {
+        margin-top: 4px;
+        border-radius: 15px;
+        position: absolute;
+        padding: 0 20px 0 20px;
+        box-sizing: border-box;
+        div {
+          background-color: #fff;
+          overflow: hidden;
+          .borderCir {
+            color: red;
+            background-color: rgba(255, 182, 198, 0.2);
+            border-radius: 15px;
+          }
+          p {
+            margin: 15px;
+            border-bottom: 1px solid #eee;
+            padding: 0px 0px 10px 10px;
+          }
+          ul.tabAll {
+            display: flex;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+            padding-left: 30px;
+            li {
+              margin-bottom: 10px;
+              width: 26%;
+              margin-right: 20px;
+              span {
+                font-size: 12px;
+              }
+            }
+          }
         }
       }
     }
