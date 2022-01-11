@@ -4,6 +4,6 @@ export default {
   component: () => import('@/views/NoFoundPages/NoFoundPages'),
   meta: {
     needHead: false,
-    tittle:'NotFound'
+    tittle: '找不到页面'
   }
 }

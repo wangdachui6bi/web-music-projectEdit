@@ -88,6 +88,7 @@ export default {
       // 将该歌单里的的所有歌曲信息添加到vuex 相应数据并且把
       // 播放的歌曲 singleSongMsg设置为该歌单第一首歌
       // 而且对第一首歌进行MP3url请求
+      if (this.hislistSongMsg.length === 0) return
       this.$store.commit("songDetail/setSongList", this.hislistSongMsg)
       this.$store.dispatch('songDetail/getoneMusic', this.hislistSongMsg[0])
     }

@@ -91,7 +91,7 @@ export default {
 
   methods: {
     nextmusic() {
-      if (this.$store.state.songListAll.length === 1) {
+      if (this.$store.state.songDetail.songListAll.length === 1) {
         // 如果放到最后一首歌并且只有一首歌的时候 就重新播放
         this.$refs.audioRef.play()
         this.$refs.audioRef.currentTime = 0
@@ -138,7 +138,7 @@ export default {
   computed: {
     // 是否有播放的歌曲状态
     historyplayList() {
-      return localStorage.historyplayList || []
+      return JSON.parse(localStorage.historyplayList || "[]")
     },
     listenStatus() {
       return this.$store.state.songDetail.isHavesong

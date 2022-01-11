@@ -29,6 +29,11 @@ module.exports = {
         .entry('app')
         .clear()
         .add('./src/main-dev.js')
+      // 配置首页定制
+      config.plugin('html').tap(args => {
+        args[0].isProd = false
+        return args
+      })
     })
   }
 }

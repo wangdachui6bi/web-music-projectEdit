@@ -5,6 +5,6 @@ export default {
   props: true,
   meta: {
     needHead: true,
-    tittle:'按歌搜索'
+    tittle: '搜索结果'
   }
 }

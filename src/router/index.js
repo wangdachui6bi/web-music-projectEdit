@@ -28,6 +28,7 @@ const routes = [
     path: "/",
     redirect: "/personalrecom"
   }
+  
 ]
 
 const router = new VueRouter({
