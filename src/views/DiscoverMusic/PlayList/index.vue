@@ -80,7 +80,7 @@ import { mapState, mapGetters } from 'vuex'
 import { getHotCat, getplaylist, getHighquality } from '../../../api/DiscoverMusic/playList'
 export default {
   name: "playlist",
-  data () {
+  data() {
     return {
       loading: true,
       msg: '华语',
@@ -97,7 +97,7 @@ export default {
       iconarr: ["icon-yuzhong", "icon-fengge", "icon-kafei1", "icon-iconweixiao", "icon-zhuti"]
     }
   },
-  created () {
+  created() {
     this.$store.dispatch("playlist/getAlcat")
     getHotCat().then(async (res) => {
       const arr = res.data.tags
@@ -110,7 +110,7 @@ export default {
       this.loading = false
     })
   },
-  mounted () {
+  mounted() {
     this.clickhidden()
   },
   computed: {
@@ -129,7 +129,7 @@ export default {
     msg: {
       // 初始化进行一次监听
       immediate: true,
-      async handler (newVal, oldVal) {
+      async handler(newVal, oldVal) {
         getplaylist({ cat: newVal, page: this.currentPage - 1 }).then((res) => {
           this.playlist = res.data.playlists
           // 更改每次的总条数
@@ -143,18 +143,18 @@ export default {
     }
   },
   methods: {
-    getTo (url, id) {
+    getTo(url, id) {
       this.$router.push(url + '/' + id)
       // console.log(id)
     },
-    clickhidden () {
+    clickhidden() {
       document.body.onclick = (event) => {
         if (event.target !== this.$refs.clickbutton) {
           this.isShow = false
         }
       }
     },
-    clickChange (item) {
+    clickChange(item) {
       // 改变颜色
       // 排他思想 所有的全部变为false
       this.catesub.forEach((item, index) => {
@@ -166,17 +166,17 @@ export default {
       this.msg = item.name
       this.isShow = false
     },
-    onClickTab (name, title) {
+    onClickTab(name, title) {
       this.msg = title
     },
-    showPopup () {
+    showPopup() {
       this.show = true
     },
     // 改变totallist状态
-    changisShow () {
+    changisShow() {
       this.isShow = !this.isShow
     },
-    currentChange (page) {
+    currentChange(page) {
       this.currentPage = page
       getplaylist({ cat: this.msg, page: this.currentPage - 1 }).then((res) => {
         this.playlist = res.data.playlists
