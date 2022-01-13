@@ -64,7 +64,7 @@ const mutations = {
       Toast('请添加歌曲到歌单')
       return 0
     }
-
+    state.isPlay = true
     const indexNow = state.songListAll.findIndex((item) => item.id === state.singleSongMsg.id)
     // 有俩种情况 当一个一个点击进来的时候 都进行了MP3url的获取所以
     // 所以MP3url也被放进了songListAll数组
@@ -101,6 +101,7 @@ const mutations = {
       Toast('请添加歌曲到歌单')
       return 0
     }
+    state.isPlay = true
     const indexNow = state.songListAll.findIndex((item) => item.id === state.singleSongMsg.id)
     state.songListAll.forEach((song, index) => {
       // 为最后一首的时候恢复成第一首歌

@@ -5,7 +5,8 @@ import App from './App.vue'
 // import './plugins/element.js'
 import router from './router'
 import store from './store'
-
+// 导入删除cookie
+import clearCookie from './utils/clearCookie'
 // 引入矢量图
 import '@/assets/css/index.css'
 import '@/assets/fonts/iconfont/iconfont.css'
@@ -19,3 +20,7 @@ new Vue({
   store,
   router
 }).$mount('#app')
+// 防止路由重复性跳转出现报错
+window.onunload = () => {
+  clearCookie()
+}

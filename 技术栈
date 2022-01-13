@@ -1,0 +1,38 @@
+后端  
+
+  express + mysql/mongodb + jwt 
+
+
+前端   
+
+  phone  
+
+    vue-cli + webpack + vue-router + vuex + axios + vant + es6^  
+
+  pc 
+
+    vue-cli + webpack + vue-router + vuex + axios + div+css + es6^  
+
+  admin  
+
+    vue-cli + wepback + vue-router + vuex + axios + element-ui + es6^ 
+
+
+  上线、优化     
+
+  网络请求二次封装     
+
+    axios   
+
+
+  生产环境 
+
+    http://itfly.vip    
+
+  开发环境 
+
+    http://127.0.0.1:3000
+
+  测试环境  
+
+    http://127.0.0.1:3000

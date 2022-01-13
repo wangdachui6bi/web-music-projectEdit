@@ -50,9 +50,10 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Tooltip)
 
+// 按需引入babel.config.js需要配置官方对应的规则
 
 
-
-
+// 因为//由于Message组件并没有install方法供Vue来操作的，是直接返回的，
+// 所以Message不能被Vue.use 直接进行添加就好
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm // 消息确认

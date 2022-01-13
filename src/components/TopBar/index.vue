@@ -75,10 +75,10 @@
 import { mapState } from "vuex"
 import { logout, userAccount, playlist } from '@/api/login'
 import SearchInput from "@/components/SearchInput"
-
+import clearCookie from '@/utils/clearCookie'
 export default {
   name: "TopBar",
-  data () {
+  data() {
     return {
       isCollapse: false,
       createdList: [],
@@ -93,11 +93,11 @@ export default {
   },
   methods: {
     // 弹出菜单
-    showPopup () {
+    showPopup() {
       this.isCollapse = !this.isCollapse
     },
     // 获取账户信息
-    async getAccount () {
+    async getAccount() {
       const res = await userAccount()
       // 将数据传给Vuex
       this.$store.commit('login/setProfile', res.data.profile)
@@ -108,7 +108,7 @@ export default {
       })
     },
     // 退出弹窗
-    open () {
+    open() {
       this.$confirm('将要退出登录 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -117,6 +117,7 @@ export default {
         // 执行退出 移除登录状态
         logout()
         sessionStorage.removeItem("isLogin")
+        clearCookie()
         this.$message({
           type: 'success',
           message: '退出成功!'
@@ -130,7 +131,7 @@ export default {
       })
     }
   },
-  created () {
+  created() {
     this.getAccount()
   }
 }
@@ -176,7 +177,7 @@ export default {
       span:after,
       span:before {
         position: absolute;
-        content: '';
+        content: "";
         display: inline-block;
         width: 20px;
         height: 2px;

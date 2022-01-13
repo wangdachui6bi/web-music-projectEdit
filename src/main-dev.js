@@ -4,6 +4,9 @@ import './plugins/vant.js'
 import './plugins/element.js'
 import router from './router'
 import store from './store'
+
+// 导入删除cookie
+import clearCookie from './utils/clearCookie'
 // 在mainjs先引入
 import VueRouter from "vue-router"
 
@@ -27,3 +30,6 @@ VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch((err) => err)
 }
 // 防止路由重复性跳转出现报错
+window.onunload = () => {
+  clearCookie()
+}
