@@ -18,7 +18,7 @@
     <div class="div-line mtop-20"></div>
     <el-skeleton :rows="6" animated :loading="loading">
       <template v-if="!loading">
-        <el-table :data="hislistSongMsg" style="width: 100%" stripe>
+        <el-table :data="hislistSongMsg" style="width: 100%" stripe @row-click="getOneSong">
           <el-table-column type="index" width="50"> </el-table-column>
           <el-table-column prop="favicon" width="30">
             <template slot-scope="scope">
