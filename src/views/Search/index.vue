@@ -122,7 +122,7 @@
                 <div class="vd">
                   <img :src="video.cover" alt="" />
                   <p>{{ video.name }}</p>
-                  <span>{{ 'by' + video.artists[0].name }}</span>
+                  <span>{{ "by" + video.artists[0].name }}</span>
                 </div>
               </li>
             </ul>
@@ -139,7 +139,7 @@ import { getLikeIdList, likeMusic } from '@/api/DiscoverMusic/PersonalRecom'
 export default {
   name: "Search",
   props: ["keyword"],
-  data () {
+  data() {
     return {
       searchRes: [],
       Count: 0,
@@ -153,17 +153,20 @@ export default {
       likeIdList: []
     }
   },
-  created () {
+  created() {
     this.init()
   },
+  updated() {
+    console.log(this.searchRes)
+  },
   computed: {
-    uid () {
+    uid() {
       return this.$store.state.login.profile.userId
     }
   },
   methods: {
     // 请求数据
-    getOneSong (row) {
+    getOneSong(row) {
       if (this.isListenId !== row.id) {
         this.isListenId = row.id
         // 响应式的数据
@@ -177,16 +180,18 @@ export default {
         this.$store.commit('songDetail/setplayListTracks', [row])
       }
     },
-    async init (keyword = this.keyword, type = 1, offset = 0) {
+    async init(keyword = this.keyword, type = 1, offset = 0) {
       this.type = type
       const { data: { result } } = await searchKeyword(keyword, type, offset)
       await this.getLikeIdList(this.uid)
       if (type === 1) {
         this.type = type
         this.Count = result.songCount
+        this.searchRes = []
         result.songs.forEach((item) => {
           this.$set(item, "isLiked", this.isLiked(item.id))
           this.searchRes.push(item)
+          // this.searchRes = item
         })
       } else if (type === 10) {
         this.searchRes = result.albums
@@ -207,41 +212,41 @@ export default {
       }
       this.loading = false
     },
-    goMvDetail (id) {
+    goMvDetail(id) {
       this.$router.push("/videodetail/mv/" + id)
     },
     // 改变搜索的type
-    search (index, typename, type) {
+    search(index, typename, type) {
       this.loading = true
       this.active = index
       this.typename = typename
       this.init(this.keyword, type)
     },
     // 去歌单详情页
-    goPlayListDetail (id) {
+    goPlayListDetail(id) {
       this.$router.push(`/playlistdetail/${id}`)
     },
     // 去歌手详情页
-    goArtistInfo (id) {
+    goArtistInfo(id) {
       this.$router.push(`/artistdetail/${id}`)
     },
-    async getLikeIdList (uid) {
+    async getLikeIdList(uid) {
       const res = await getLikeIdList(uid)
       this.likeIdList = res.data.ids
     },
     // 判断当前是否喜欢
-    isLiked (id) {
+    isLiked(id) {
       return this.likeIdList.indexOf(id) !== -1
     },
     // 点击喜欢
-    async likeMusic (item) {
+    async likeMusic(item) {
       item.isLiked = !item.isLiked
       await likeMusic(item.id, item.isLiked)
       this.init(this.keyword, this.type)
     }
   },
   watch: {
-    '$route' (to, from) {
+    '$route'(to, from) {
       this.init(this.keyword, this.type)
     }
   }
@@ -267,7 +272,7 @@ export default {
     }
     .search-menu-item.isActive:after {
       display: block;
-      content: '';
+      content: "";
       height: 4px;
       width: 90%;
       margin: 0 auto;
